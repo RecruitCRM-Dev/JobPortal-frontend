@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav class="z-10 w-full absolute">
-      <Container>
+      <div class="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
         <div
           class="flex flex-wrap items-center justify-between py-2 gap-6 md:py-4 md:gap-0 relative"
         >
@@ -13,7 +13,7 @@
             class="hidden peer"
           />
           <div class="relative z-20 w-full flex justify-between lg:w-max md:px-0">
-            <a href="#home" aria-label="logo" class="flex space-x-2 items-center">
+            <a href="/" aria-label="logo" class="flex space-x-2 items-center">
               <div aria-hidden="true" class="flex space-x-1">
                 <div class="h-4 w-4 rounded-full bg-gray-900 dark:bg-white"></div>
                 <div class="h-6 w-2 bg-primary"></div>
@@ -86,7 +86,7 @@
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </nav>
   </header>
 </template>

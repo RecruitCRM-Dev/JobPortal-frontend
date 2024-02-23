@@ -1,6 +1,6 @@
 <template>
   <div id="footer" class="relative">
-    <Container>
+    <div class="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
       
       <div class="bg-gradient-to-b from-deep-purple-accent-400 to-indigo-800 px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
         <div class="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -139,7 +139,7 @@
           </ul>
         </div>
       </div>
-    </Container>
+    </div>
     <div aria-hidden="true" class="absolute inset-0 lg:grid lg:grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
       <div class="mt-36 blur-[106px] h-48  bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700"></div>
       <div class="mt-36 blur-[106px] h-48  bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
