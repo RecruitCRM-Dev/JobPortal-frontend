@@ -1,12 +1,10 @@
 <template>
-  <Layout title="Welcome to Astrolus.">
     <main class="space-y-10 mb-40">
       <HeroSection />
       <Job />
       <NewsLetter />
       <Testimonials />
     </main>
-  </Layout>
 </template>
 
 <script setup>

@@ -12,7 +12,7 @@
       ></div>
     </div>
     <Container>
-      <div class="relative pt-36 ml-auto">
+      <div class="relative pt-24 ml-auto">
         <div class="lg:w-2/3 text-center mx-auto">
           <h1 class="text-gray-900 dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl">
             Where opportunities <span class="text-primary dark:text-white">meet aspirations.</span>
