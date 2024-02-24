@@ -3,6 +3,7 @@
     <Container>
       <div>
         <!-- Mobile filter dialog -->
+        <JobSearch />
         <TransitionRoot as="template" :show="mobileFiltersOpen">
           <Dialog as="div" class="relative z-40 lg:hidden" @close="mobileFiltersOpen = false">
             <TransitionChild
@@ -101,7 +102,7 @@
         </TransitionRoot>
 
         <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
+          <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-14">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900">Jobs</h1>
 
             <div class="flex items-center">
@@ -226,7 +227,7 @@
               </form>
 
               <!-- Product grid -->
-              <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10">
+              <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2">
                 <JobCard />
                 <JobCard />
                 <JobCard />
@@ -247,6 +248,7 @@
 import { ref } from 'vue'
 import Container from '@/components/Container.vue'
 import JobCard from '@/components/JobCard.vue'
+import JobSearch from '@/components/JobSearch.vue'
 import {
   Dialog,
   DialogPanel,
@@ -332,4 +334,3 @@ const filters = [
 
 const mobileFiltersOpen = ref(false)
 </script>
-
