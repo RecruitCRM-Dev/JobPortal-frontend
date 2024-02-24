@@ -5,7 +5,7 @@
       <div>
         <div class="container mx-auto py-8">
           <div class="bg-white mt-3">
-            <h2 class="text-center mt-12 text-3xl text-gray-900">Applications</h2>
+            <h2 class="text-center mt-12 text-3xl text-gray-900">Your Applications</h2>
           </div>
           <UserNavigation />
 
@@ -47,36 +47,12 @@
                   >
                 </div>
               </div>
-              <div class="flex gap-2">
-                <div>
-                  <button
-                    class="bg-red-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
-                  >
-                    Rejected
-                  </button>
-                </div>
-                <div>
-                  <button
-                    class="bg-purple-900 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
-                  >
-                    Apply Now
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </svg>
-                  </button>
-                  <p class="mt-2 italic text-sm text-gray-400">2hours before</p>
-                </div>
+              <div>
+                <button
+                  class="bg-red-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
+                >
+                  Rejected
+                </button>
               </div>
             </div>
           </Container>
