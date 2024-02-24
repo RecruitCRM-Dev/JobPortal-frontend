@@ -6,6 +6,7 @@ import CandidateRegisterVue from '@/views/Auth/CandidateRegister.vue'
 import EmployerLoginVue from '@/views/Auth/EmployerLogin.vue'
 import EmployerRegisterVue from '@/views/Auth/EmployerRegister.vue'
 import UserProfileVue from '@/views/UserProfile.vue'
+import JobApplication from '@/views/JobApplication.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,11 @@ const router = createRouter({
       path: '/jobs',
       name: 'jobs',
       component: JobList
+    },
+    {
+      path: '/job/:id/apply',
+      name: 'apply',
+      component: JobApplication
     },
     {
       path: '/login',

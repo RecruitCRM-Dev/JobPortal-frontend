@@ -22,7 +22,7 @@
                 <input
                   type="text"
                   id="simple-search"
-                  class="bg-gray-50 rounded-l-md h-14 border-l-0 border-t-0 border-b-0 border-r-1 focus:outline-none border-gray-200 text-gray-900 text-sm block w-full pl-10 py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white shadow"
+                  class="bg-gray-50 rounded-l-md h-14 border-l-0 border-t-0 border-b-0 border-r-1 focus:ring-0  border-gray-200 text-gray-900 text-sm block w-full pl-10 py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white shadow"
                   placeholder="Enter job name..."
                   required
                 />

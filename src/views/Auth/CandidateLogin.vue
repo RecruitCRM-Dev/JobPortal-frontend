@@ -1,6 +1,7 @@
 <template>
+  <Container>
   <div class="h-screen md:flex">
-    <div class="relative overflow-hidden md:flex w-1/2 justify-around items-center hidden">
+    <div class="relative overflow-hidden md:flex w-1/2 justify-around items-center hidden pt-5">
       <img src="@/assets/login-img.jpg" alt="" class="object-cover w-full h-full" />
     </div>
 
@@ -68,10 +69,12 @@
       </Form>
     </div>
   </div>
+</Container>
 </template>
 
 <script setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import Container from '@/components/Container.vue';
 
 import * as yup from 'yup'
 
