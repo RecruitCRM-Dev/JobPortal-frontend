@@ -5,6 +5,8 @@ import CandidateLoginVue from '@/views/Auth/CandidateLogin.vue'
 import CandidateRegisterVue from '@/views/Auth/CandidateRegister.vue'
 import EmployerLoginVue from '@/views/Auth/EmployerLogin.vue'
 import EmployerRegisterVue from '@/views/Auth/EmployerRegister.vue'
+import UserProfileVue from '@/views/UserProfile.vue'
+import JobApplication from '@/views/JobApplication.vue'
 import CandidateOverviewVue from '@/views/Candidate/CandidateOverview.vue'
 import CandidateProfileVue from '@/views/Candidate/CandidateProfile.vue'
 import CandidateApplicationVue from '@/views/Candidate/CandidateApplication.vue'
@@ -21,6 +23,11 @@ const router = createRouter({
       path: '/jobs',
       name: 'jobs',
       component: JobList
+    },
+    {
+      path: '/job/:id/apply',
+      name: 'apply',
+      component: JobApplication
     },
     {
       path: '/login',
