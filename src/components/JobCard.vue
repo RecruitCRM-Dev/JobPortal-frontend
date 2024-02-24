@@ -1,5 +1,5 @@
 <template>
-  <div class="cursor-pointer transition-[0.2s] px-4 py-5 rounded-lg hover:scale-[1.02]">
+  <div class="cursor-pointer transition-[0.2s] px-4 py-5 rounded-lg hover:scale-[1.02] border border-gray-200">
     <div>
       <svg
         class="shadow-none w-[46px] p-2.5 rounded-lg"
