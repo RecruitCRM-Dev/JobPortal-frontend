@@ -23,7 +23,7 @@
               <Field
                 name="name"
                 placeholder="Full name"
-                class="pl-2 outline-none border-none w-full"
+                class="pl-2 outline-none border-none w-full py-0.5"
               />
             </div>
             <ErrorMessage name="name" class="text-red-500" />
@@ -45,7 +45,7 @@
               <Field
                 name="phone"
                 placeholder="Contact number"
-                class="pl-2 outline-none border-none w-full"
+                class="pl-2 outline-none border-none w-full py-0.5"
               />
             </div>
             <ErrorMessage name="phone" class="text-red-500" />
@@ -71,7 +71,7 @@
               <Field
                 name="email"
                 placeholder="Email"
-                class="pl-2 outline-none border-none w-full"
+                class="pl-2 outline-none border-none w-full py-0.5"
               />
             </div>
             <ErrorMessage name="email" class="text-red-500" />
@@ -94,7 +94,7 @@
               <Field
                 name="password"
                 placeholder="Password"
-                class="pl-2 outline-none border-none w-full"
+                class="pl-2 outline-none border-none w-full py-0.5"
               />
             </div>
             <ErrorMessage name="password" class="text-red-500" />
@@ -117,7 +117,7 @@
               <Field
                 name="confirm_password"
                 placeholder="Confirm password"
-                class="pl-2 outline-none border-none w-full"
+                class="pl-2 outline-none border-none w-full py-0.5"
               />
             </div>
             <ErrorMessage name="confirm_password" class="text-red-500" />
@@ -129,11 +129,10 @@
         >
           Register
         </button>
-        <span class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password ?</span>
       </Form>
     </div>
     <div class="overflow-hidden md:flex w-1/2 justify-around items-center hidden">
-      <img src="../assets/register-img.jpg" alt="" class="object-cover w-full h-full" />
+      <img src="../../assets/register-img.jpg" alt="" class="object-cover w-full h-full" />
     </div>
   </div>
 </template>
