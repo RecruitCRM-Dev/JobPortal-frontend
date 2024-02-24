@@ -29,7 +29,7 @@
               <Field
                 name="email"
                 placeholder="Email"
-                class="pl-2 outline-none border-none w-full"
+                class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
               />
             </div>
             <ErrorMessage name="email" class="text-red-500" />
@@ -52,7 +52,7 @@
               <Field
                 name="password"
                 placeholder="Password"
-                class="pl-2 outline-none border-none w-full"
+                class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
               />
             </div>
             <ErrorMessage name="password" class="text-red-500" />
