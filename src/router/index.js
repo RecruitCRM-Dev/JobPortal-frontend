@@ -29,12 +29,12 @@ const router = createRouter({
       component: JobApplication
     },
     {
-      path: '/login',
+      path: '/candidate/login',
       name: 'login',
       component: CandidateLoginVue
     },
     {
-      path: '/register',
+      path: '/candidate/register',
       name: 'candidate-register',
       component: CandidateRegisterVue
     },

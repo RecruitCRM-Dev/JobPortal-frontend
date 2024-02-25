@@ -22,7 +22,7 @@
                 <rect x="14" y="11" width="7" height="12"></rect>
               </svg>
               <span class="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase"
-                >Company</span
+                >Job Portal</span
               >
             </a>
             <div class="mt-6 lg:max-w-sm">
