@@ -54,7 +54,7 @@
                   d="M280,416h38.4L496,246.857V16H280ZM312,48H464V233.143L312,377.905Z"
                 ></path>
               </svg>
-              <p class="px-6 py-1 text-lg italic">
+              <p class="px-10 py-1 text-lg italic">
                 Accusantium illum cupiditate harum asperiores iusto quos quasi quis quae! Fugit
                 doloribus, voluptatum quidem magnam velit excepturi nobis, reprehenderit ducimus
                 incidunt quisquam quae veritatis, quos iure harum.
