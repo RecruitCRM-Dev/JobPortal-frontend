@@ -173,16 +173,34 @@
               </div>
             </div>
 
-            <!--  Name -->
+            <!--  Education -->
             <div class="sm:col-span-2">
               <div>
-                <label for="name" class="block mb-2 text-sm font-medium text-gray-900"
+                <label for="education" class="block mb-2 text-sm font-medium text-gray-900"
+                  >Education</label
+                >
+
+                <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
+                  <Field
+                    name="education"
+                    v-model="formData.education"
+                    placeholder=""
+                    class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!--  Address -->
+            <div class="sm:col-span-2">
+              <div>
+                <label for="address" class="block mb-2 text-sm font-medium text-gray-900"
                   >Address</label
                 >
 
                 <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
                   <Field
-                    name="name"
+                    name="address"
                     v-model="formData.address"
                     placeholder=""
                     class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
