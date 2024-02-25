@@ -10,6 +10,19 @@
         <p class="text-sm font-normal text-gray-600 mb-7">Welcome Back</p>
         <div class="flex flex-col w-80">
           <div class="mb-4">
+            <!-- Role Checkbox -->
+            <div class="flex w-32 gap-x-5 mb-3">
+              <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
+                <Field name="role" type="radio" value="candidate" />
+                <div class="ml-2">Candidate</div>
+              </div>
+              <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
+                <Field name="role" type="radio" value="employer" />
+                <div class="ml-2">Employer</div>
+              </div>
+            </div>
+
+            <!-- Email -->
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -35,6 +48,7 @@
             <ErrorMessage name="email" class="text-red-500" />
           </div>
 
+          <!-- Password -->
           <div>
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
@@ -76,6 +90,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from 'yup'
 
 const schema = yup.object().shape({
+  role: '',
   email: yup
     .string()
     .email('Please enter a valid email address')

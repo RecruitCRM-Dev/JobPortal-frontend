@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import JobList from '../views/JobList.vue'
-import CandidateLoginVue from '@/views/Auth/CandidateLogin.vue'
+import LoginVue from '@/views/Auth/CommonLogin.vue'
 import CandidateRegisterVue from '@/views/Auth/CandidateRegister.vue'
-import EmployerLoginVue from '@/views/Auth/EmployerLogin.vue'
+import EmployerLoginVue from '@/views/Auth/CommonLogin.vue'
 import EmployerRegisterVue from '@/views/Auth/EmployerRegister.vue'
 import JobApplication from '@/views/JobApplication.vue'
 import CandidateOverviewVue from '@/views/Candidate/CandidateOverview.vue'
@@ -29,9 +29,9 @@ const router = createRouter({
       component: JobApplication
     },
     {
-      path: '/candidate/login',
+      path: '/login',
       name: 'login',
-      component: CandidateLoginVue
+      component: LoginVue
     },
     {
       path: '/candidate/register',
