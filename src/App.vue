@@ -1,6 +1,8 @@
 <template>
   <div class="bg-white dark:bg-gray-900">
+    <AppHeader />
     <router-view></router-view>
+    <AppFooter />
   </div>
 </template>
 
