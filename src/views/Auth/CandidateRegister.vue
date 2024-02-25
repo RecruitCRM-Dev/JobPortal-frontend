@@ -98,6 +98,7 @@
               </svg>
               <Field
                 name="password"
+                type="password"
                 placeholder="Password"
                 class="pl-2 outline-none border-none w-full py-0.5"
               />
@@ -122,6 +123,7 @@
               </svg>
               <Field
                 name="confirm_password"
+                type="password"
                 placeholder="Confirm password"
                 class="pl-2 outline-none border-none w-full py-0.5"
               />

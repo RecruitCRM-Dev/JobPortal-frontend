@@ -10,7 +10,6 @@
         <p class="text-sm font-normal text-gray-600 mb-7">Welcome Back</p>
         <div class="flex flex-col w-80">
           <div class="mb-4">
-
             <!-- Role Checkbox -->
             <div class="flex w-32 gap-x-5 mb-3">
               <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
@@ -66,6 +65,7 @@
               </svg>
               <Field
                 name="password"
+                type="password"
                 placeholder="Password"
                 class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
               />
