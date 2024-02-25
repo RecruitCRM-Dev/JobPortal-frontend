@@ -5,6 +5,8 @@
         <h1 class="text-gray-800 font-bold text-2xl mb-1">Hello There!</h1>
         <p class="text-sm font-normal text-gray-600 mb-7">Welcome</p>
         <div class="flex flex-col w-80">
+          
+          <!-- Full Name -->
           <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
@@ -29,6 +31,7 @@
             <ErrorMessage name="name" class="text-red-500" />
           </div>
 
+          <!-- Contact Number -->
           <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
@@ -51,6 +54,7 @@
             <ErrorMessage name="phone" class="text-red-500" />
           </div>
 
+          <!-- Email -->
           <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
@@ -77,6 +81,7 @@
             <ErrorMessage name="email" class="text-red-500" />
           </div>
 
+          <!-- Password -->
           <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
@@ -100,6 +105,7 @@
             <ErrorMessage name="password" class="text-red-500" />
           </div>
 
+          <!-- Confirm Password -->
           <div>
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
@@ -123,6 +129,8 @@
             <ErrorMessage name="confirm_password" class="text-red-500" />
           </div>
         </div>
+
+        <!-- Register -->
         <button
           type="submit"
           class="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
