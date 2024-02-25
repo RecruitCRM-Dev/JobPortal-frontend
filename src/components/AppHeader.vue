@@ -170,6 +170,6 @@
 import { ref } from 'vue'
 import Container from './Container.vue'
 
-const isLoggedIn = ref(false)
+const isLoggedIn = ref(true)
 const openUserMenu = ref(false)
 </script>

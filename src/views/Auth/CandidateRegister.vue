@@ -23,13 +23,13 @@
               <Field
                 name="name"
                 placeholder="Full name"
-                class="pl-2 outline-none border-none w-full py-0.5"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
             </div>
             <ErrorMessage name="name" class="text-red-500" />
           </div>
 
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +49,7 @@
               />
             </div>
             <ErrorMessage name="phone" class="text-red-500" />
-          </div>
+          </div> -->
 
           <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
@@ -71,7 +71,7 @@
               <Field
                 name="email"
                 placeholder="Email"
-                class="pl-2 outline-none border-none w-full py-0.5"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
             </div>
             <ErrorMessage name="email" class="text-red-500" />
@@ -94,7 +94,7 @@
               <Field
                 name="password"
                 placeholder="Password"
-                class="pl-2 outline-none border-none w-full py-0.5"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
             </div>
             <ErrorMessage name="password" class="text-red-500" />
@@ -115,12 +115,12 @@
                 />
               </svg>
               <Field
-                name="confirm_password"
+                name="password_confirmation"
                 placeholder="Confirm password"
-                class="pl-2 outline-none border-none w-full py-0.5"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
             </div>
-            <ErrorMessage name="confirm_password" class="text-red-500" />
+            <ErrorMessage name="password_confirmation" class="text-red-500" />
           </div>
         </div>
         <button
@@ -129,6 +129,10 @@
         >
           Register
         </button>
+        <p class="text-sm text-gray-400">
+          Already logged in?
+          <span class="text-indigo-500 text-sm"><a href="/candidate/login">Login</a></span>
+        </p>
       </Form>
     </div>
     <div class="overflow-hidden md:flex w-1/2 justify-around items-center hidden">
@@ -139,21 +143,28 @@
 
 <script setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import axios from 'axios'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 import * as yup from 'yup'
+import router from '@/router'
 
 const schema = yup.object().shape({
   name: yup
     .string()
     .required((data) => `${data.path} is required`)
     .label('Full name'),
-  phone: yup
-    .string()
-    .required((data) => `${data.path} is required`)
-    .matches(/^\+?[0-9]+$/, 'Invalid phone number')
-    .min(10, 'Phone number must be at least 10 digits')
-    .max(15, 'Phone number can be at most 15 digits')
-    .label('Contact Number'),
+  // phone: yup
+  //   .string()
+  //   .required((data) => `${data.path} is required`)
+  //   .matches(/^\+?[0-9]+$/, 'Invalid phone number')
+  //   .min(10, 'Phone number must be at least 10 digits')
+  //   .max(15, 'Phone number can be at most 15 digits')
+  //   .label('Contact Number'),
   email: yup
     .string()
     .email('Please enter a valid email address')
@@ -164,14 +175,29 @@ const schema = yup.object().shape({
     .min(5, (data) => `Password must be at least ${data.min} characters`)
     .required((data) => `${data.label} is required`)
     .label('Password'),
-  confirm_password: yup
+  password_confirmation: yup
     .string()
     .required(() => `Field is required`)
     .label('Confirm password')
     .oneOf([yup.ref('password'), null], 'Passwords must match')
 })
 
-const onSubmit = (values) => {
-  console.log(values)
+const onSubmit = async (values) => {
+  try {
+    await store.dispatch('register', values);
+
+    //Showing message to user
+    toast('Registered Successfully!', {
+      type: 'success',
+      "autoClose": 1000,
+      dangerouslyHTMLString: true
+    })
+
+    setTimeout(() => {
+      router.push('/')
+    }, 2000);
+  } catch {
+    console.log('Error')
+  }
 }
 </script>
