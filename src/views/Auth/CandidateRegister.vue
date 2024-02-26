@@ -104,6 +104,7 @@
               </svg>
               <Field
                 name="password"
+                type="password"
                 placeholder="Password"
                 class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
