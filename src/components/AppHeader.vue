@@ -133,6 +133,7 @@
                       </router-link>
                     </li>
                     <li
+                      @click="handleLogout"
                       class="px-3 py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400"
                     >
                       <span>
@@ -167,10 +168,34 @@
 <script setup>
 import { ref } from 'vue'
 import { useStore } from 'vuex'
-import Container from './Container.vue'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import { useRouter } from 'vue-router'
 
 const store = useStore()
+const router = useRouter()
 
-const isLoggedIn = ref(true)
 const openUserMenu = ref(false)
+
+const handleLogout = async () => {
+  try {
+    await store.dispatch('logout')
+    //Showing message to user
+    toast('Logged Out Successfully!', {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000)
+  } catch (error) {
+    toast('Internal Server Error', {
+      type: 'error',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+  }
+}
 </script>
