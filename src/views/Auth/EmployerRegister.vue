@@ -2,9 +2,10 @@
   <div class="h-screen md:flex">
     <div class="flex md:w-1/2 justify-center py-10 items-center">
       <Form @submit="onSubmit" :validation-schema="schema" class="flex flex-col py-10 ml-1">
+        <h1 class="font-bold text-3xl mb-5 text-center">Employer Registration Form</h1>
         <h1 class="text-gray-800 font-bold text-2xl mb-1">Hello There!</h1>
         <p class="text-sm font-normal text-gray-600 mb-7">Welcome</p>
-        <div class="flex flex-col w-80">
+        <div class="flex flex-col px-5 lg:px-0">
           <!-- Company Name -->
           <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">

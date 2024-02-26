@@ -25,7 +25,7 @@ const store = createStore({
         if (localStorage.getItem('access-token')) {
           const res = await axios.get('/api/user', {
             headers: {
-              'Authorization': 'Bearer '+localStorage.getItem('access-token')
+              Authorization: 'Bearer ' + localStorage.getItem('access-token')
             }
           })
           context.commit('setUser', res.data.data.user)
@@ -49,7 +49,7 @@ const store = createStore({
             password: password
           })
 
-          console.log('hello');
+          console.log('hello')
         } else if (userRole === 'employer') {
           res = await axios.post('/api/login/employer', {
             //TODO
@@ -90,12 +90,12 @@ const store = createStore({
 
     async logout(context) {
       try {
-        await axios.post('/api/logout')
+        await axios.post('/api/logout/user')
+        localStorage.clear()
         context.commit('setUser', null)
         return 'Logged Out Successfully'
-      } catch (err) {
-        console.log(err)
-        return 'Unable to logout'
+      } catch (error) {
+        throw error
       }
     }
   }
