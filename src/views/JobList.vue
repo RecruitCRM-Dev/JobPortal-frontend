@@ -198,7 +198,7 @@
                 </div>
               </div>
 
-              <section aria-labelledby="products-heading" class="pb-24 pt-6 flex">
+              <section v-if="currentPage<=totalPages" aria-labelledby="products-heading" class="pb-24 pt-6 flex">
                 <h2 id="products-heading" class="sr-only">Products</h2>
 
                 <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
@@ -260,16 +260,82 @@
 
                   <!-- Product grid -->
                   <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2">
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
+                    <JobCard v-for="job in jobs" :key="job.id" :job="job" />
+                    <!-- <p>sd</p> -->
                   </div>
                 </div>
               </section>
+              <p v-else class="text-center my-10 text-gray-500">No jobs found. <router-link to="/jobs" class="text-indigo-500 cursor-pointer">Go to Jobs</router-link></p>
+              <!-- Pagination Start -->
+              <div class="flex items-center justify-center mx-auto gap-4">
+                <button
+                  @click="prevPage"
+                  :disabled="currentPage === 1"
+                  class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-indigo-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                  type="button"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                    ></path>
+                  </svg>
+                  Previous
+                </button>
+                <div v-for="page in visiblePages" :key="page" class="flex items-center gap-2">
+                  <router-link :to="{ name: 'jobs', query: { page: page } }">
+                    <button
+                      class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg"
+                      :class="{
+                        'bg-indigo-900 text-center align-middle font-sans text-xs font-medium uppercase text-white shadow-md shadow-indigo-900/10 transition-all hover:shadow-lg hover:shadow-indigo-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none':
+                          currentPage === page,
+                        'text-center align-middle font-sans text-xs font-medium uppercase text-indigo-900 transition-all hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none':
+                          currentPage != page
+                      }"
+                      type="button"
+                    >
+                      <span
+                        class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                      >
+                        {{ page }}
+                      </span>
+                    </button>
+                  </router-link>
+                </div>
+                <button
+                  @click="nextPage"
+                  :disabled="currentPage === totalPages"
+                  class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-indigo-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                  type="button"
+                >
+                  Next
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+              <!-- Pagination End -->
             </div>
           </main>
         </div>
@@ -279,7 +345,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import Container from '@/components/Container.vue'
 import JobCard from '@/components/JobCard.vue'
@@ -305,6 +371,8 @@ import {
   PlusIcon,
   Squares2X2Icon
 } from '@heroicons/vue/20/solid'
+import axios from 'axios'
+import { useRoute, useRouter } from 'vue-router'
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -366,6 +434,66 @@ const filters = [
     ]
   }
 ]
-
 const mobileFiltersOpen = ref(false)
+
+const route = useRoute()
+const router = useRouter()
+
+const currentPage = ref()
+const totalPages = ref(1)
+let jobs = ref([])
+const pageRange = 3 // Number of pages before and after the current page to display
+
+const fetchJobs = async () => {
+  try {
+    const response = await axios.get(`/api/jobs?page=${currentPage.value}`)
+    jobs.value = response.data.jobs.data
+    totalPages.value = response.data.jobs.last_page // Assuming API response contains total number of pages
+  } catch (error) {
+    console.error('Error fetching jobs:', error)
+  }
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+    router.push(`/jobs?page=${currentPage.value}`)
+  }
+}
+
+const nextPage = () => {
+  console.log('next')
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+    console.log(currentPage.value)
+    router.push(`/jobs?page=${currentPage.value}`)
+  }
+}
+
+const gotoPage = (page) => {
+  currentPage.value = page
+  fetchJobs()
+}
+
+const visiblePages = computed(() => {
+  const startPage = Math.max(1, currentPage.value - pageRange)
+  const endPage = Math.min(totalPages.value, currentPage.value + pageRange)
+  const pages = []
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i)
+  }
+  return pages
+})
+
+watch(
+  () => route.query.page,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      currentPage.value = parseInt(newValue) || 1 // Parse the new value to an integer or default to 1
+    }
+    fetchJobs()
+  }
+)
+currentPage.value = parseInt(route.query.page) || 1
+onMounted(fetchJobs)
 </script>

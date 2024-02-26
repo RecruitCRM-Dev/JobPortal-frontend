@@ -2,10 +2,16 @@
   <div class="h-screen md:flex">
     <div class="flex md:w-1/2 justify-center py-10 items-center">
       <Form @submit="onSubmit" :validation-schema="schema" class="flex flex-col py-10 ml-1">
+        <router-link to="/">
+          <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" class="mb-5">
+            <path fill="#6366f1" d="M13.853 18.14 1 10.643 31 1l-.019.058z"></path>
+            <path fill="#a5b4fc" d="M13.853 18.14 30.981 1.058 21.357 31l-7.5-12.857z"></path>
+          </svg>
+        </router-link>
+        <h1 class="font-bold text-3xl mb-5 text-center">Candidate Registration Form</h1>
         <h1 class="text-gray-800 font-bold text-2xl mb-1">Hello There!</h1>
         <p class="text-sm font-normal text-gray-600 mb-7">Welcome</p>
-        <div class="flex flex-col w-80">
-          
+        <div class="flex flex-col px-5 lg:px-0">
           <!-- Full Name -->
           <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
@@ -32,7 +38,7 @@
           </div>
 
           <!-- Contact Number -->
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -138,9 +144,15 @@
         >
           Register
         </button>
+        <p class="text-sm text-gray-400 mb-2">
+          Are you employer?
+          <span class="text-indigo-500 text-sm"
+            ><a href="/employer/register">Employer Signup</a></span
+          >
+        </p>
         <p class="text-sm text-gray-400">
-          Already logged in?
-          <span class="text-indigo-500 text-sm"><a href="/candidate/login">Login</a></span>
+          Already have an account?
+          <span class="text-indigo-500 text-sm"><a href="/login">Login</a></span>
         </p>
       </Form>
     </div>
@@ -156,11 +168,20 @@ import axios from 'axios'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { useStore } from 'vuex'
+import * as yup from 'yup'
+import router from '@/router'
+import { onMounted } from 'vue'
 
 const store = useStore()
 
-import * as yup from 'yup'
-import router from '@/router'
+onMounted(async () => {
+  await axios.get('sanctum/csrf-cookie')
+  await store.dispatch('tryLogIn')
+
+  if (store.getters.isLoggedIn) {
+    router.push('/')
+  }
+})
 
 const schema = yup.object().shape({
   name: yup
@@ -193,20 +214,31 @@ const schema = yup.object().shape({
 
 const onSubmit = async (values) => {
   try {
-    await store.dispatch('register', values);
-
+    await store.dispatch('register', values)
     //Showing message to user
     toast('Registered Successfully!', {
       type: 'success',
-      "autoClose": 1000,
+      autoClose: 1000,
       dangerouslyHTMLString: true
     })
 
     setTimeout(() => {
-      router.push('/')
-    }, 2000);
-  } catch {
-    console.log('Error')
+      router.push('/candidate/update')
+    }, 2000)
+  } catch (error) {
+    if (error.response?.status === 400) {
+      toast(error.response.data.data.email, {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    } else {
+      toast('Internal Server Error', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    }
   }
 }
 </script>
