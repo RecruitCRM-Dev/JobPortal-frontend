@@ -208,9 +208,9 @@ const onSubmit = async (values) => {
       dangerouslyHTMLString: true
     })
 
-    // setTimeout(() => {
-    //   router.push('/')
-    // }, 2000)
+    setTimeout(() => {
+      router.push('/candidate/update')
+    }, 2000)
   } catch (error) {
     if (error.response?.status === 400) {
       toast(error.response.data.data.email, {
