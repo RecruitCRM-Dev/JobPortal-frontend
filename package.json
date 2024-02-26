@@ -14,6 +14,8 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.6",
+    "@headlessui/vue": "^1.7.19",
+    "@heroicons/vue": "^2.1.1",
     "@tailwindcss/forms": "^0.5.7",
     "@vueform/multiselect": "^2.6.6",
     "@vueform/vueform": "^1.8.0",
