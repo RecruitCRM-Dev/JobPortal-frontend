@@ -6,20 +6,9 @@
         <div class="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4">
           <div class="sm:col-span-2">
             <a href="/" aria-label="Go home" title="Company" class="inline-flex items-center">
-              <svg
-                class="w-8 text-deep-purple-accent-400"
-                viewBox="0 0 24 24"
-                stroke-linejoin="round"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-miterlimit="10"
-                stroke="currentColor"
-                fill="none"
-              >
-                <rect x="3" y="1" width="7" height="12"></rect>
-                <rect x="3" y="17" width="7" height="6"></rect>
-                <rect x="14" y="1" width="7" height="6"></rect>
-                <rect x="14" y="11" width="7" height="12"></rect>
+              <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#6366f1" d="M13.853 18.14 1 10.643 31 1l-.019.058z"></path>
+                <path fill="#a5b4fc" d="M13.853 18.14 30.981 1.058 21.357 31l-7.5-12.857z"></path>
               </svg>
               <span class="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase"
                 >Job Portal</span
