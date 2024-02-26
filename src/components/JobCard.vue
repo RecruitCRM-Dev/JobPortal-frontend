@@ -1,5 +1,7 @@
 <template>
-  <div class="cursor-pointer transition-[0.2s] px-4 py-5 rounded-lg hover:scale-[1.02] border border-gray-200">
+  <div
+    class="cursor-pointer transition-[0.2s] px-4 py-5 rounded-lg hover:scale-[1.02] border border-gray-200"
+  >
     <div>
       <svg
         class="shadow-none w-[46px] p-2.5 rounded-lg"
@@ -22,32 +24,42 @@
         class="bg-[color:var(--placeholder-color)] shadow-[-6px_0_0_0_var(--placeholder-color),6px_0_0_0_var(--placeholder-color)] w-1 h-1 ml-auto mr-2 p-0 rounded-[50%] border-0"
       ></div>
     </div>
-    <div class="font-semibold text-sm mt-4">UI / UX Designer</div>
+    <div class="font-semibold text-sm mt-4">{{ job.title }}</div>
     <div class="text-[color:var(--subtitle-color)] text-[13px] leading-[1.6em] mt-3.5">
-      The User Experience Designer position exists to create compelling and digital user experience
-      through excellent design...
+      {{ job.description }}
     </div>
     <div class="space-x-2">
       <span
         class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
-        >Full Time</span
+        >{{ job.category }}</span
       >
       <span
         class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10"
-        >Min. 1 year</span
+        >Min. {{ job.experience }} year</span
       >
-      <span
+      <!-- <span
         class="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10"
-        >Senior Level</span
-      >
+        >Rs. {{ job.salary }}</span
+      > -->
     </div>
     <div class="mt-4">
-      <button
-        type="button"
-        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        Apply Now
-      </button>
+      <router-link :to="`/job/${job.id}/apply`">
+        <button
+          type="button"
+          class="w-full text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-blue-800"
+        >
+          Apply Now
+        </button>
+      </router-link>
     </div>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  job: {
+    type: Object,
+    required: true
+  }
+})
+</script>
