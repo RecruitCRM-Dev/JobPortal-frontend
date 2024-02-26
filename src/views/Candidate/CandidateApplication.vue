@@ -10,10 +10,10 @@
 
         <!-- all the jobs will be listed here -->
 
-        <div class="max-w-4xl mx-auto p-3">
-          <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
-            <div class="flex-1">
-              <div class="sticky top-0 z-10 p-6 w-full m-3 bg-white border-b border-gray-200">
+        <div class="max-w-4xl mx-auto">
+          <main class="mx-auto sm:px-6 lg:px-8 flex">
+            <div class="flex-1 w-full">
+              <div class="sticky top-0 z-10 py-10 w-full m-3 bg-white border-b border-gray-200">
                 <div class="lg:flex items-baseline justify-between">
                   <h1 class="text-4xl font-bold tracking-tight text-gray-900">Jobs</h1>
 
