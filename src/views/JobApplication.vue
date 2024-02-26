@@ -99,9 +99,7 @@
                   All Jobs
                 </a>
               </div>
-              <h1 class="font-extrabold text-4xl mb-10">
-                Engineering Manager Developer Experience
-              </h1>
+              <h1 class="font-extrabold text-4xl mb-10">Senior Software Engineer</h1>
               <div class="mb-8">
                 <div class="mb-10">
                   <h3 class="font-bold text-xl mb-5 text-gray-900 text-opacity-100">The Role</h3>
@@ -249,6 +247,20 @@
 <script setup>
 import AppLayout from '../layouts/AppLayout.vue'
 import Container from '../components/Container.vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
+import { useRoute } from 'vue-router'
+
+const job = ref(null)
+const route = useRoute()
+onMounted(async () => {
+  try {
+    const res = await axios.get(`/api/jobs/${route.params.id}`)
+    job.value = res.data.job
+  } catch (error) {
+    console.log(error)
+  }
+})
 </script>
 <style>
 .abc {
