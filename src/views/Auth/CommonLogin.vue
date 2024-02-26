@@ -12,14 +12,15 @@
           <div class="mb-4">
 
             <!-- Role Checkbox -->
+            <p class="text-gray-500">Are you?</p>
             <div class="flex w-32 gap-x-5 mb-3">
               <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
-                <Field name="role" type="radio" value="candidate" />
-                <div class="ml-2">Candidate</div>
+                <Field id="candidate" name="role" type="radio" value="candidate" />
+                <label for="candidate" class="ml-2">Candidate</label>
               </div>
               <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
-                <Field name="role" type="radio" value="employer" />
-                <div class="ml-2">Employer</div>
+                <Field id="employer" name="role" type="radio" value="employer" />
+                <label for="employer" class="ml-2">Employer</label>
               </div>
             </div>
 
@@ -81,7 +82,7 @@
         >
           Login
         </button>
-        <span class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password ?</span>
+        <!-- <span class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password ?</span> -->
       </Form>
     </div>
   </div>

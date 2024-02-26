@@ -5,7 +5,6 @@
         <h1 class="text-gray-800 font-bold text-2xl mb-1">Hello There!</h1>
         <p class="text-sm font-normal text-gray-600 mb-7">Welcome</p>
         <div class="flex flex-col w-80">
-          
           <!-- Full Name -->
           <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
@@ -32,7 +31,7 @@
           </div>
 
           <!-- Contact Number -->
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -155,11 +154,20 @@ import axios from 'axios'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { useStore } from 'vuex'
+import * as yup from 'yup'
+import router from '@/router'
+import { onMounted } from 'vue'
 
 const store = useStore()
 
-import * as yup from 'yup'
-import router from '@/router'
+onMounted(async ()=>{
+  await axios.get('sanctum/csrf-cookie')
+  await store.dispatch('tryLogIn')
+
+  if(store.getters.isLoggedIn){
+    router.push('/')
+  }
+})
 
 const schema = yup.object().shape({
   name: yup
@@ -192,20 +200,31 @@ const schema = yup.object().shape({
 
 const onSubmit = async (values) => {
   try {
-    await store.dispatch('register', values);
-
+    await store.dispatch('register', values)
     //Showing message to user
     toast('Registered Successfully!', {
       type: 'success',
-      "autoClose": 1000,
+      autoClose: 1000,
       dangerouslyHTMLString: true
     })
 
-    setTimeout(() => {
-      router.push('/')
-    }, 2000);
-  } catch {
-    console.log('Error')
+    // setTimeout(() => {
+    //   router.push('/')
+    // }, 2000)
+  } catch (error) {
+    if (error.response?.status === 400) {
+      toast(error.response.data.data.email, {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    } else {
+      toast('Internal Server Error', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    }
   }
 }
 </script>
