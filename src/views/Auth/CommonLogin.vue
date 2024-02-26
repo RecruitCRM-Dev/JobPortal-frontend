@@ -10,18 +10,32 @@
         <p class="text-sm font-normal text-gray-600 mb-7">Welcome Back</p>
         <div class="flex flex-col w-80">
           <div class="mb-4">
-
             <!-- Role Checkbox -->
             <p class="text-gray-500">Are you?</p>
-            <div class="flex w-32 gap-x-5 mb-3">
-              <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
-                <Field id="candidate" name="role" type="radio" value="candidate" />
-                <label for="candidate" class="ml-2">Candidate</label>
+            <div class="mb-3">
+              <div class="flex gap-x-5">
+                <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
+                  <Field
+                    id="candidate"
+                    name="role"
+                    type="radio"
+                    value="candidate"
+                    v-model="userRole"
+                  />
+                  <label for="candidate" class="ml-2">Candidate</label>
+                </div>
+                <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
+                  <Field
+                    id="employer"
+                    name="role"
+                    type="radio"
+                    value="employer"
+                    v-model="userRole"
+                  />
+                  <label for="employer" class="ml-2">Employer</label>
+                </div>
               </div>
-              <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
-                <Field id="employer" name="role" type="radio" value="employer" />
-                <label for="employer" class="ml-2">Employer</label>
-              </div>
+              <ErrorMessage name="role" class="text-red-500" />
             </div>
 
             <!-- Email -->
@@ -90,11 +104,31 @@
 
 <script setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
-
+import { ref } from 'vue'
+import { useStore } from 'vuex'
 import * as yup from 'yup'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import router from '@/router'
+import { onMounted } from 'vue'
+import axios from 'axios'
+
+const userRole = ref(null)
+const store = useStore()
+
+onMounted(async ()=>{
+  await axios.get('sanctum/csrf-cookie')
+  await store.dispatch('tryLogIn')
+
+  if(store.getters.isLoggedIn){
+    router.push('/')
+  }
+})
+
+
 
 const schema = yup.object().shape({
-  role: '',
+  role: yup.string().required('Please select a role'),
   email: yup
     .string()
     .email('Please enter a valid email address')
@@ -107,7 +141,33 @@ const schema = yup.object().shape({
     .label('Password')
 })
 
-const onSubmit = (values) => {
-  console.log(values)
+const onSubmit = async (values) => {
+  try {
+    await store.dispatch('login', values)
+    //Showing message to user
+    toast('Logged In Successfully!', {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+
+    setTimeout(() => {
+      router.push('/')
+    }, 2000)
+  } catch (error) {
+    if (error.response?.status === 401) {
+      toast('Invalid credentials', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    } else {
+      toast('Internal Server Error', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    }
+  }
 }
 </script>

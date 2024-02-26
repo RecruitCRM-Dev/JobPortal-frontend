@@ -38,7 +38,7 @@ const store = createStore({
       const email = payload.email
       const password = payload.password
       const userRole = payload.role
-      const res = null
+      let res = null
 
       axios.defaults.withCredentials = true
       axios.defaults.withXSRFToken = true
@@ -48,6 +48,8 @@ const store = createStore({
             email: email,
             password: password
           })
+
+          console.log('hello');
         } else if (userRole === 'employer') {
           res = await axios.post('/api/login/employer', {
             //TODO
@@ -55,11 +57,13 @@ const store = createStore({
             password: password
           })
         }
-        context.commit('setUser', res.data.user)
+
+        console.log(res)
+        context.commit('setUser', res.data.data.user)
+        localStorage.setItem('access-token', res.data.data.token)
         return 'Logged In Successfully'
-      } catch (err) {
-        console.log(err)
-        return err.response.error
+      } catch (error) {
+        throw error
       }
     },
     async register(context, payload) {

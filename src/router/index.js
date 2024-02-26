@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import JobList from '../views/JobList.vue'
-import LoginVue from '@/views/Auth/CommonLogin.vue'
+import CommonLogin from '@/views/Auth/CommonLogin.vue'
 import CandidateRegisterVue from '@/views/Auth/CandidateRegister.vue'
 import EmployerLoginVue from '@/views/Auth/CommonLogin.vue'
 import EmployerRegisterVue from '@/views/Auth/EmployerRegister.vue'
@@ -31,7 +31,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LoginVue
+      component: CommonLogin
     },
     {
       path: '/candidate/register',
