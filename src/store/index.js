@@ -16,19 +16,24 @@ const store = createStore({
   mutations: {
     setUser(state, user) {
       state.user = user
-      console.log(state.user)
     }
   },
 
   actions: {
-    //   async tryLogIn(context) {
-    //     try {
-    //       const res = await axios.get('/api/user')
-    //       context.commit('setUser', res.data)
-    //     } catch (err) {
-    //       console.log(err)
-    //     }
-    //   },
+    async tryLogIn(context) {
+      try {
+        if (localStorage.getItem('access-token')) {
+          const res = await axios.get('/api/user', {
+            headers: {
+              'Authorization': 'Bearer '+localStorage.getItem('access-token')
+            }
+          })
+          context.commit('setUser', res.data.data.user)
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
     async login(context, payload) {
       const email = payload.email
       const password = payload.password
@@ -71,12 +76,11 @@ const store = createStore({
           password: password,
           password_confirmation: password
         })
-        context.commit('setUser', res.data.user)
-        localStorage.setItem('access-token', res.data.access_token)
+        context.commit('setUser', res.data.data.user)
+        localStorage.setItem('access-token', res.data.data.token)
         return 'Registered Successfully'
-      } catch (err) {
-        console.log(err)
-        return err.response.error
+      } catch (error) {
+        throw error
       }
     },
 
