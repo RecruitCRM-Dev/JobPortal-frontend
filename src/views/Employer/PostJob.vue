@@ -45,7 +45,7 @@
   
           <button
             type="submit"
-            class="block bg-indigo-600 mt-1 mb-3 py-2 rounded-2xl text-white font-semibold mb-2"
+            class="block bg-indigo-600 mt-1 py-2 rounded-2xl text-white font-semibold mb-2"
           >
             Post
           </button>
