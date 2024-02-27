@@ -17,10 +17,10 @@
           />
           <div class="relative z-20 w-full flex justify-between lg:w-max md:px-0">
             <a href="/" aria-label="logo" class="flex space-x-2 items-center">
-              <div aria-hidden="true" class="flex space-x-1">
-                <div class="h-4 w-4 rounded-full bg-gray-900 dark:bg-white"></div>
-                <div class="h-6 w-2 bg-primary"></div>
-              </div>
+              <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#6366f1" d="M13.853 18.14 1 10.643 31 1l-.019.058z"></path>
+                <path fill="#a5b4fc" d="M13.853 18.14 30.981 1.058 21.357 31l-7.5-12.857z"></path>
+              </svg>
               <span class="text-2xl font-bold text-gray-900 dark:text-white">Job Portal</span>
             </a>
 
@@ -64,7 +64,7 @@
               </ul>
             </div>
 
-            <div v-if="!isLoggedIn" class="mt-12 lg:mt-0">
+            <div v-if="!store.getters.isLoggedIn" class="mt-12 lg:mt-0">
               <router-link
                 to="/candidate/register"
                 class="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
@@ -72,7 +72,7 @@
                 <span class="relative text-sm font-semibold text-white">Candidate Signup</span>
               </router-link>
             </div>
-            <div v-if="!isLoggedIn" class="mt-12 lg:mt-0">
+            <div v-if="!store.getters.isLoggedIn" class="mt-12 lg:mt-0">
               <router-link
                 to="/employer/register"
                 class="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
@@ -133,6 +133,7 @@
                       </router-link>
                     </li>
                     <li
+                      @click="handleLogout"
                       class="px-3 py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400"
                     >
                       <span>
@@ -166,8 +167,35 @@
 
 <script setup>
 import { ref } from 'vue'
-//import Container from './Container.vue'
+import { useStore } from 'vuex'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import { useRouter } from 'vue-router'
 
-const isLoggedIn = ref(true)
+const store = useStore()
+const router = useRouter()
+
 const openUserMenu = ref(false)
+
+const handleLogout = async () => {
+  try {
+    await store.dispatch('logout')
+    //Showing message to user
+    toast('Logged Out Successfully!', {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000)
+  } catch (error) {
+    toast('Internal Server Error', {
+      type: 'error',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+  }
+}
 </script>

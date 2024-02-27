@@ -266,7 +266,7 @@
                     </p>
                     <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                   </div>
-                  <input id="resume" type="file" class="hidden" />
+                  <input id="resume" name="resume" type="file" class="hidden" />
                 </label>
               </div>
             </div>

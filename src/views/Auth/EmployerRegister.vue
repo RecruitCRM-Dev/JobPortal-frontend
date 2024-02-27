@@ -2,9 +2,16 @@
   <div class="h-screen md:flex">
     <div class="flex md:w-1/2 justify-center py-10 items-center">
       <Form @submit="onSubmit" :validation-schema="schema" class="flex flex-col py-10 ml-1">
+        <router-link to="/">
+          <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" class="mb-5">
+            <path fill="#6366f1" d="M13.853 18.14 1 10.643 31 1l-.019.058z"></path>
+            <path fill="#a5b4fc" d="M13.853 18.14 30.981 1.058 21.357 31l-7.5-12.857z"></path>
+          </svg>
+        </router-link>
+        <h1 class="font-bold text-3xl mb-5 text-center">Employer Registration Form</h1>
         <h1 class="text-gray-800 font-bold text-2xl mb-1">Hello There!</h1>
         <p class="text-sm font-normal text-gray-600 mb-7">Welcome</p>
-        <div class="flex flex-col w-80">
+        <div class="flex flex-col px-5 lg:px-0">
           <!-- Company Name -->
           <div class="mb-3">
             <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
@@ -74,6 +81,7 @@
               </svg>
               <Field
                 name="password"
+                type="password"
                 placeholder="Password"
                 class="pl-2 outline-none border-none w-full py-0.5"
               />
@@ -98,6 +106,7 @@
               </svg>
               <Field
                 name="confirm_password"
+                type="password"
                 placeholder="Confirm password"
                 class="pl-2 outline-none border-none w-full py-0.5"
               />
@@ -113,6 +122,16 @@
         >
           Register
         </button>
+        <p class="text-sm text-gray-400 mb-2">
+          Are you candidate?
+          <span class="text-indigo-500 text-sm"
+            ><a href="/candidate/register">Candidate Signup</a></span
+          >
+        </p>
+        <p class="text-sm text-gray-400">
+          Already have an account?
+          <span class="text-indigo-500 text-sm"><a href="/login">Login</a></span>
+        </p>
       </Form>
     </div>
     <div class="overflow-hidden md:flex w-1/2 justify-around items-center hidden">
