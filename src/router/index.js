@@ -82,7 +82,7 @@ const router = createRouter({
       path: '/employee/jobs',
       name: 'employee-jobs',
       component: EmployeeJobPosts
-    }
+    },
     {
       path: '/employer/job/post',
       name: 'job-post',
