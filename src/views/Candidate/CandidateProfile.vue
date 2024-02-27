@@ -12,22 +12,27 @@
             <!-- Avtar -->
             <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
               <div class="h-36 w-full -mr-24">
-                <img class="h-full rounded-full" :src="formData.avtar" alt="Rounded avatar" />
+                <img
+                    :src="userPic"
+                    class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover"
+                  />
               </div>
               <div class="w-full mr-2">
                 <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input"
                   >Upload avatar</label
                 >
-                <input
+                <Field
                   class="m-0 block min-w-0 flex-auto border-solid w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-2.5"
                   aria-describedby="file_input_help"
                   id="file_input"
+                  name="profile_pic"
+                  @change="handleProfilePicChange"
                   type="file"
                 />
                 <p class="mt-1 text-sm text-gray-500" id="file_input_help">
                   SVG, PNG, JPG or GIF (MAX. 800x400px).
                 </p>
-                <button
+                <!-- <button
                   type="button"
                   class="text-red-400 inline-flex items-center hover:text-white border border-red-400 hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
                 >
@@ -44,7 +49,7 @@
                     ></path>
                   </svg>
                   Delete
-                </button>
+                </button> -->
               </div>
             </div>
 
@@ -220,7 +225,7 @@
 
                 <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
                   <Field
-                    name="skills"
+                    name="skills" v-model="formData.skills"
                     class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                   >
                     <Multiselect
@@ -242,7 +247,7 @@
               <label for="resume" class="block mb-2 text-sm font-medium text-gray-900"
                 >Resume</label
               >
-              <input type="file" name="resume" @change="uploadFile" />
+              <Field type="file" name="resume" v-model="formData.resume" @change="handleFileChange" />
             </div>
           </div>
 
@@ -274,9 +279,8 @@ import { useStore } from 'vuex'
 import axios from 'axios'
 
 const store = useStore()
-const user = ref()
+const userPic = ref(null)
 const apiProgress = ref(true)
-const userResume = ref()
 
 useForm({
   initialValues: {
@@ -285,12 +289,30 @@ useForm({
   }
 })
 
-const skillOptions = ref(['HTML5','Javascript','Vue','Laravel','ReactJS', 'Python', 'Java', 'Django'])
+const skillOptions = ref([
+  'HTML5',
+  'Javascript',
+  'Vue',
+  'Laravel',
+  'ReactJS',
+  'Python',
+  'Java',
+  'Django'
+])
 
 // console.log(user)
 
+const handleProfilePicChange = (event) => {
+  formData.profile_pic = event.target.files[0]
+  console.log(event.target.files[0])
+}
+
+const handleFileChange = (event) => {
+  formData.resume = event.target.files[0]
+}
+
 const formData = reactive({
-  avtar: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png',
+  profile_pic: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png',
   name: '',
   about: '',
   address: '',
@@ -300,27 +322,32 @@ const formData = reactive({
   education: '',
   phone: '',
   skills: [],
+  resume: null
 })
 
-const onSubmit = async (event) => {
-  // console.log(file.value)
+const onSubmit = async (values) => {
   try {
-  await axios.put(`/api/user/profile/${store.getters.User.id}`, formData)
+    console.log(values)
+    await axios.post(`/api/user/profile/update/${store.getters.User.id}`, values, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
 
-  toast('Profile Update Successfully!', {
+    toast('Profile Update Successfully!', {
       type: 'success',
       autoClose: 1000,
       dangerouslyHTMLString: true
     })
   } catch (error) {
     if (error.response?.status === 400) {
-      toast("Please check input fields", {
+      toast('Please check input fields', {
         type: 'error',
         autoClose: 1000,
         dangerouslyHTMLString: true
       })
-    }else {
-    toast('Please try again!', {
+    } else {
+      toast('Please try again!', {
         type: 'error',
         autoClose: 1000,
         dangerouslyHTMLString: true
@@ -335,6 +362,8 @@ onMounted(async () => {
   }
   try {
     const res = await axios.get(`/api/user/profile/${store.getters.User.id}`)
+    formData.profile_pic = res.data.user.profile_pic
+    userPic.value = res.data.user.profile_pic
     formData.name = res.data.user.name
     formData.about = res.data.user.about
     formData.gender = res.data.user.gender
@@ -344,6 +373,7 @@ onMounted(async () => {
     formData.phone = res.data.user.phone
     formData.address = res.data.user.address
     formData.skills = res.data.user.skills.split(',')
+    formData.resume = res.data.user.resume
   } catch (error) {
     console.log(error)
   }
