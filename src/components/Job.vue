@@ -13,15 +13,15 @@
       </div>
       <div
         v-for="job in jobs"
-        :key="job.id"
+        :key="job.data.job_id"
         class="bg-white shadow-xl shadow-gray-100 w-full flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md mb-2"
       >
         <div>
-          <span class="text-purple-800 text-sm">{{ job.category }}</span>
-          <h3 class="font-bold mt-px">{{ job.title }}</h3>
+          <span class="text-purple-800 text-sm">{{ job.data.attributes.category }}</span>
+          <h3 class="font-bold mt-px">{{ job.data.attributes.title }}</h3>
           <div class="flex items-center gap-3 mt-2">
             <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
-              >Exp: {{ job.experience }}years</span
+              >Exp: {{ job.data.attributes.experience }}years</span
             >
             <span class="text-slate-600 text-sm flex gap-1 items-center">
               <svg
@@ -43,12 +43,12 @@
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                 />
               </svg>
-              {{ job.location }}</span
+              {{ job.data.attributes.location }}</span
             >
           </div>
         </div>
         <div>
-          <router-link :to="`/job/${job.id}/apply`">
+          <router-link :to="`/job/${job.data.job_id}/apply`">
             <button
               class="bg-purple-900 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
             >
@@ -65,7 +65,7 @@
               </svg>
             </button>
           </router-link>
-          <p class="mt-2 italic text-sm text-gray-400">{{ timeSincePosted(job.created_at) }}</p>
+          <p class="mt-2 italic text-sm text-gray-400">{{ job.data.attributes.posted_at }}</p>
         </div>
       </div>
     </Container>
@@ -81,25 +81,7 @@ const jobs = ref(null)
 
 onMounted(async () => {
   const res = await axios.get('/api/jobs/latest')
-  jobs.value = res.data.jobs
+  jobs.value = res.data.data
   console.log(res.data.jobs)
 })
-
-const timeSincePosted = (createdAt) => {
-  const createdTime = new Date(createdAt)
-  const currentTime = new Date()
-  const diffInMilliseconds = currentTime - createdTime
-
-  // Calculate time difference in hours
-  const diffInHours = Math.floor(diffInMilliseconds / (1000 * 60 * 60))
-
-  // Generate human-readable output
-  if (diffInHours === 0) {
-    return 'Less than an hour ago'
-  } else if (diffInHours === 1) {
-    return '1 hour ago'
-  } else {
-    return `${diffInHours} hours ago`
-  }
-}
 </script>

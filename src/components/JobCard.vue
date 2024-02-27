@@ -24,18 +24,18 @@
         class="bg-[color:var(--placeholder-color)] shadow-[-6px_0_0_0_var(--placeholder-color),6px_0_0_0_var(--placeholder-color)] w-1 h-1 ml-auto mr-2 p-0 rounded-[50%] border-0"
       ></div>
     </div>
-    <div class="font-semibold text-sm mt-4">{{ job.title }}</div>
+    <div class="font-semibold text-sm mt-4">{{ job.attributes.title }}</div>
     <div class="text-[color:var(--subtitle-color)] text-[13px] leading-[1.6em] mt-3.5">
-      {{ job.description }}
+      {{ job.attributes.description }}
     </div>
     <div class="space-x-2">
       <span
         class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
-        >{{ job.category }}</span
+        >{{ job.attributes.category }}</span
       >
       <span
         class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10"
-        >Min. {{ job.experience }} year</span
+        >Min. {{ job.attributes.experience }} year</span
       >
       <!-- <span
         class="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10"
@@ -43,7 +43,7 @@
       > -->
     </div>
     <div class="mt-4">
-      <router-link :to="`/job/${job.id}/apply`">
+      <router-link :to="`/job/${job.job_id}/apply`">
         <button
           type="button"
           class="w-full text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-blue-800"
