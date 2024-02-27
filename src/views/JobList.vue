@@ -260,7 +260,7 @@
 
                   <!-- Product grid -->
                   <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2">
-                    <JobCard v-for="job in jobs" :key="job.id" :job="job" />
+                    <JobCard v-for="job in jobs" :key="job.data.job_id" :job="job.data" />
                     <!-- <p>sd</p> -->
                   </div>
                 </div>
@@ -447,8 +447,8 @@ const pageRange = 3 // Number of pages before and after the current page to disp
 const fetchJobs = async () => {
   try {
     const response = await axios.get(`/api/jobs?page=${currentPage.value}`)
-    jobs.value = response.data.jobs.data
-    totalPages.value = response.data.jobs.last_page // Assuming API response contains total number of pages
+    jobs.value = response.data.data
+    totalPages.value = response.data.meta.last_page // Assuming API response contains total number of pages
   } catch (error) {
     console.error('Error fetching jobs:', error)
   }

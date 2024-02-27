@@ -28,6 +28,7 @@ const store = createStore({
               Authorization: 'Bearer ' + localStorage.getItem('access-token')
             }
           })
+          console.log(res.data.data.user)
           context.commit('setUser', res.data.data.user)
         }
       } catch (err) {
