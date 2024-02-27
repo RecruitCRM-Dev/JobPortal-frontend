@@ -9,7 +9,7 @@ import JobApplication from '@/views/JobApplication.vue'
 import CandidateOverviewVue from '@/views/Candidate/CandidateOverview.vue'
 import CandidateProfileVue from '@/views/Candidate/CandidateProfile.vue'
 import CandidateApplicationVue from '@/views/Candidate/CandidateApplication.vue'
-import PostJobVue from '@/views/Employer/PostJob.vue'
+import JobPostVue from '@/views/Employer/JobPost.vue'
 import JobApplicantsVue from '@/views/Employer/JobApplicants.vue'
 import EmployeeOverview from '@/views/Employee/EmployeeOverview.vue'
 import EmployeeProfile from '@/views/Employee/EmployeeProfile.vue'
@@ -86,7 +86,7 @@ const router = createRouter({
     {
       path: '/employer/job/post',
       name: 'job-post',
-      component: PostJobVue
+      component: JobPostVue
     },
     {
       path:'/job/applicants',
