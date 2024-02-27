@@ -181,6 +181,17 @@
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
 import EmployeeNavigation from '@/components/EmployeeNavigation.vue'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 //const skills = ['VueJs', 'Laravel', 'HTML', 'CSS ', 'JS', 'C++']
+
+const store = useStore()
+const router = useRouter()
+onMounted(async () => {
+  if (!store.getters.isLoggedIn) {
+    router.push('/login')
+  }
+})
 </script>
