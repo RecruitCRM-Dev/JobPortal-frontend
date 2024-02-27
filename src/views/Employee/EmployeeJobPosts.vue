@@ -1,0 +1,256 @@
+<template>
+  <div>
+    <AppHeader />
+    <section>
+      <div class="container mx-auto py-8">
+        <div class="bg-white mt-3">
+          <h2 class="text-center mt-12 text-3xl text-gray-900">Your Applications</h2>
+        </div>
+        <EmployeeNavigation />
+
+        <!-- all the jobs will be listed here -->
+
+        <div class="max-w-4xl mx-auto p-3">
+          <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
+            <div class="flex-1">
+              <div class="sticky top-0 z-10 p-6 w-full m-3 bg-white border-b border-gray-200">
+                <div class="lg:flex items-baseline justify-between">
+                  <h1 class="text-4xl font-bold tracking-tight text-gray-900">Jobs</h1>
+
+                  <div class="flex items-center mt-5 lg:mt-0">
+                    <!-- <div class="relative">
+                      <div
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                          class="w-5 h-5 text-blue-700"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        id="simple-search"
+                        class="bg-gray-50 rounded h-10 border-r-1 focus:ring-0 border-gray-200 text-gray-900 text-sm block w-full pl-10 py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white shadow"
+                        placeholder="Search here..."
+                        required
+                      />
+                    </div> -->
+                    <Menu as="div" class="relative inline-block text-left ml-5">
+                      <div>
+                        <MenuButton
+                          class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
+                        >
+                          Sort
+                          <ChevronDownIcon
+                            class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                            aria-hidden="true"
+                          />
+                        </MenuButton>
+                      </div>
+
+                      <transition
+                        enter-active-class="transition ease-out duration-100"
+                        enter-from-class="transform opacity-0 scale-95"
+                        enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-75"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95"
+                      >
+                        <MenuItems
+                          class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        >
+                          <div class="py-1">
+                            <MenuItem
+                              v-for="option in sortOptions"
+                              :key="option.name"
+                              v-slot="{ active }"
+                            >
+                              <a
+                                :href="option.href"
+                                :class="[
+                                  option.current ? 'font-medium text-gray-900' : 'text-gray-500',
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm'
+                                ]"
+                                >{{ option.name }}</a
+                              >
+                            </MenuItem>
+                          </div>
+                        </MenuItems>
+                      </transition>
+                    </Menu>
+
+                    <button
+                      type="button"
+                      class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
+                    >
+                      <span class="sr-only">View grid</span>
+                      <Squares2X2Icon class="h-5 w-5" aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
+                      @click="mobileFiltersOpen = true"
+                    >
+                      <span class="sr-only">Filters</span>
+                      <FunnelIcon class="h-5 w-5" aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+          <div
+            v-for="job in jobs"
+            :key="job"
+            class="bg-white shadow-xl shadow-gray-100 w-full flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md mb-2"
+          >
+            <div>
+              <!-- <span class="text-purple-800 text-sm">Engineering</span> -->
+              <h3 class="font-bold mt-px">{{ job.job_title }}</h3>
+              <div class="flex items-center gap-3 mt-2">
+                <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
+                  >Full-time</span
+                >
+                <span class="text-slate-600 text-sm flex gap-1 items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  {{ job.location }}</span
+                >
+                <span
+                  class="rounded-full px-3 py-1 text-sm"
+                  :class="
+                    job.job_status == 'Active'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-orange-100 text-orange-700'
+                  "
+                  >{{ job.job_status }}</span
+                >
+              </div>
+            </div>
+            <div>
+              <router-link
+                to="/employee/candidates"
+                class="bg-purple-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
+                >View</router-link
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup>
+import AppHeader from '@/components/AppHeader.vue'
+import EmployeeNavigation from '@/components/EmployeeNavigation.vue'
+import { ref } from 'vue'
+
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
+
+const sortOptions = [
+  { name: 'Active', href: '#', current: false },
+  { name: 'Expired', href: '#', current: false }
+]
+const jobs = [
+  {
+    job_title: 'Senior Full Stack Backend Engineer',
+    location: 'Chennai',
+    job_status: 'Active'
+  },
+  {
+    job_title: 'Junir Full Stack Backend Engineer',
+    location: 'Hyderabad',
+    job_status: 'Epired'
+  },
+  {
+    job_title: 'Senior Frontend Developer',
+    location: 'Mumbai',
+    job_status: 'Active'
+  },
+  {
+    job_title: 'Junior Backend Developer',
+    location: 'Bangalore',
+    job_status: 'Expired'
+  },
+  {
+    job_title: 'Senior Software Engineer',
+    location: 'Pune',
+    job_status: 'Active'
+  },
+  {
+    job_title: 'Junior Full Stack Developer',
+    location: 'Delhi',
+    job_status: 'Expired'
+  },
+  {
+    job_title: 'Senior Backend Engineer',
+    location: 'Kolkata',
+    job_status: 'Active'
+  },
+  {
+    job_title: 'Junior Frontend Developer',
+    location: 'Chandigarh',
+    job_status: 'Expired'
+  },
+  {
+    job_title: 'Senior Java Developer',
+    location: 'Ahmedabad',
+    job_status: 'Active'
+  },
+  {
+    job_title: 'Junior Software Engineer',
+    location: 'Jaipur',
+    job_status: 'Expired'
+  },
+  {
+    job_title: 'Senior Full Stack Developer',
+    location: 'Lucknow',
+    job_status: 'Active'
+  },
+  {
+    job_title: 'Junior Backend Engineer',
+    location: 'Indore',
+    job_status: 'Expired'
+  },
+  {
+    job_title: 'Senior Frontend Engineer',
+    location: 'Bhubaneswar',
+    job_status: 'Active'
+  },
+  {
+    job_title: 'Junior Web Developer',
+    location: 'Guwahati',
+    job_status: 'Expired'
+  }
+]
+
+const mobileFiltersOpen = ref(false)
+</script>
