@@ -15,7 +15,7 @@
             <div class="flex-1 w-full">
               <div class="sticky top-0 z-10 py-10 w-full m-3 bg-white border-b border-gray-200">
                 <div class="lg:flex items-baseline justify-between">
-                  <h1 class="text-4xl font-bold tracking-tight text-gray-900">Jobs</h1>
+                  <h1 class="text-4xl font-bold tracking-tight text-gray-900">Applied Jobs</h1>
 
                   <div class="flex items-center mt-5 lg:mt-0">
                     <div class="relative">
@@ -108,17 +108,20 @@
               </div>
             </div>
           </main>
+          <div v-if="jobApplications?.length == 0" class="text-center">
+            You have not applied to any job till now
+          </div>
           <div
-            v-for="index in 20"
-            :key="index"
+            v-for="jobApplication in jobApplications"
+            :key="jobApplication.id"
             class="bg-white shadow-xl shadow-gray-100 w-full flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md mb-2"
           >
             <div>
-              <span class="text-purple-800 text-sm">Engineering</span>
-              <h3 class="font-bold mt-px">Senior Full Stack Backend Engineer</h3>
+              <span class="text-purple-800 text-sm">{{jobApplication.job.category}}</span>
+              <h3 class="font-bold mt-px">{{jobApplication.job.title}}</h3>
               <div class="flex items-center gap-3 mt-2">
                 <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
-                  >Full-time</span
+                  >Exp. {{ jobApplication.job.experience }} year</span
                 >
                 <span class="text-slate-600 text-sm flex gap-1 items-center">
                   <svg
@@ -140,7 +143,7 @@
                       d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  Remote, UK</span
+                  {{jobApplication.job.location}}</span
                 >
               </div>
             </div>
@@ -148,7 +151,7 @@
               <button
                 class="bg-red-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
               >
-                Rejected
+                {{jobApplication.status}}
               </button>
             </div>
           </div>
@@ -161,10 +164,12 @@
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
 import UserNavigation from '@/components/UserNavigation.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
+import axios from 'axios'
+import { useStore } from 'vuex'
 
 const sortOptions = [
   { name: 'Best Rating', href: '#', current: false },
@@ -174,4 +179,22 @@ const sortOptions = [
 ]
 
 const mobileFiltersOpen = ref(false)
+const jobApplications = ref()
+const apiProgress = ref(true)
+const store = useStore()
+
+onMounted(async () => {
+  if (!store.getters.isLoggedIn) {
+    router.push('/login')
+  }
+  try {
+    const res = await axios.get(`/api/myJobs?user_id=${store.getters.User.id}`)
+    // console.log()
+    jobApplications.value = res.data.job_applications
+    console.log(res.data.job_applications)
+    apiProgress.value = false
+  } catch (error) {
+    console.log(error)
+  }
+})
 </script>

@@ -80,6 +80,14 @@
                 <span class="relative text-sm font-semibold text-white">Employer Signup</span>
               </router-link>
             </div>
+            <div v-if="!store.getters.isLoggedIn" class="mt-12 lg:mt-0">
+              <router-link
+                to="/employer/register"
+                class="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
+              >
+                <span class="relative text-sm font-semibold text-white">Login</span>
+              </router-link>
+            </div>
             <div v-else class="mt-5 lg:mt-0">
               <div
                 @click="openUserMenu = !openUserMenu"

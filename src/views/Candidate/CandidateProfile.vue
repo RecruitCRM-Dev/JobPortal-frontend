@@ -7,7 +7,7 @@
           <h2 class="text-center text-3xl text-gray-900">Edit your profile</h2>
         </div>
         <UserNavigation />
-        <Form @submit="onSubmit" class="flex flex-col py-10 ml-1">
+        <Form @submit="onSubmit" class="flex flex-col py-10 ml-1" enctype="multipart/form-data">
           <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5 items-center">
             <!-- Avtar -->
             <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
@@ -102,9 +102,9 @@
                     as="select"
                     class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                   >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="others">Others</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Others">Others</option>
                   </Field>
                 </div>
               </div>
@@ -142,11 +142,13 @@
                   v-model="formData.role"
                   class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                 >
-                  <option value="EC">Electronics</option>
-                  <option value="TV">TV/Monitors</option>
-                  <option value="PC">PC</option>
-                  <option value="GA">Gaming/Console</option>
-                  <option value="PH">Phones</option>
+                  <option value="Software Developer">Software Developer</option>
+                  <option value="Graphic Designer">Graphic Designer</option>
+                  <option value="Sales">Sales</option>
+                  <option value="HR">HR</option>
+                  <option value="Project Manager">Project Manager</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Business">Business</option>
                 </Field>
               </div>
             </div>
@@ -164,11 +166,11 @@
                   as="select"
                   class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                 >
-                  <option value="EC" selected>Electronics</option>
-                  <option value="TV">TV/Monitors</option>
-                  <option value="PC">PC</option>
-                  <option value="GA">Gaming/Console</option>
-                  <option value="PH">Phones</option>
+                  <option value="0" selected>Fresher</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4+</option>
                 </Field>
               </div>
             </div>
@@ -240,35 +242,7 @@
               <label for="resume" class="block mb-2 text-sm font-medium text-gray-900"
                 >Resume</label
               >
-              <div class="flex items-center justify-center w-full sm:col-span-2">
-                <label
-                  for="resume"
-                  class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
-                >
-                  <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg
-                      class="w-8 h-8 mb-4 text-gray-500"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg>
-                    <p class="mb-2 text-sm text-gray-500">
-                      <span class="font-semibold">Click to upload</span> or drag and drop
-                    </p>
-                    <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                  </div>
-                  <input id="resume" name="resume" type="file" class="hidden" />
-                </label>
-              </div>
+              <input type="file" name="resume" @change="uploadFile" />
             </div>
           </div>
 
@@ -286,15 +260,24 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 
 import Multiselect from '@vueform/multiselect'
 
 import AppHeader from '@/components/AppHeader.vue'
 import UserNavigation from '@/components/UserNavigation.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import { useForm } from 'vee-validate'
+import { useStore } from 'vuex'
+import axios from 'axios'
+
+const store = useStore()
+const user = ref()
+const apiProgress = ref(true)
+const userResume = ref()
+
 useForm({
   initialValues: {
     name: 'Divyanshu Upreti',
@@ -302,24 +285,69 @@ useForm({
   }
 })
 
-const skillOptions = ref(['Vue Js', 'Laravel', 'More to Come', 'Html', 'CSS'])
+const skillOptions = ref(['HTML5','Javascript','Vue','Laravel','ReactJS', 'Python', 'Java', 'Django'])
+
+// console.log(user)
 
 const formData = reactive({
   avtar: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png',
-  name: 'Divyanshu',
+  name: '',
   about: '',
   address: '',
   gender: '',
   role: '',
   experience: '',
+  education: '',
   phone: '',
-  resume: '',
-  skills: []
+  skills: [],
 })
 
-const onSubmit = () => {
-  console.log(formData)
+const onSubmit = async (event) => {
+  // console.log(file.value)
+  try {
+  await axios.put(`/api/user/profile/${store.getters.User.id}`, formData)
+
+  toast('Profile Update Successfully!', {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+  } catch (error) {
+    if (error.response?.status === 400) {
+      toast("Please check input fields", {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    }else {
+    toast('Please try again!', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    }
+  }
 }
+
+onMounted(async () => {
+  if (!store.getters.isLoggedIn) {
+    router.push('/login')
+  }
+  try {
+    const res = await axios.get(`/api/user/profile/${store.getters.User.id}`)
+    formData.name = res.data.user.name
+    formData.about = res.data.user.about
+    formData.gender = res.data.user.gender
+    formData.role = res.data.user.role
+    formData.experience = res.data.user.experience
+    formData.education = res.data.user.education
+    formData.phone = res.data.user.phone
+    formData.address = res.data.user.address
+    formData.skills = res.data.user.skills.split(',')
+  } catch (error) {
+    console.log(error)
+  }
+})
 </script>
 
 <style src="@vueform/multiselect/themes/default.css"></style>

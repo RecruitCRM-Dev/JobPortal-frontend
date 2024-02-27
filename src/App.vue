@@ -10,11 +10,10 @@ import { onMounted } from 'vue'
 import { useStore } from 'vuex'
 const store = useStore()
 
-onMounted(async () => {
-  window.scrollTo(0, 0);
-  await axios.get('sanctum/csrf-cookie')
-  await store.dispatch('tryLogIn')
-})
+// onMounted(async () => {
+//   // window.scrollTo(0, 0);
+//   // await store.dispatch('tryLogIn')
+// })
 </script>
 
 <style>
