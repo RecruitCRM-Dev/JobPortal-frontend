@@ -175,8 +175,8 @@ import { onMounted } from 'vue'
 const store = useStore()
 
 onMounted(async () => {
-  await axios.get('sanctum/csrf-cookie')
-  await store.dispatch('tryLogIn')
+  // await axios.get('sanctum/csrf-cookie')
+  // await store.dispatch('tryLogIn')
 
   if (store.getters.isLoggedIn) {
     router.push('/')
@@ -214,7 +214,7 @@ const schema = yup.object().shape({
 
 const onSubmit = async (values) => {
   try {
-    await store.dispatch('register', values)
+    await store.dispatch('candidateRegister', values)
     //Showing message to user
     toast('Registered Successfully!', {
       type: 'success',

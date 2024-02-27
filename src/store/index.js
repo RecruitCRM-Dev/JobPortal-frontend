@@ -10,7 +10,8 @@ const vuexLocal = new VuexPersistence({
 const store = createStore({
   state() {
     return {
-      user: null
+      user: null,
+      role: null
     }
   },
 
@@ -20,11 +21,17 @@ const store = createStore({
     },
     User(state) {
       return state.user
+    },
+    isRole(state){
+      return state.role
     }
   },
   mutations: {
     setUser(state, user) {
       state.user = user
+    },
+    setRole(state, role){
+      state.role = role
     }
   },
 
@@ -59,16 +66,16 @@ const store = createStore({
             password: password
           })
 
-          console.log('hello')
+          context.commit('setRole', 'candidate')
         } else if (userRole === 'employer') {
           res = await axios.post('/api/login/employer', {
             //TODO
             email: email,
             password: password
           })
+          console.log(res)
+          context.commit('setRole', 'employer')
         }
-
-        console.log(res)
         context.commit('setUser', res.data.data.user)
         localStorage.setItem('access-token', res.data.data.token)
         return 'Logged In Successfully'
@@ -76,7 +83,7 @@ const store = createStore({
         throw error
       }
     },
-    async register(context, payload) {
+    async candidateRegister(context, payload) {
       const name = payload.name
       const email = payload.email
       const password = payload.password
@@ -91,7 +98,31 @@ const store = createStore({
           password_confirmation: password
         })
         context.commit('setUser', res.data.data.user)
+        context.commit('setRole', 'candidate')
         localStorage.setItem('access-token', res.data.data.token)
+        return 'Registered Successfully'
+      } catch (error) {
+        throw error
+      }
+    },
+
+    async employerRegister(context, payload) {
+      const name = payload.name
+      const email = payload.email
+      const password = payload.password
+
+      axios.defaults.withCredentials = true
+      axios.defaults.withXSRFToken = true
+      try {
+        const res = await axios.post('/api/register/employer', {
+          name: name,
+          email: email,
+          password: password,
+          password_confirmation: password
+        })
+        context.commit('setUser', res.data.data.user)
+        context.commit('setRole', 'employer')
+        localStorage.setItem('access-token', res.data.data.access_token)
         return 'Registered Successfully'
       } catch (error) {
         throw error
@@ -103,6 +134,7 @@ const store = createStore({
         await axios.post('/api/logout/user')
         localStorage.clear()
         context.commit('setUser', null)
+        context.commit('setRole', null)
         return 'Logged Out Successfully'
       } catch (error) {
         throw error

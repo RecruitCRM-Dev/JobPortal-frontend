@@ -99,7 +99,7 @@
                 >
                   <ul>
                     <li class="px-3 py-3 text-sm font-medium hover:bg-slate-400">
-                      <router-link to="/candidate" class="flex space-x-2 items-center">
+                      <router-link :to="store.getters.isRole==='employer' ? '/employee': '/candidate'" class="flex space-x-2 items-center">
                         <span>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +120,7 @@
                       </router-link>
                     </li>
                     <li class="px-3 py-3 text-sm font-medium hover:bg-slate-400">
-                      <router-link to="/candidate/applications" class="flex space-x-2 items-center">
+                      <router-link :to="store.getters.isRole==='employer' ? '/employee/jobs': '/candidate/applications'" class="flex space-x-2 items-center">
                         <span>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +137,8 @@
                             />
                           </svg>
                         </span>
-                        <span> Applied Jobs </span>
+                        <span v-if="store.getters.isRole==='employer'">Posted Jobs</span>
+                        <span v-else> Applied Jobs </span>
                       </router-link>
                     </li>
                     <li

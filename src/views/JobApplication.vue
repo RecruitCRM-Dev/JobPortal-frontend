@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="pt-20">
+    <div class="pt-20" v-if="!apiProgress">
       <Container>
         <div class="lg:flex lg:justify-between">
           <!-- side menu -->
@@ -15,7 +15,9 @@
                     height="72"
                     alt=""
                   />
-                  <h2 class="font-bold text-xl">Medium inc.</h2>
+                  <h2 class="font-bold text-xl">
+                    {{ job.attributes.posted_by.data.attributes.name }}
+                  </h2>
                 </div>
                 <div class="lg:justify-start flex mb-5 justify-center">
                   <ul class="flex-col inline-flex">
@@ -35,7 +37,7 @@
                         />
                       </svg>
 
-                      <span class="abc">24 August, 2024</span>
+                      <span class="abc">{{ jobPostedDate }}</span>
                     </li>
                     <li class="items-center flex text-opacity-100 text-gray-400">
                       <svg
@@ -57,7 +59,7 @@
                           d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
                         />
                       </svg>
-                      <span class="abc">Remote</span>
+                      <span class="abc">{{job.attributes.location}}</span>
                     </li>
                     <li class="items-center flex text-opacity-100 text-gray-400">
                       <svg
@@ -74,7 +76,7 @@
                           d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                         />
                       </svg>
-                      <span class="abc">7lpa - 12lpa</span>
+                      <span class="abc">{{job.attributes.salary.toLocaleString('en-IN')}}</span>
                     </li>
                   </ul>
                 </div>
@@ -99,7 +101,7 @@
                   All Jobs
                 </a>
               </div>
-              <h1 class="font-extrabold text-4xl mb-10">Senior Software Engineer</h1>
+              <h1 class="font-extrabold text-4xl mb-10">{{ job.attributes.title }}</h1>
               <div class="mb-8">
                 <div class="mb-10">
                   <h3 class="font-bold text-xl mb-5 text-gray-900 text-opacity-100">The Role</h3>
@@ -252,15 +254,28 @@ import axios from 'axios'
 import { useRoute } from 'vue-router'
 
 const job = ref(null)
+const jobPostedDate = ref(null)
 const route = useRoute()
+const apiProgress = ref(true)
 onMounted(async () => {
   try {
     const res = await axios.get(`/api/jobs/${route.params.id}`)
-    job.value = res.data.job
+    // console.log(res.data)
+    job.value = res.data.data
+    jobPostedDate.value = convertToLocalDate(res.data.data.attributes.created_at)
+    apiProgress.value = false
   } catch (error) {
     console.log(error)
   }
 })
+
+const convertToLocalDate = (jobDate) => {
+  const dateString = jobDate
+  const date = new Date(dateString)
+
+  const options = { day: '2-digit', month: 'long', year: 'numeric' }
+  return date.toLocaleDateString('en-GB', options)
+}
 </script>
 <style>
 .abc {

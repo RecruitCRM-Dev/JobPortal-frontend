@@ -286,7 +286,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { onMounted, reactive } from 'vue'
 
 //import Multiselect from '@vueform/multiselect'
 
@@ -295,6 +295,8 @@ import EmployeeNavigation from '@/components/EmployeeNavigation.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
 import { useForm } from 'vee-validate'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 useForm({
   initialValues: {
     name: 'Divyanshu Upreti',
@@ -314,6 +316,14 @@ const formData = reactive({
 const onSubmit = () => {
   console.log(formData)
 }
+
+const store = useStore()
+const router = useRouter()
+onMounted(async () => {
+  if (!store.getters.isLoggedIn) {
+    router.push('/login')
+  }
+})
 </script>
 
 <style src="@vueform/multiselect/themes/default.css"></style>

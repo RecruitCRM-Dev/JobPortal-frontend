@@ -142,8 +142,22 @@
 
 <script setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
-
+import { useStore } from 'vuex'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import * as yup from 'yup'
+import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+
+
+onMounted(async () => {
+  // await axios.get('sanctum/csrf-cookie')
+  // await store.dispatch('tryLogIn')
+
+  if (store.getters.isLoggedIn) {
+    router.push('/')
+  }
+})
 
 const schema = yup.object().shape({
   name: yup
@@ -167,7 +181,36 @@ const schema = yup.object().shape({
     .oneOf([yup.ref('password'), null], 'Passwords must match')
 })
 
-const onSubmit = (values) => {
-  console.log(values)
+const store = useStore()
+const router = useRouter()
+
+const onSubmit = async (values) => {
+  try {
+    await store.dispatch('employerRegister', values)
+    //Showing message to user
+    toast('Registered Successfully!', {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+
+    setTimeout(() => {
+      router.push('/employee/update')
+    }, 2000)
+  } catch (error) {
+    if (error.response?.status === 400) {
+      toast(error.response.data.data.email, {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    } else {
+      toast('Internal Server Error', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    }
+  }
 }
 </script>

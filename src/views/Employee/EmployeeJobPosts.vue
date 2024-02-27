@@ -170,10 +170,12 @@
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
 import EmployeeNavigation from '@/components/EmployeeNavigation.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 const sortOptions = [
   { name: 'Active', href: '#', current: false },
@@ -253,4 +255,14 @@ const jobs = [
 ]
 
 const mobileFiltersOpen = ref(false)
+
+const store = useStore()
+const router = useRouter()
+
+onMounted(async () => {
+  if (!store.getters.isLoggedIn) {
+    router.push('/login')
+  }
+  
+})
 </script>
