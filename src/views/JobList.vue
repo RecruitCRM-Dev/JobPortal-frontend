@@ -336,11 +336,11 @@ const filters = [
     id: 'job-role',
     name: 'Job Roles',
     options: [
-      { value: 'programming', label: 'Programming', checked: false },
-      { value: 'design', label: 'Design', checked: false },
-      { value: 'management', label: 'Management', checked: true },
-      { value: 'customer-support', label: 'Customer Support', checked: false },
-      { value: 'sales', label: 'Sales / Marketing', checked: false }
+      { value: 'IT', label: 'IT', checked: true},
+      { value: 'Finance', label: 'Finance', checked: false },
+      { value: 'Sales', label: 'Sales', checked: false },
+      { value: 'Marketing', label: 'Marketing', checked: false },
+      { value: 'HR', label: 'HR', checked: false }
     ]
   },
   {
