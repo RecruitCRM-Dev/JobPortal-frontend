@@ -13,13 +13,13 @@
               <div class="bg-white shadow-xl rounded-lg p-6">
                 <div class="flex flex-col items-center">
                   <img
-                    :src="user.profile_pic"
+                    :src="user.profile_pic ? user.profile_pic :  'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'"
                     class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover"
                   />
                   <h1 class="text-xl font-bold">{{ user.name }}</h1>
                   <p v-if="user.role" class="text-gray-700 text-sm">{{ user.role }}</p>
                   <div class="items-center">
-                    <p class="text-gray-700 text-sm text-center" v-if="user.address">{{ user.address }} years</p>
+                    <p class="text-gray-700 text-sm text-center" v-if="user.address">{{ user.address }}</p>
                   </div>
 
 

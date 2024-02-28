@@ -1,6 +1,6 @@
 <template>
   <div
-    class="cursor-pointer transition-[0.2s] px-4 py-5 rounded-lg hover:scale-[1.02] border border-gray-200"
+    class="cursor-pointer transition-[0.2s] px-4 py-5 rounded-lg hover:scale-[1.02] border border-gray-200 max-w-md"
   >
     <div>
       <svg
