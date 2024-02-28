@@ -402,21 +402,21 @@ const subCategories = [
 ]
 const filters = [
   {
-    id: 'job-type',
-    name: 'Job Type',
+    id: 'location',
+    name: 'Location',
     options: [
-      { value: 'full-time', label: 'Full-time', checked: false },
-      { value: 'part-time', label: 'Part-time', checked: false },
-      { value: 'internship', label: 'Internship', checked: true },
-      { value: 'contract', label: 'Contract / Freelance', checked: false },
-      { value: 'co-founder', label: 'Co-founder', checked: false }
+      { value: 'banglore', label: 'Banglore', checked: false },
+      { value: 'pune', label: 'Pune', checked: false },
+      { value: 'delhi', label: 'Delhi', checked: true },
+      { value: 'chennai', label: 'Chennai', checked: false },
+      { value: 'bombay', label: 'Bombay', checked: false }
     ]
   },
   {
     id: 'job-role',
     name: 'Job Roles',
     options: [
-      { value: 'IT', label: 'IT', checked: true },
+      { value: 'IT', label: 'IT', checked: true},
       { value: 'Finance', label: 'Finance', checked: false },
       { value: 'Sales', label: 'Sales', checked: false },
       { value: 'Marketing', label: 'Marketing', checked: false },
@@ -455,16 +455,16 @@ const totalPages = ref(1)
 let jobs = ref([])
 const pageRange = 3 // Number of pages before and after the current page to display
 
-const fetchJobs = async () => {
-  try {
-    const response = await axios.get(`/api/jobs?page=${currentPage.value}`)
-    console.log(response.data.data)
-    jobs.value = response.data.data
-    totalPages.value = response.data.meta.last_page // Assuming API response contains total number of pages
-  } catch (error) {
-    console.error('Error fetching jobs:', error)
-  }
-}
+// const fetchJobs = async () => {
+//   try {
+//     const response = await axios.get(`/api/jobs?page=${currentPage.value}`)
+//     console.log(response.data.data)
+//     jobs.value = response.data.data
+//     totalPages.value = response.data.meta.last_page // Assuming API response contains total number of pages
+//   } catch (error) {
+//     console.error('Error fetching jobs:', error)
+//   }
+// }
 console.log(filters)
 
 const filterJobs = async () => {
@@ -483,12 +483,12 @@ const filterJobs = async () => {
     console.error('Error filtering jobs:', error);
   }
 };
-// for (const filter of filters) {
-//   for (const option of filter.options) {
-//     watch(() => option.checked, filterJobs);
-//   }
-// }
-watch(() => filters, filterJobs, { deep: true });
+for (const filter of filters) {
+  for (const option of filter.options) {
+    watch(() => option, filterJobs);
+  }
+}
+// watch(() => filters, filterJobs, { deep: true });
 
 // watch(() => filters.value, filterJobs, { deep: true });
 onMounted(filterJobs);
@@ -510,7 +510,7 @@ const nextPage = () => {
 
 const gotoPage = (page) => {
   currentPage.value = page
-  fetchJobs()
+  // fetchJobs()
 }
 
 const visiblePages = computed(() => {
@@ -522,6 +522,10 @@ const visiblePages = computed(() => {
   }
   return pages
 })
+// watch(filters, (newFilters, oldFilters) => {
+//   // Filter jobs when the filters change
+//   filterJobs();
+// }, { deep: true });
 
 watch(
   () => route.query.page,
@@ -529,11 +533,11 @@ watch(
     if (newValue !== oldValue) {
       currentPage.value = parseInt(newValue) || 1 // Parse the new value to an integer or default to 1
     }
-    fetchJobs()
+    filterJobs()
   }
 )
 currentPage.value = parseInt(route.query.page) || 1
-onMounted(fetchJobs)
+onMounted(filterJobs)
 
 
 </script>
