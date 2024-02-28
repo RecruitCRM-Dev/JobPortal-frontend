@@ -37,7 +37,7 @@
             </td>
             <td class="px-4 py-3 text-ms font-semibold border">{{applicant.user.email}}</td>
             <td class="px-4 py-3 text-xs border">
-                <select value="status" class="bg-transparent">
+                <select value="status" class="bg-transparent" v-model="applicant.status" @change="updateStatus(applicant)">
                     <option value="Just_Applied">Applied</option>
                     <option value="ResumeViewed">Resume Viewed</option>
                     <option value="Underconsideration">Under Consideration</option>
@@ -70,7 +70,15 @@
       const date = new Date(dateString);
       return date.toLocaleDateString(); // Adjust formatting as needed
     };
-
+    const updateStatus = async (applicant) => {
+      try {
+      
+        await axios.put('/api/employer/1/job/72/', { userId:applicant.user.id,status: applicant.status })
+        console.log('Updated status')
+      } catch (error) {
+        console.error('Error updating status:', error)
+      }
+    }
     onMounted(async () => {
       if (!store.getters.isLoggedIn) {
         router.push('/login')
