@@ -1,15 +1,15 @@
 <template>
   <div class="flex space-x-5 justify-center items-center p-5 m-3">
     <router-link
-      to="/employee"
+      to="/employer"
       class="text-black"
-      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employee' }"
+      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer' }"
       >Overview</router-link
     >
     <router-link
-      to="/employee/update"
+      to="/employer/update"
       class="text-black"
-      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employee/update' }"
+      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer/update' }"
       >Profile Update</router-link
     >
     <router-link
@@ -19,9 +19,9 @@
       >Post a Job</router-link
     >
     <router-link
-      to="/employee/jobs"
+      to="/employer/jobs"
       class="text-black"
-      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employee/jobs' }"
+      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer/jobs' }"
       >Jobs Posted</router-link
     >
   </div>
