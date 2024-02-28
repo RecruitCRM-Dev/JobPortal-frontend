@@ -12,7 +12,7 @@
             <!-- Avtar -->
             <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
               <div class="h-36 w-full -mr-24">
-                <img class="h-full rounded-full" :src="formData.avtar" alt="Rounded avatar" />
+                <img class="h-full rounded-full" :src="formData.avtar ? formData.avtar : 'https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg'" alt="Rounded avatar" />
               </div>
               <div class="w-full mr-2">
                 <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input"

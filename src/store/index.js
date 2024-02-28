@@ -11,7 +11,8 @@ const store = createStore({
   state() {
     return {
       user: null,
-      role: null
+      role: null,
+      jobFilters: null
     }
   },
 
@@ -24,6 +25,9 @@ const store = createStore({
     },
     isRole(state){
       return state.role
+    },
+    jobFilters(state){
+      return state.jobFilters
     }
   },
   mutations: {
@@ -32,6 +36,9 @@ const store = createStore({
     },
     setRole(state, role){
       state.role = role
+    },
+    setJobFilters(state, filters){
+      state.jobFilters = filters
     }
   },
 

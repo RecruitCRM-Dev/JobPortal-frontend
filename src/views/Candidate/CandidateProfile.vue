@@ -13,7 +13,7 @@
             <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
               <div class="h-36 w-full -mr-24">
                 <img
-                    :src="userPic"
+                    :src="userPic ? userPic :  'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'"
                     class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover"
                   />
               </div>
@@ -379,7 +379,7 @@ onMounted(async () => {
     formData.phone = res.data.user.phone
     formData.address = res.data.user.address
     if(res.data.user?.skills){
-      // formData.skills = res.data.user.skills.split(',')
+      formData.skills = res.data.user.skills.split(',')
     }
     formData.resume = res.data.user.resume
   } catch (error) {
