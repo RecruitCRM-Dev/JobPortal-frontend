@@ -420,8 +420,8 @@ const subCategories = [
 ]
 const filters = [
   {
-    id: 'job-type',
-    name: 'Job Type',
+    id: 'location',
+    name: 'Location',
     options: [
       { value: 'full-time', label: 'Full-time', checked: false },
       { value: 'part-time', label: 'Part-time', checked: false },
@@ -493,6 +493,18 @@ const currentPage = ref()
 const totalPages = ref(1)
 let jobs = ref([])
 const pageRange = 3 // Number of pages before and after the current page to display
+
+// const fetchJobs = async () => {
+//   try {
+//     const response = await axios.get(`/api/jobs?page=${currentPage.value}`)
+//     console.log(response.data.data)
+//     jobs.value = response.data.data
+//     totalPages.value = response.data.meta.last_page // Assuming API response contains total number of pages
+//   } catch (error) {
+//     console.error('Error fetching jobs:', error)
+//   }
+// }
+console.log(filters)
 
 const filterJobs = async () => {
   try {
