@@ -7,13 +7,13 @@
           <div class="mt-3">
             <h2 class="text-center text-3xl text-gray-900">Edit your profile</h2>
           </div>
-          <EmployeeNavigation />
-          <Form @submit="onSubmit" class="flex flex-col py-10 ml-1" enctype="multipart/form-data">
+          <EmployerNavigation />
+          <Form @submit="onSubmit" :validation-schema="schema" class="flex flex-col py-10 ml-1" enctype="multipart/form-data" name="jobPost">
             <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5 items-center">
-                <h3 class="text-gray-900 inline-block float-right font-bold text-xl mb-3"><span class="text-indigo-500 inline-block float-left font-bold text-xl">1.&nbsp;</span>Your Company</h3>
+                <!-- <h3 class="text-gray-900 inline-block float-right font-bold text-xl mb-3"><span class="text-indigo-500 inline-block float-left font-bold text-xl">1.&nbsp;</span>Your Company</h3> -->
 
                 <!-- Avtar -->
-              <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
+              <!-- <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
                 <div class="h-36 w-full -mr-24">
                   <img
                       src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"
@@ -53,64 +53,28 @@
                     </svg>
                     Delete
                   </button> -->
-                </div>
-              </div>
+                <!-- </div> -->
+              <!-- </div> -->
   
               <!--  Name -->
-              <div class="sm:col-span-2">
-                <div>
-                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900"
-                    >Company Name</label
-                  >
-  
-                  <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
-                    <Field
-                      name="name"
-                      v-model="formData.name"
-                      placeholder=""
-                      class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
-                    />
-                  </div>
-                  <ErrorMessage name="name" class="text-red-500" />
-                </div>
-              </div>
-  
-              <!--  About -->
-              <div class="sm:col-span-2">
-                <div>
-                  <label for="about" class="block mb-2 text-sm font-medium text-gray-900"
-                    >About Company</label
-                  >
-  
-                  <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
-                    <Field
-                      name="about"
-                      v-model="formData.about"
-                      placeholder=""
-                      as="textarea"
-                      class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
-                    />
-                  </div>
-                  <ErrorMessage name="about" class="text-red-500" />
-                </div>
-              </div>
-  
-              <h3 class="text-gray-900 inline-block float-right font-bold text-xl mb-3"><span class="text-indigo-500 inline-block float-left font-bold text-xl">2.&nbsp;</span>The Role</h3>
+
+             <h1 class="text-gray-900 inline-block float-right font-bold text-2xl mb-3"><!--<span class="text-indigo-500 inline-block float-left font-bold text-xl">2.&nbsp;</span>-->The Role</h1>
  
               <!--  Job Title -->
               <div class="sm:col-span-2">
                 <div>
-                  <label for="job_title" class="block mb-2 text-sm font-medium text-gray-900"
+                  <label for="title" class="block mb-2 text-sm font-medium text-gray-900"
                     >Job Title</label>
   
                   <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
                     <Field
-                      name="education"
-                      v-model="formData.education"
+                      name="title"
+                      v-model="formData.title"
                       placeholder=""
                       class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                     />
-                  </div>
+                  </div>                
+                  <ErrorMessage name="title" class="text-red-500" />
                 </div>
               </div>
               <div class="w-full">
@@ -121,13 +85,13 @@
 
                 <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
                   <Field
-                    name="phone"
-                    v-model="formData.phone"
+                    name="salary"
+                    v-model="formData.salary"
                     placeholder=""
                     class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                   />
                 </div>
-                <ErrorMessage name="name" class="text-red-500" />
+                <ErrorMessage name="salary" class="text-red-500" />
               </div>
             </div>
             <div class="w-full">
@@ -138,51 +102,95 @@
 
                 <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
                   <Field
-                    name="phone"
-                    v-model="formData.phone"
+                    name="location"
+                    v-model="formData.location"
                     placeholder=""
                     class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                   />
                 </div>
-                <ErrorMessage name="name" class="text-red-500" />
+                <ErrorMessage name="location" class="text-red-500" />
               </div>
             </div>
+            <div>
+              <label for="type" class="block mb-2 text-sm font-medium text-gray-900"
+                >Job Type</label
+              >
+              <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
+                <Field
+                  id="type"
+                  name="type"
+                  as="select"
+                  v-model="formData.type"
+                  class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
+                >
+                  <option value="Full Time">Full Time</option>
+                  <option value="Part Time">Part Time</option>
+                  <option value="Internship">Internship</option>
+                  <option value="Freelancing">Freelancing</option>
               
+                </Field>
+              </div>
+              <ErrorMessage name="type" class="text-red-500" />
+
+            </div>
+
+            <div>
+              <label for="category" class="block mb-2 text-sm font-medium text-gray-900"
+                >Category</label
+              >
+              <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
+                <Field
+                  id="category"
+                  name="category"
+                  v-model="formData.category"
+                  as="select"
+                  class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
+                >
+                  <option value="IT" selected>IT</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Sales">Sales</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="HR">HR</option>
+                </Field>
+              </div>
+              <ErrorMessage name="category" class="text-red-500" />
+
+            </div>
               <div class="sm:col-span-2">
                 <div>
-                  <label for="roles" class="block mb-2 text-sm font-medium text-gray-900"
+                  <label for="description" class="block mb-2 text-sm font-medium text-gray-900"
                     >The Role</label
                   >
   
                   <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
                     <Field
-                      name="about"
-                      v-model="formData.about"
+                      name="description"
+                      v-model="formData.description"
                       placeholder=""
                       as="textarea"
                       class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                     />
                   </div>
-                  <ErrorMessage name="about" class="text-red-500" />
+                  <ErrorMessage name="description" class="text-red-500" />
                 </div>
               </div>
               
               <div class="sm:col-span-2">
                 <div>
-                  <label for="things_to_do" class="block mb-2 text-sm font-medium text-gray-900"
-                    >Things To Do</label
+                  <label for="responsibilities" class="block mb-2 text-sm font-medium text-gray-900"
+                    >Responsibilities</label
                   >
   
                   <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
                     <Field
-                      name="about"
-                      v-model="formData.about"
+                      name="responsibilities"
+                      v-model="formData.responsibilities"
                       placeholder=""
                       as="textarea"
                       class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                     />
                   </div>
-                  <ErrorMessage name="about" class="text-red-500" />
+                  <ErrorMessage name="responsibilities" class="text-red-500" />
                 </div>
               </div>
             </div>
@@ -205,18 +213,21 @@
   import Multiselect from '@vueform/multiselect'
   
   import AppHeader from '@/components/AppHeader.vue'
-  import EmployeeNavigation from '@/components/EmployeeNavigation.vue'
+  import EmployerNavigation from '@/components/EmployerNavigation.vue'
   import { Form, Field, ErrorMessage } from 'vee-validate'
   import { toast } from 'vue3-toastify'
   import 'vue3-toastify/dist/index.css'
   import { useForm } from 'vee-validate'
   import { useStore } from 'vuex'
   import axios from 'axios'
-  
+  import router from '@/router'
+  import * as yup from 'yup'
+
   const store = useStore()
-  const userPic = ref(null)
   const apiProgress = ref(true)
-  
+ 
+  const { resetForm } = useForm();
+
   useForm({
     initialValues: {
       name: 'Divyanshu Upreti',
@@ -234,9 +245,44 @@
     'Java',
     'Django'
   ])
-  
+  const Job = {
+  category: ['IT',
+        'Finance',
+        'Sales',
+        'Marketing',
+        'HR'
+      ], 
+  jobType: ['Full Time',
+        'Part Time',
+        'Internship',
+        'Freelancing'
+      ] 
+};
   // console.log(user)
-  
+  const schema = yup.object().shape({
+  title: yup.string()
+    .required('Title is required')
+    .max(255),
+  description: yup.string().
+    required('Description is required'),
+  responsibilities: yup.
+    string().
+    required('Responsibilities are required'),
+  category: yup.string().
+    required('Category is required').
+    oneOf(Job.category), // Assuming Job.category holds the list of categories
+  salary: yup.number()
+    .required('Salary is required')
+    .min(5000),
+  location: yup.string()
+    .required('Location is required'),
+  type: yup.string()
+    .required('Type is required')
+    .oneOf(Job.jobType), // Assuming Job.jobType holds the list of job types
+});
+
+// Assuming Job is an object containing the categories and job types
+
   const handleProfilePicChange = (event) => {
     formData.profile_pic = event.target.files[0]
     console.log(event.target.files[0])
@@ -247,29 +293,35 @@
   }
   
   const formData = reactive({
-    profile_pic: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png',
-    name: '',
-    about: '',
-    address: '',
-    gender: '',
-    role: '',
-    experience: '',
-    education: '',
-    phone: '',
-    skills: [],
-    resume: null
+    // profile_pic: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png',
+    title: '',
+    description: '',
+    responsibilities: '',
+    category: '',
+    salary: '',
+    experience:'',
+    location: '',
+    status: '',
+    type: '',
+    
   })
   
   const onSubmit = async (values) => {
     try {
-      console.log(values)
-      await axios.post(`/api/user/profile/update/${store.getters.User.id}`, values, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
+      // console.log(values)
+      await store.dispatch('postJob', values)
+
+      formData.title = '';
+      formData.description = '';
+      formData.responsibilities = '';
+      formData.category = '';
+      formData.salary = '';
+      formData.location = '';
+      formData.type = '';
+
+      resetForm();
   
-      toast('Profile Update Successfully!', {
+      toast('Job Posted Successfully!', {
         type: 'success',
         autoClose: 1000,
         dangerouslyHTMLString: true
@@ -294,23 +346,6 @@
   onMounted(async () => {
     if (!store.getters.isLoggedIn) {
       router.push('/login')
-    }
-    try {
-      const res = await axios.get(`/api/user/profile/${store.getters.User.id}`)
-      formData.profile_pic = res.data.user.profile_pic
-      userPic.value = res.data.user.profile_pic
-      formData.name = res.data.user.name
-      formData.about = res.data.user.about
-      formData.gender = res.data.user.gender
-      formData.role = res.data.user.role
-      formData.experience = res.data.user.experience
-      formData.education = res.data.user.education
-      formData.phone = res.data.user.phone
-      formData.address = res.data.user.address
-      formData.skills = res.data.user.skills.split(',')
-      formData.resume = res.data.user.resume
-    } catch (error) {
-      console.log(error)
     }
   })
   </script>
