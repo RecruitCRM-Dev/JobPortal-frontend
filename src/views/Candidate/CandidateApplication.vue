@@ -40,6 +40,8 @@
                         id="simple-search"
                         class="bg-gray-50 rounded h-10 border-r-1 focus:ring-0 border-gray-200 text-gray-900 text-sm block w-full pl-10 py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white shadow"
                         placeholder="Search here..."
+                        v-model="searchTerm"
+                        @input="handleSearch"
                         required
                       />
                     </div>
@@ -112,13 +114,13 @@
             You have not applied to any job till now
           </div>
           <div
-            v-for="jobApplication in jobApplications"
+            v-for="jobApplication in filteredApplications"
             :key="jobApplication.id"
             class="bg-white shadow-xl shadow-gray-100 w-full flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md mb-2"
           >
             <div>
-              <span class="text-purple-800 text-sm">{{jobApplication.job.category}}</span>
-              <h3 class="font-bold mt-px">{{jobApplication.job.title}}</h3>
+              <span class="text-purple-800 text-sm">{{ jobApplication.job.category }}</span>
+              <h3 class="font-bold mt-px">{{ jobApplication.job.title }}</h3>
               <div class="flex items-center gap-3 mt-2">
                 <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
                   >Exp. {{ jobApplication.job.experience }} year</span
@@ -143,7 +145,7 @@
                       d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  {{jobApplication.job.location}}</span
+                  {{ jobApplication.job.location }}</span
                 >
               </div>
             </div>
@@ -151,7 +153,7 @@
               <button
                 class="bg-red-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
               >
-                {{jobApplication.status}}
+                {{ jobApplication.status }}
               </button>
             </div>
           </div>
@@ -164,7 +166,7 @@
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
 import UserNavigation from '@/components/UserNavigation.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
@@ -195,6 +197,21 @@ onMounted(async () => {
     apiProgress.value = false
   } catch (error) {
     console.log(error)
+  }
+})
+
+const searchTerm = ref('')
+const handleSearch = (event) => {
+  searchTerm.value = event.target.value.trim().toLowerCase()
+}
+
+const filteredApplications = computed(() => {
+  if (!searchTerm.value) {
+    return jobApplications.value
+  } else {
+    return jobApplications.value.filter(application =>
+      application.job.title.toLowerCase().includes(searchTerm.value)
+    )
   }
 })
 </script>
