@@ -4,9 +4,9 @@
     <section>
       <div class="container mx-auto py-8">
         <div class="bg-white mt-3">
-          <h2 class="text-center mt-12 text-3xl text-gray-900">Your Applications</h2>
+          <h2 class="text-center mt-12 text-3xl text-gray-900">Your Jobs</h2>
         </div>
-        <EmployeeNavigation />
+        <EmployerNavigation />
 
         <!-- all the jobs will be listed here -->
 
@@ -95,14 +95,7 @@
                       <span class="sr-only">View grid</span>
                       <Squares2X2Icon class="h-5 w-5" aria-hidden="true" />
                     </button>
-                    <button
-                      type="button"
-                      class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-                      @click="mobileFiltersOpen = true"
-                    >
-                      <span class="sr-only">Filters</span>
-                      <FunnelIcon class="h-5 w-5" aria-hidden="true" />
-                    </button>
+                    
                   </div>
                 </div>
               </div>
@@ -115,7 +108,7 @@
           >
             <div>
               <!-- <span class="text-purple-800 text-sm">Engineering</span> -->
-              <h3 class="font-bold mt-px">{{ job.job_title }}</h3>
+              <h3 class="font-bold mt-px">{{ job.data.attributes.title }}</h3>
               <div class="flex items-center gap-3 mt-2">
                 <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
                   >Full-time</span
@@ -140,22 +133,18 @@
                       d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  {{ job.location }}</span
+                  {{ job.data.attributes.location }}</span
                 >
                 <span
-                  class="rounded-full px-3 py-1 text-sm"
-                  :class="
-                    job.job_status == 'Active'
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-orange-100 text-orange-700'
-                  "
-                  >{{ job.job_status }}</span
+                  class="rounded-full px-3 py-1 text-sm bg-purple-100 text-purple-700"
+                  
+                  >{{ job.data.attributes.category }}</span
                 >
               </div>
             </div>
             <div>
               <router-link
-                to="/job/applicants"
+                to="/job/7/applicants"
                 class="bg-purple-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
                 >View</router-link
               >
@@ -169,8 +158,9 @@
 
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
-import EmployeeNavigation from '@/components/EmployeeNavigation.vue'
+import EmployerNavigation from '@/components/EmployerNavigation.vue'
 import { onMounted, ref } from 'vue'
+import axios from 'axios'
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
@@ -181,88 +171,27 @@ const sortOptions = [
   { name: 'Active', href: '#', current: false },
   { name: 'Expired', href: '#', current: false }
 ]
-const jobs = [
-  {
-    job_title: 'Senior Full Stack Backend Engineer',
-    location: 'Chennai',
-    job_status: 'Active'
-  },
-  {
-    job_title: 'Junir Full Stack Backend Engineer',
-    location: 'Hyderabad',
-    job_status: 'Epired'
-  },
-  {
-    job_title: 'Senior Frontend Developer',
-    location: 'Mumbai',
-    job_status: 'Active'
-  },
-  {
-    job_title: 'Junior Backend Developer',
-    location: 'Bangalore',
-    job_status: 'Expired'
-  },
-  {
-    job_title: 'Senior Software Engineer',
-    location: 'Pune',
-    job_status: 'Active'
-  },
-  {
-    job_title: 'Junior Full Stack Developer',
-    location: 'Delhi',
-    job_status: 'Expired'
-  },
-  {
-    job_title: 'Senior Backend Engineer',
-    location: 'Kolkata',
-    job_status: 'Active'
-  },
-  {
-    job_title: 'Junior Frontend Developer',
-    location: 'Chandigarh',
-    job_status: 'Expired'
-  },
-  {
-    job_title: 'Senior Java Developer',
-    location: 'Ahmedabad',
-    job_status: 'Active'
-  },
-  {
-    job_title: 'Junior Software Engineer',
-    location: 'Jaipur',
-    job_status: 'Expired'
-  },
-  {
-    job_title: 'Senior Full Stack Developer',
-    location: 'Lucknow',
-    job_status: 'Active'
-  },
-  {
-    job_title: 'Junior Backend Engineer',
-    location: 'Indore',
-    job_status: 'Expired'
-  },
-  {
-    job_title: 'Senior Frontend Engineer',
-    location: 'Bhubaneswar',
-    job_status: 'Active'
-  },
-  {
-    job_title: 'Junior Web Developer',
-    location: 'Guwahati',
-    job_status: 'Expired'
-  }
-]
+
 
 const mobileFiltersOpen = ref(false)
 
 const store = useStore()
 const router = useRouter()
+const jobs = ref()
+const apiProgress = ref(true)
 
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
-  
+  try {
+    const res = await axios.get('/api/employer/1/job')
+    // console.log()
+    jobs.value = res.data.data
+    apiProgress.value = false
+    // console.log(user.role)
+  } catch (error) {
+    console.log(error)
+  }
 })
 </script>
