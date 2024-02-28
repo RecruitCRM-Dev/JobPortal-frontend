@@ -95,6 +95,12 @@
                           </div>
                         </DisclosurePanel>
                       </Disclosure>
+                      <button
+                    type="submit"
+                    class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
+                  >
+                    Clear
+                  </button>
                     </form>
                   </DialogPanel>
                 </TransitionChild>
@@ -256,6 +262,10 @@
                         </div>
                       </DisclosurePanel>
                     </Disclosure>
+                    <button
+                    class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
+                  >Clear
+                  </button>
                   </form>
 
                   <!-- Product grid -->
@@ -374,6 +384,8 @@ import {
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 
+
+
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
   { name: 'Best Rating', href: '#', current: false },
@@ -404,33 +416,32 @@ const filters = [
     id: 'job-role',
     name: 'Job Roles',
     options: [
-      { value: 'programming', label: 'Programming', checked: false },
-      { value: 'design', label: 'Design', checked: false },
-      { value: 'management', label: 'Management', checked: true },
-      { value: 'customer-support', label: 'Customer Support', checked: false },
-      { value: 'sales', label: 'Sales / Marketing', checked: false }
+      { value: 'IT', label: 'IT', checked: true },
+      { value: 'Finance', label: 'Finance', checked: false },
+      { value: 'Sales', label: 'Sales', checked: false },
+      { value: 'Marketing', label: 'Marketing', checked: false },
+      { value: 'HR', label: 'HR', checked: false }
     ]
   },
   {
     id: 'size',
-    name: 'Salary Range',
+    name: 'Annual Salary',
     options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true }
+      { value: '200000', label: '2Lpa', checked: false },
+      { value: '600000', label: '6Lpa', checked: false },
+      { value: '1200000', label: '12Lpa', checked: false },
+      { value: '1800000', label: '18Lpa', checked: false },
+      { value: '200000', label: '20L', checked: false },
+      { value: '400000', label: '40L', checked: true }
     ]
   },
   {
     id: 'experience',
     name: 'Experience',
     options: [
-      { value: 'all', label: 'All', checked: false },
-      { value: 'entry', label: 'Entry', checked: false },
-      { value: 'intermediate', label: 'Intermediate', checked: false },
-      { value: 'senior', label: 'Senior', checked: false }
+      { value: '1', label: 'Entry', checked: false },
+      { value: '10', label: 'Intermediate', checked: false },
+      { value: '20', label: 'Senior', checked: false }
     ]
   }
 ]
@@ -447,13 +458,40 @@ const pageRange = 3 // Number of pages before and after the current page to disp
 const fetchJobs = async () => {
   try {
     const response = await axios.get(`/api/jobs?page=${currentPage.value}`)
+    console.log(response.data.data)
     jobs.value = response.data.data
     totalPages.value = response.data.meta.last_page // Assuming API response contains total number of pages
   } catch (error) {
     console.error('Error fetching jobs:', error)
   }
 }
+console.log(filters)
 
+const filterJobs = async () => {
+  try {
+    console.log(filters,filters.find(section => section.id === 'job-role'))
+    const selectedJobRoles = filters.find(section => section.id === 'job-role').options.filter(option => option.checked).map(option => option.value);
+    const params = {
+      category: selectedJobRoles,
+      page: currentPage.value
+    };
+    const response = await axios.get('/api/jobs',{params});
+    console.log(response.data.data);
+    jobs.value = response.data.data;
+    totalPages.value = response.data.meta.last_page;
+  } catch (error) {
+    console.error('Error filtering jobs:', error);
+  }
+};
+// for (const filter of filters) {
+//   for (const option of filter.options) {
+//     watch(() => option.checked, filterJobs);
+//   }
+// }
+watch(() => filters, filterJobs, { deep: true });
+
+// watch(() => filters.value, filterJobs, { deep: true });
+onMounted(filterJobs);
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
@@ -496,4 +534,6 @@ watch(
 )
 currentPage.value = parseInt(route.query.page) || 1
 onMounted(fetchJobs)
+
+
 </script>

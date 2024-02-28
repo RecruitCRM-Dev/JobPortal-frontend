@@ -5,7 +5,7 @@
       <div>
         <div class="container mx-auto py-8">
           <div class="bg-white mt-3">
-            <h2 class="text-center mt-12 text-3xl text-gray-900">What jobseeker will see</h2>
+            <h2 class="text-center mt-12 text-3xl text-gray-900">Overview</h2>
           </div>
           <EmployeeNavigation />
           <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">

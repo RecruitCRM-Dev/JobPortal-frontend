@@ -155,7 +155,7 @@
             </div>
             <div>
               <router-link
-                to="/employee/candidates"
+                to="/job/applicants"
                 class="bg-purple-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
                 >View</router-link
               >
