@@ -277,10 +277,12 @@ import 'vue3-toastify/dist/index.css'
 import { useForm } from 'vee-validate'
 import { useStore } from 'vuex'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 const store = useStore()
 const userPic = ref(null)
 const apiProgress = ref(true)
+const router = useRouter()
 
 useForm({
   initialValues: {
@@ -339,6 +341,10 @@ const onSubmit = async (values) => {
       autoClose: 1000,
       dangerouslyHTMLString: true
     })
+
+    setTimeout(() => {
+      router.push('/candidate')
+    }, 2000);
   } catch (error) {
     if (error.response?.status === 400) {
       toast('Please check input fields', {
@@ -372,7 +378,9 @@ onMounted(async () => {
     formData.education = res.data.user.education
     formData.phone = res.data.user.phone
     formData.address = res.data.user.address
-    formData.skills = res.data.user.skills.split(',')
+    if(res.data.user?.skills){
+      // formData.skills = res.data.user.skills.split(',')
+    }
     formData.resume = res.data.user.resume
   } catch (error) {
     console.log(error)
