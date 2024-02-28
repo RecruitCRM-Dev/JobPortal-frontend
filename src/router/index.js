@@ -89,7 +89,7 @@ const router = createRouter({
       component: JobPostVue
     },
     {
-      path:'/job/applicants',
+      path:'/job/:id/applicants',
       name:'job-applicants',
       component: JobApplicantsVue
     }

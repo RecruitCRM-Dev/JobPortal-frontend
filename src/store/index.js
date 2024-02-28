@@ -146,6 +146,36 @@ const store = createStore({
       } catch (error) {
         throw error
       }
+    },
+    async postJob(context, payload) {
+      const title = payload.title
+      const description = payload.description
+      const responsibilities = payload.responsibilities
+      const category = payload.category
+      const salary = payload.salary
+      const location = payload.location
+      const type = payload.type
+
+      axios.defaults.withCredentials = true
+      axios.defaults.withXSRFToken = true
+      try {
+        const res = await axios.post(`/api/employer/1/job`, {
+          title : title,
+          description : description,
+          responsibilities : responsibilities,
+          category : category,
+          salary : salary,
+          location : location,
+          type : type
+        })
+        // context.commit('setUser', res.data.data.user)
+        // context.commit('setRole', 'employer')
+        // localStorage.setItem('access-token', res.data.data.access_token)
+        // console.log('Job Posted')
+        return 'Job Posted'
+      } catch (error) {
+        throw error
+      }
     }
   },
   plugins: [vuexLocal.plugin]

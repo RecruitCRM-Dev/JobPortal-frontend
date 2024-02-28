@@ -6,7 +6,7 @@
         <div class="mt-3">
           <h2 class="text-center text-3xl text-gray-900">Edit your profile</h2>
         </div>
-        <EmployeeNavigation />
+        <EmployerNavigation />
         <Form @submit="onSubmit" class="flex flex-col py-10 ml-1">
           <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5 items-center">
             <!-- Avtar -->
@@ -291,7 +291,7 @@ import { onMounted, reactive } from 'vue'
 //import Multiselect from '@vueform/multiselect'
 
 import AppHeader from '@/components/AppHeader.vue'
-import EmployeeNavigation from '@/components/EmployeeNavigation.vue'
+import EmployerNavigation from '@/components/EmployerNavigation.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
 import { useForm } from 'vee-validate'

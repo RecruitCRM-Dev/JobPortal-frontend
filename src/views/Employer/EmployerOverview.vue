@@ -7,7 +7,7 @@
           <div class="bg-white mt-3">
             <h2 class="text-center mt-12 text-3xl text-gray-900">Overview</h2>
           </div>
-          <EmployeeNavigation />
+          <EmployerNavigation />
           <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div class="col-span-4 sm:col-span-3">
               <div class="bg-white shadow-xl rounded-lg p-6">
@@ -180,7 +180,7 @@
 
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
-import EmployeeNavigation from '@/components/EmployeeNavigation.vue'
+import EmployerNavigation from '@/components/EmployerNavigation.vue'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
