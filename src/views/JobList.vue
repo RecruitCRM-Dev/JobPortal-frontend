@@ -45,7 +45,7 @@
                     </div>
 
                     <!-- Filters -->
-                    <form class="mt-4 border-t border-gray-200">
+                    <form class="mt-4 border-t border-gray-200" @submit.prevent>
                       <h3 class="sr-only">Categories</h3>
                       <!-- <ul role="list" class="px-2 py-3 font-medium text-gray-900">
                       <li v-for="category in subCategories" :key="category.name">
@@ -84,6 +84,7 @@
                                 :value="option.value"
                                 type="checkbox"
                                 :checked="option.checked"
+                                @change="handleChange(section.id, optionIdx)"
                                 class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                               />
                               <label
@@ -96,11 +97,11 @@
                         </DisclosurePanel>
                       </Disclosure>
                       <button
-                    type="submit"
-                    class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
-                  >
-                    Clear
-                  </button>
+                        @click="handleFiltersClear"
+                        class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
+                      >
+                        Clear
+                      </button>
                     </form>
                   </DialogPanel>
                 </TransitionChild>
@@ -110,7 +111,7 @@
 
           <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
             <div class="flex-1">
-              <div class="sticky top-0 z-10 bg-white border-b border-gray-200 pb-6 pt-16">
+              <div class="sticky top-0 z-10 bg-white border-b border-gray-200 pb-6 pt-16 lg::max-w-md">
                 <div class="lg:flex items-baseline justify-between">
                   <h1 class="text-4xl font-bold tracking-tight text-gray-900">Jobs</h1>
 
@@ -137,6 +138,8 @@
                         id="simple-search"
                         class="bg-gray-50 rounded h-10 border-r-1 focus:ring-0 border-gray-200 text-gray-900 text-sm block w-full pl-10 py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white shadow"
                         placeholder="Search here..."
+                        v-model="searchQuery"
+                        @input="handleInputSearch"
                         required
                       />
                     </div>
@@ -204,12 +207,16 @@
                 </div>
               </div>
 
-              <section v-if="currentPage<=totalPages" aria-labelledby="products-heading" class="pb-24 pt-6 flex">
+              <section
+                v-if="currentPage <= totalPages"
+                aria-labelledby="products-heading"
+                class="pb-24 pt-6 flex"
+              >
                 <h2 id="products-heading" class="sr-only">Products</h2>
 
                 <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                   <!-- Filters -->
-                  <form class="hidden lg:block">
+                  <form class="hidden lg:block" @submit.prevent>
                     <h3 class="sr-only">Categories</h3>
                     <!-- <ul
                   role="list"
@@ -251,6 +258,7 @@
                               :value="option.value"
                               type="checkbox"
                               :checked="option.checked"
+                              @change="handleChange(section.id, optionIdx)"
                               class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                             />
                             <label
@@ -262,20 +270,30 @@
                         </div>
                       </DisclosurePanel>
                     </Disclosure>
-                    <button
-                    class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
-                  >Clear
-                  </button>
+                    <button @click="handleFiltersClear"
+                      class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
+                    >
+                      Clear
+                    </button>
+                    <!-- <button type="submit">Filte apply</button> -->
                   </form>
 
                   <!-- Product grid -->
-                  <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2">
-                    <JobCard v-for="job in jobs" :key="job.data.job_id" :job="job.data" />
+                  <div v-if="jobs.length == 0" class="text-center w-100">
+                    <p>No jobs found. <span class="text-indigo-500">Clear Search</span></p>
+                  </div>
+                  <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2" v-if="jobs">
+                    <JobCard v-for="job in jobs" :key="job.data.job_id" :job="job.data" class="max-h-80 max-w-xl" />
                     <!-- <p>sd</p> -->
                   </div>
                 </div>
               </section>
-              <p v-else class="text-center my-10 text-gray-500">No jobs found. <router-link to="/jobs" class="text-indigo-500 cursor-pointer">Go to Jobs</router-link></p>
+              <p v-else class="text-center my-10 text-gray-500">
+                No jobs found.
+                <router-link to="/jobs" class="text-indigo-500 cursor-pointer"
+                  >Go to Jobs</router-link
+                >
+              </p>
               <!-- Pagination Start -->
               <div class="flex items-center justify-center mx-auto gap-4">
                 <button
@@ -384,7 +402,7 @@ import {
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 
-
+const searchQuery = ref('')
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -407,16 +425,16 @@ const filters = [
     options: [
       { value: 'full-time', label: 'Full-time', checked: false },
       { value: 'part-time', label: 'Part-time', checked: false },
-      { value: 'internship', label: 'Internship', checked: true },
+      { value: 'internship', label: 'Internship', checked: false },
       { value: 'contract', label: 'Contract / Freelance', checked: false },
       { value: 'co-founder', label: 'Co-founder', checked: false }
     ]
   },
   {
-    id: 'job-role',
-    name: 'Job Roles',
+    id: 'category',
+    name: 'Job Category',
     options: [
-      { value: 'IT', label: 'IT', checked: true },
+      { value: 'IT', label: 'IT', checked: false },
       { value: 'Finance', label: 'Finance', checked: false },
       { value: 'Sales', label: 'Sales', checked: false },
       { value: 'Marketing', label: 'Marketing', checked: false },
@@ -424,28 +442,48 @@ const filters = [
     ]
   },
   {
-    id: 'size',
+    id: 'salary',
     name: 'Annual Salary',
     options: [
-      { value: '200000', label: '2Lpa', checked: false },
-      { value: '600000', label: '6Lpa', checked: false },
-      { value: '1200000', label: '12Lpa', checked: false },
-      { value: '1800000', label: '18Lpa', checked: false },
-      { value: '200000', label: '20L', checked: false },
-      { value: '400000', label: '40L', checked: true }
+      { value: '2lpa', label: '2Lpa', checked: false },
+      { value: '6lpa', label: '6Lpa', checked: false },
+      { value: '12lpa', label: '12Lpa', checked: false },
+      { value: '18lpa', label: '18Lpa', checked: false },
+      { value: '20lpa', label: '20Lpa', checked: false },
+      { value: '40lpa', label: '40Lpa', checked: false }
     ]
   },
   {
     id: 'experience',
     name: 'Experience',
     options: [
-      { value: '1', label: 'Entry', checked: false },
-      { value: '10', label: 'Intermediate', checked: false },
-      { value: '20', label: 'Senior', checked: false }
+      { value: 'entry', label: 'Entry', checked: false },
+      { value: 'intermediate', label: 'Intermediate', checked: false },
+      { value: 'senior', label: 'Senior', checked: false }
     ]
   }
 ]
 const mobileFiltersOpen = ref(false)
+
+const handleFiltersClear = () =>{
+  filters.forEach(filter => {
+    filter.options.forEach(option => {
+      option.checked = false
+    })
+  })
+  filterJobs()
+}
+
+const handleChange = (sectionId, optionIdx) => {
+  // Toggle the checked property of the selected option
+  filters.find((filter) => filter.id === sectionId).options[optionIdx].checked = !filters.find(
+    (filter) => filter.id === sectionId
+  ).options[optionIdx].checked
+
+  // Call your filter function or perform any other necessary action here
+  filterJobs() // Assuming you have a filter function defined
+  // currentPage.value = 1
+}
 
 const route = useRoute()
 const router = useRouter()
@@ -455,43 +493,37 @@ const totalPages = ref(1)
 let jobs = ref([])
 const pageRange = 3 // Number of pages before and after the current page to display
 
-const fetchJobs = async () => {
-  try {
-    const response = await axios.get(`/api/jobs?page=${currentPage.value}`)
-    console.log(response.data.data)
-    jobs.value = response.data.data
-    totalPages.value = response.data.meta.last_page // Assuming API response contains total number of pages
-  } catch (error) {
-    console.error('Error fetching jobs:', error)
-  }
-}
-console.log(filters)
-
 const filterJobs = async () => {
   try {
-    console.log(filters,filters.find(section => section.id === 'job-role'))
-    const selectedJobRoles = filters.find(section => section.id === 'job-role').options.filter(option => option.checked).map(option => option.value);
+    const selectedFilters = {}
+    filters.forEach((filter) => {
+      selectedFilters[filter.id] = filter.options
+        .filter((option) => option.checked)
+        .map((option) => option.value)
+    })
     const params = {
-      category: selectedJobRoles,
+      category: selectedFilters.category,
+      salary: selectedFilters.salary,
+      experience: selectedFilters.experience,
       page: currentPage.value
-    };
-    const response = await axios.get('/api/jobs',{params});
-    console.log(response.data.data);
-    jobs.value = response.data.data;
-    totalPages.value = response.data.meta.last_page;
+    }
+    const response = await axios.get('/api/jobs', { params })
+    console.log(response.data.data)
+    jobs.value = response.data.data
+    totalPages.value = response.data.meta.last_page
   } catch (error) {
-    console.error('Error filtering jobs:', error);
+    console.error('Error filtering jobs:', error)
   }
-};
-// for (const filter of filters) {
-//   for (const option of filter.options) {
-//     watch(() => option.checked, filterJobs);
-//   }
-// }
-watch(() => filters, filterJobs, { deep: true });
+}
+for (const filter of filters) {
+  for (const option of filter.options) {
+    watch(() => option, filterJobs)
+  }
+}
+// watch(() => filters, filterJobs, { deep: true });
 
 // watch(() => filters.value, filterJobs, { deep: true });
-onMounted(filterJobs);
+onMounted(filterJobs)
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
@@ -508,11 +540,6 @@ const nextPage = () => {
   }
 }
 
-const gotoPage = (page) => {
-  currentPage.value = page
-  fetchJobs()
-}
-
 const visiblePages = computed(() => {
   const startPage = Math.max(1, currentPage.value - pageRange)
   const endPage = Math.min(totalPages.value, currentPage.value + pageRange)
@@ -522,6 +549,10 @@ const visiblePages = computed(() => {
   }
   return pages
 })
+// watch(filters, (newFilters, oldFilters) => {
+//   // Filter jobs when the filters change
+//   filterJobs();
+// }, { deep: true });
 
 watch(
   () => route.query.page,
@@ -529,11 +560,9 @@ watch(
     if (newValue !== oldValue) {
       currentPage.value = parseInt(newValue) || 1 // Parse the new value to an integer or default to 1
     }
-    fetchJobs()
+    filterJobs()
   }
 )
 currentPage.value = parseInt(route.query.page) || 1
-onMounted(fetchJobs)
-
-
+onMounted(filterJobs)
 </script>

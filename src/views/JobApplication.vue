@@ -97,10 +97,10 @@
             <!-- Job Description -->
             <div class="mb-8">
               <div class="mb-4">
-                <a href="/" class="text-indigo-600 items-center text-opacity-100 font-medium">
+                <router-link to="/jobs" class="text-indigo-600 items-center text-opacity-100 font-medium">
                   <span>← </span>
                   All Jobs
-                </a>
+                </router-link>
               </div>
               <h1 class="font-extrabold text-4xl mb-10">{{ job.attributes.title }}</h1>
               <div class="mb-8">
