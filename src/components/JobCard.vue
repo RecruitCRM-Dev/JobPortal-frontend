@@ -26,7 +26,7 @@
     </div>
     <div class="font-semibold text-sm mt-4">{{ job.attributes.title }}</div>
     <div class="text-[color:var(--subtitle-color)] text-[13px] leading-[1.6em] mt-3.5">
-      {{ job.attributes.description }}
+      {{ truncateDescription(job.attributes.description, 15) }}...
     </div>
     <div class="space-x-2">
       <span
@@ -62,4 +62,15 @@ defineProps({
     required: true
   }
 })
+
+const truncateDescription = (description, words) => {
+  // Split the description into words
+  const wordsArray = description.split(' ');
+
+  // Take only the specified number of words
+  const truncatedDescription = wordsArray.slice(0, words);
+
+  // Join the words back into a string
+  return truncatedDescription.join(' ');
+};
 </script>

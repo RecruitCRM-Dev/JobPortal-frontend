@@ -146,3 +146,16 @@ const formData = reactive({
   avtar: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
 })
 </script>
+
+<style>
+  /* Hide scrollbar for all elements */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Optional: In case scrollbar is visible on some elements */
+  /* Hide scrollbar for specific elements */
+  .scrollable-element::-webkit-scrollbar {
+    display: none;
+  }
+</style>
