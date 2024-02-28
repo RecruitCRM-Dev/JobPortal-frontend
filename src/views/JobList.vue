@@ -283,7 +283,7 @@
                     <p>No jobs found. <span class="text-indigo-500">Clear Search</span></p>
                   </div>
                   <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2" v-if="jobs">
-                    <JobCard v-for="job in jobs" :key="job.data.job_id" :job="job.data" class="max-h-80 max-w-xl" />
+                    <JobCard v-for="job in filteredApplications" :key="job.data.job_id" :job="job.data" class="max-h-80 max-w-xl" />
                     <!-- <p>sd</p> -->
                   </div>
                 </div>
@@ -474,6 +474,7 @@ const handleFiltersClear = () =>{
   filterJobs()
 }
 
+
 const handleChange = (sectionId, optionIdx) => {
   // Toggle the checked property of the selected option
   filters.find((filter) => filter.id === sectionId).options[optionIdx].checked = !filters.find(
@@ -565,4 +566,21 @@ watch(
 )
 currentPage.value = parseInt(route.query.page) || 1
 onMounted(filterJobs)
+
+
+const handleInputSearch = (event)=>{
+  searchQuery.value = event.target.value.trim().toLowerCase()
+}
+
+const filteredApplications = computed(() => {
+  if (!searchQuery.value) {
+    return jobs.value
+  } else {
+    return jobs.value.filter(job =>
+    job.data.attributes.title.toLowerCase().includes(searchQuery.value) ||
+    job.data.attributes.category.toLowerCase().includes(searchQuery.value)
+    )
+  }
+})
+
 </script>
