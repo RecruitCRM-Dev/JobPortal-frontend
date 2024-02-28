@@ -19,7 +19,10 @@
           </tr>
         </thead>
         <tbody class="bg-white">
-          <tr class="text-gray-700">
+          <tr 
+          v-for="applicant in applicants"
+          :key="applicant"
+          class="text-gray-700">
             <td class="px-4 py-3 border">
               <div class="flex items-center text-sm">
                 <div class="relative w-8 h-8 mr-3 rounded-full md:block">
@@ -44,7 +47,7 @@
             </td>
             <td class="px-4 py-3 text-sm border">6/4/2000</td>
           </tr>
-          <tr class="text-gray-700">
+          <!-- <tr class="text-gray-700">
             <td class="px-4 py-3 border">
               <div class="flex items-center text-sm">
                 <div class="relative w-8 h-8 mr-3 rounded-full">
@@ -244,7 +247,7 @@
                         </select>
             </td>
             <td class="px-4 py-3 border text-sm">6/10/2020</td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </div>
