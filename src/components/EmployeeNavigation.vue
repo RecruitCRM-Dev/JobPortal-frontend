@@ -13,9 +13,9 @@
       >Profile Update</router-link
     >
     <router-link
-      to="/employee/jobpost"
+      to="/employer/job/post"
       class="text-black"
-      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employee/jobpost' }"
+      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer/job/post' }"
       >Post a Job</router-link
     >
     <router-link

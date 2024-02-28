@@ -14,22 +14,22 @@
                 <div class="flex flex-col items-center">
                   <img
                     :src="user.profile_pic"
-                    class="w-32 h-32 rounded-full mb-4 shrink-0"
+                    class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover"
                   />
                   <h1 class="text-xl font-bold">{{ user.name }}</h1>
-                  <p v-if="user.role" class="text-gray-700 text-sm">{{ user.role }}r</p>
+                  <p v-if="user.role" class="text-gray-700 text-sm">{{ user.role }}</p>
                   <div class="items-center">
-                    <p class="text-gray-700 text-sm text-center">{{ user.address }} years</p>
+                    <p class="text-gray-700 text-sm text-center" v-if="user.address">{{ user.address }} years</p>
                   </div>
 
 
                   <div class="mt-6 flex flex-wrap gap-4 justify-center">
-                    <a
+                    <a v-if="user.phone"
                       :href="`tel:${user.phone}`"
                       class="text-indigo-400 inline-flex items-center hover:text-white border border-indigo-400 hover:bg-indigo-400 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
                       >Contact</a
                     >
-                    <a
+                    <a v-if="user.resume"
                       :href="user.resume" target="_blank"
                       class="text-indigo-400 inline-flex items-center hover:text-white border border-indigo-400 hover:bg-indigo-400 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
                       >Resume</a
@@ -51,11 +51,11 @@
                   <h1 class="text-xl font-bold mb-2">Skills</h1>
 
                   <!-- TODO print all the skills here   -->
-                  <div class="flex flex-wrap gap-3">
+                  <div class="flex flex-wrap gap-3" v-if="user.skills">
                     <div
-                      v-for="skill in user.skills.split(',')"
+                      v-for="skill in user.skills?.split(',')"
                       :key="skill"
-                      class="text-indigo-400 inline-flex items-center hover:text-white border border-indigo-400 hover:bg-indigo-400 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
+                      class="text-indigo-400 inline-flex items-center hover:text-white border border-indigo-400 hover:bg-indigo-400 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2 text-center cursor-pointer"
                     >
                       {{ skill }}
                     </div>
@@ -99,7 +99,7 @@ onMounted(async () => {
     // console.log()
     user.value = res.data.user
     apiProgress.value = false
-    console.log(user.role)
+    // console.log(user.role)
   } catch (error) {
     console.log(error)
   }

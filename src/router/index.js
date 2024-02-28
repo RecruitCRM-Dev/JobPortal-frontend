@@ -9,9 +9,12 @@ import JobApplication from '@/views/JobApplication.vue'
 import CandidateOverviewVue from '@/views/Candidate/CandidateOverview.vue'
 import CandidateProfileVue from '@/views/Candidate/CandidateProfile.vue'
 import CandidateApplicationVue from '@/views/Candidate/CandidateApplication.vue'
+import JobPostVue from '@/views/Employer/JobPost.vue'
+import JobApplicantsVue from '@/views/Employer/JobApplicants.vue'
 import EmployeeOverview from '@/views/Employee/EmployeeOverview.vue'
 import EmployeeProfile from '@/views/Employee/EmployeeProfile.vue'
 import EmployeeJobPosts from '@/views/Employee/EmployeeJobPosts.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -79,6 +82,16 @@ const router = createRouter({
       path: '/employee/jobs',
       name: 'employee-jobs',
       component: EmployeeJobPosts
+    },
+    {
+      path: '/employer/job/post',
+      name: 'job-post',
+      component: JobPostVue
+    },
+    {
+      path:'/job/applicants',
+      name:'job-applicants',
+      component: JobApplicantsVue
     }
   ]
 })
