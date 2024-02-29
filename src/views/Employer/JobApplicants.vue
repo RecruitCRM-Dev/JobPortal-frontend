@@ -65,6 +65,7 @@
     import axios from 'axios'
     import { useStore } from 'vuex'
     import { useRoute } from 'vue-router'
+    import { toast } from 'vue3-toastify'
 
     import { useRouter } from 'vue-router'
     const store = useStore()
@@ -93,6 +94,11 @@
       try {
         const res = await axios.get(`/api/employer/${store.getters.User.id}/job/${route.params.job_id}`)
         // console.log(res)
+        toast('Status updated successfully!', {
+          type: 'success',
+          autoClose: 1000,
+          dangerouslyHTMLString: true
+        })
         applicants.value = res.data.users
         // console.log(applicants.value)
         apiProgress.value = false
