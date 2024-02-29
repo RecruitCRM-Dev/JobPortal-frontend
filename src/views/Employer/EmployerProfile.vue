@@ -193,7 +193,7 @@ const onSubmit = async (values) => {
     })
 
     setTimeout(() => {
-      router.push('/candidate')
+      router.push(`/employer/${store.getters.User.id}`)
     }, 2000);
   } catch (error) {
     if (error.response?.status === 400) {

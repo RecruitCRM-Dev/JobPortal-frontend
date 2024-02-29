@@ -120,8 +120,15 @@
           >
             <div>
               <span class="text-purple-800 text-sm">{{ jobApplication.job.category }}</span>
-              <h3 class="font-bold mt-px">{{ jobApplication.job.title }}</h3>
-              <div class="flex items-center gap-3 mt-2">
+              
+              <router-link
+                :to="`/job/${jobApplication.job.id}/apply`"
+                class="text-black"
+                :class="{ 'border-b-4 border-indigo-300': $route.path === `/candidate/${store.getters.User.id} ` }">
+                <h3 class="font-bold mt-px">{{ jobApplication.job.title }}</h3>
+              </router-link>
+
+                <div class="flex items-center gap-3 mt-2">
                 <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
                   >Exp. {{ jobApplication.job.experience }} year</span
                 >

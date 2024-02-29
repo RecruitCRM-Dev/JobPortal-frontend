@@ -1,15 +1,15 @@
 <template>
   <div class="flex space-x-5 justify-center items-center p-5 m-3">
     <router-link
-      to="/employer"
+      :to="`/employer/${store.getters.User.id}`"
       class="text-black"
-      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer' }"
+      :class="{ 'border-b-4 border-indigo-300': $route.path === `/employer/${store.getters.User.id}`}"
       >Overview</router-link
     >
     <router-link
-      to="/employer/update"
+      :to="`/employer/${store.getters.User.id}/update`"
       class="text-black"
-      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer/update' }"
+      :class="{ 'border-b-4 border-indigo-300': $route.path === `/employer/${store.getters.User.id}/update` }"
       >Profile Update</router-link
     >
     <router-link

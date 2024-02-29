@@ -319,7 +319,7 @@
       formData.location = '';
       formData.type = '';
 
-      resetForm();
+      // resetForm();
   
       toast('Job Posted Successfully!', {
         type: 'success',
@@ -328,7 +328,7 @@
       })
 
       setTimeout(() => {
-        router.push('/employer/jobs')
+        router.push(`/employer/${store.getters.User.id}/jobs`)
       }, 2000);
     } catch (error) {
       if (error.response?.status === 400) {

@@ -37,9 +37,9 @@
                 <div>
 
                 <router-link
-                to="/candidate"
+                :to="`/candidate/${store.getters.User.id}`"
                 class="text-black"
-                :class="{ 'border-b-4 border-indigo-300': $route.path === '/candidate' }">
+                :class="{ 'border-b-4 border-indigo-300': $route.path === `/candidate/${store.getters.User.id}` }">
                   <p class="font-semibold text-black">{{applicant.user.name}}</p>
                 </router-link>
 
