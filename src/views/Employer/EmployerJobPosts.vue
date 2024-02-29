@@ -13,12 +13,12 @@
         <div class="max-w-4xl mx-auto p-3">
           <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
             <div class="flex-1">
-              <div class="sticky top-0 z-10 p-6 w-full m-3 bg-white border-b border-gray-200">
+              <div class="sticky top-0 z-10 py-10 w-full m-3 bg-white border-b border-gray-200">
                 <div class="lg:flex items-baseline justify-between">
-                  <h1 class="text-4xl font-bold tracking-tight text-gray-900">Jobs</h1>
+                  <h1 class="text-4xl font-bold tracking-tight text-gray-900">Your Job Posts</h1>
 
                   <div class="flex items-center mt-5 lg:mt-0">
-                    <!-- <div class="relative">
+                    <div class="relative">
                       <div
                         class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                       >
@@ -40,9 +40,11 @@
                         id="simple-search"
                         class="bg-gray-50 rounded h-10 border-r-1 focus:ring-0 border-gray-200 text-gray-900 text-sm block w-full pl-10 py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white shadow"
                         placeholder="Search here..."
+                        v-model="searchTerm"
+                        @input="handleSearch"
                         required
                       />
-                    </div> -->
+                    </div>
                     <Menu as="div" class="relative inline-block text-left ml-5">
                       <div>
                         <MenuButton
@@ -73,36 +75,28 @@
                               :key="option.name"
                               v-slot="{ active }"
                             >
-                              <a
-                                :href="option.href"
+                              <button
+                                @click="sortBy(option.name)"
                                 :class="[
                                   option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                   active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm'
+                                  'block px-4 py-2 text-sm w-full'
                                 ]"
-                                >{{ option.name }}</a
                               >
+                                {{ option.name }}
+                              </button>
                             </MenuItem>
                           </div>
                         </MenuItems>
                       </transition>
                     </Menu>
-
-                    <button
-                      type="button"
-                      class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
-                    >
-                      <span class="sr-only">View grid</span>
-                      <Squares2X2Icon class="h-5 w-5" aria-hidden="true" />
-                    </button>
-                    
                   </div>
                 </div>
               </div>
             </div>
           </main>
           <div
-            v-for="job in jobs"
+            v-for="job in filteredJobPosts"
             :key="job"
             class="bg-white shadow-xl shadow-gray-100 w-full flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md mb-2"
           >
@@ -135,11 +129,9 @@
                   </svg>
                   {{ job.data.attributes.location }}</span
                 >
-                <span
-                  class="rounded-full px-3 py-1 text-sm bg-purple-100 text-purple-700"
-                  
-                  >{{ job.data.attributes.category }}</span
-                >
+                <span class="rounded-full px-3 py-1 text-sm bg-purple-100 text-purple-700">{{
+                  job.data.attributes.category
+                }}</span>
               </div>
             </div>
             <div>
@@ -159,7 +151,7 @@
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
 import EmployerNavigation from '@/components/EmployerNavigation.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
@@ -168,17 +160,32 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
 const sortOptions = [
-  { name: 'Active', href: '#', current: false },
-  { name: 'Expired', href: '#', current: false }
+  { name: 'Newest', href: '?sort=newest', current: false },
+  { name: 'Oldest', href: '?sort=oldest', current: false }
 ]
-
 
 const mobileFiltersOpen = ref(false)
 
+const sortBy = (option) => {
+  sortOptions.forEach((sortOption) => {
+    sortOption.current = sortOption.name === option
+  })
+  if (option === 'Newest') {
+    jobPosts.value.sort(
+      (a, b) => new Date(b.data.attributes.created_at) - new Date(a.data.attributes.created_at)
+    )
+  } else if (option === 'Oldest') {
+    jobPosts.value.sort(
+      (a, b) => new Date(a.data.attributes.created_at) - new Date(b.data.attributes.created_at)
+    )
+  }
+}
+
 const store = useStore()
 const router = useRouter()
-const jobs = ref()
+const jobPosts = ref()
 const apiProgress = ref(true)
+const searchTerm = ref('')
 
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
@@ -187,11 +194,26 @@ onMounted(async () => {
   try {
     const res = await axios.get(`/api/employer/${store.getters.User.id}/job`)
     // console.log()
-    jobs.value = res.data.data
+    jobPosts.value = res.data.data
+    console.log(jobPosts.value)
     apiProgress.value = false
     // console.log(user.role)
   } catch (error) {
     console.log(error)
+  }
+})
+
+const handleSearch = (event) => {
+  searchTerm.value = event.target.value.trim().toLowerCase()
+}
+
+const filteredJobPosts = computed(() => {
+  if (!searchTerm.value) {
+    return jobPosts.value
+  } else {
+    return jobPosts.value.filter((jobPost) =>
+      jobPost.data.attributes.title.toLowerCase().includes(searchTerm.value)
+    )
   }
 })
 </script>

@@ -111,7 +111,9 @@
 
           <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
             <div class="flex-1">
-              <div class="sticky top-0 z-10 bg-white border-b border-gray-200 pb-6 pt-16 lg::max-w-md">
+              <div
+                class="sticky top-0 z-10 bg-white border-b border-gray-200 pb-6 pt-16 lg::max-w-md"
+              >
                 <div class="lg:flex items-baseline justify-between">
                   <h1 class="text-4xl font-bold tracking-tight text-gray-900">Jobs</h1>
 
@@ -173,28 +175,21 @@
                               :key="option.name"
                               v-slot="{ active }"
                             >
-                              <a
-                                :href="option.href"
+                              <button
+                                @click="sortBy(option.name)"
                                 :class="[
                                   option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                   active ? 'bg-gray-100' : '',
                                   'block px-4 py-2 text-sm'
                                 ]"
-                                >{{ option.name }}</a
                               >
+                                {{ option.name }}
+                              </button>
                             </MenuItem>
                           </div>
                         </MenuItems>
                       </transition>
                     </Menu>
-
-                    <button
-                      type="button"
-                      class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
-                    >
-                      <span class="sr-only">View grid</span>
-                      <Squares2X2Icon class="h-5 w-5" aria-hidden="true" />
-                    </button>
                     <button
                       type="button"
                       class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
@@ -208,7 +203,7 @@
               </div>
 
               <section
-                v-if="currentPage <= totalPages"
+                v-if="paginateJobs"
                 aria-labelledby="products-heading"
                 class="pb-24 pt-6 flex"
               >
@@ -270,7 +265,8 @@
                         </div>
                       </DisclosurePanel>
                     </Disclosure>
-                    <button @click="handleFiltersClear"
+                    <button
+                      @click="handleFiltersClear"
                       class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
                     >
                       Clear
@@ -279,11 +275,16 @@
                   </form>
 
                   <!-- Product grid -->
-                  <div v-if="jobs.length == 0" class="text-center w-100">
+                  <div v-if="paginatedJobs.length == 0" class="text-center w-100">
                     <p>No jobs found. <span class="text-indigo-500">Clear Search</span></p>
                   </div>
                   <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2" v-if="jobs">
-                    <JobCard v-for="job in filteredApplications" :key="job.data.job_id" :job="job.data" class="max-h-80 max-w-xl" />
+                    <JobCard
+                      v-for="job in paginatedJobs"
+                      :key="job.data.job_id"
+                      :job="job.data"
+                      class="max-h-80 max-w-xl"
+                    />
                     <!-- <p>sd</p> -->
                   </div>
                 </div>
@@ -319,26 +320,6 @@
                   </svg>
                   Previous
                 </button>
-                <div v-for="page in visiblePages" :key="page" class="flex items-center gap-2">
-                  <router-link :to="{ name: 'jobs', query: { page: page } }">
-                    <button
-                      class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg"
-                      :class="{
-                        'bg-indigo-900 text-center align-middle font-sans text-xs font-medium uppercase text-white shadow-md shadow-indigo-900/10 transition-all hover:shadow-lg hover:shadow-indigo-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none':
-                          currentPage === page,
-                        'text-center align-middle font-sans text-xs font-medium uppercase text-indigo-900 transition-all hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none':
-                          currentPage != page
-                      }"
-                      type="button"
-                    >
-                      <span
-                        class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                      >
-                        {{ page }}
-                      </span>
-                    </button>
-                  </router-link>
-                </div>
                 <button
                   @click="nextPage"
                   :disabled="currentPage === totalPages"
@@ -402,32 +383,20 @@ import {
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 
-const searchQuery = ref('')
-
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
+  { name: 'Latest', href: '#', current: false },
+  { name: 'Salary: High to Low', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false }
-]
-const subCategories = [
-  { name: 'Totes', href: '#' },
-  { name: 'Backpacks', href: '#' },
-  { name: 'Travel Bags', href: '#' },
-  { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' }
 ]
 const filters = [
   {
-    id: 'location',
-    name: 'Location',
+    id: 'type',
+    name: 'Job Type',
     options: [
-      { value: 'full-time', label: 'Full-time', checked: false },
-      { value: 'part-time', label: 'Part-time', checked: false },
-      { value: 'internship', label: 'Internship', checked: false },
-      { value: 'contract', label: 'Contract / Freelance', checked: false },
-      { value: 'co-founder', label: 'Co-founder', checked: false }
+      { value: 'Full Time', label: 'Full Time', checked: false },
+      { value: 'Part Time', label: 'Part Time', checked: false },
+      { value: 'Internship', label: 'Internship', checked: false },
+      { value: 'Freelancing', label: 'Freelance', checked: false }
     ]
   },
   {
@@ -465,15 +434,12 @@ const filters = [
 ]
 const mobileFiltersOpen = ref(false)
 
-const handleFiltersClear = () =>{
-  filters.forEach(filter => {
-    filter.options.forEach(option => {
-      option.checked = false
-    })
-  })
-  filterJobs()
-}
-
+const jobs = ref([])
+const totalPages = ref(0)
+const currentPage = ref(1)
+const searchQuery = ref('')
+// const sortOption = ref() sort option
+const pageSize = 12
 
 const handleChange = (sectionId, optionIdx) => {
   // Toggle the checked property of the selected option
@@ -482,31 +448,17 @@ const handleChange = (sectionId, optionIdx) => {
   ).options[optionIdx].checked
 
   // Call your filter function or perform any other necessary action here
-  filterJobs() // Assuming you have a filter function defined
+  fetchData() // Assuming you have a filter function defined
   // currentPage.value = 1
 }
 
-const route = useRoute()
-const router = useRouter()
+const sortBy = (option) => {
+  sortOptions.forEach((sortOption) => {
+    sortOption.current = sortOption.name === option
+  })
+}
 
-const currentPage = ref()
-const totalPages = ref(1)
-let jobs = ref([])
-const pageRange = 3 // Number of pages before and after the current page to display
-
-// const fetchJobs = async () => {
-//   try {
-//     const response = await axios.get(`/api/jobs?page=${currentPage.value}`)
-//     console.log(response.data.data)
-//     jobs.value = response.data.data
-//     totalPages.value = response.data.meta.last_page // Assuming API response contains total number of pages
-//   } catch (error) {
-//     console.error('Error fetching jobs:', error)
-//   }
-// }
-console.log(filters)
-
-const filterJobs = async () => {
+const fetchJobs = async () => {
   try {
     const selectedFilters = {}
     filters.forEach((filter) => {
@@ -514,85 +466,80 @@ const filterJobs = async () => {
         .filter((option) => option.checked)
         .map((option) => option.value)
     })
+
     const params = {
+      type: selectedFilters.type,
       category: selectedFilters.category,
       salary: selectedFilters.salary,
-      experience: selectedFilters.experience,
-      page: currentPage.value
+      experience: selectedFilters.experience
     }
-    const response = await axios.get('/api/jobs', { params })
-    console.log(response.data.data)
-    jobs.value = response.data.data
-    totalPages.value = response.data.meta.last_page
-  } catch (error) {
-    console.error('Error filtering jobs:', error)
-  }
-}
-for (const filter of filters) {
-  for (const option of filter.options) {
-    watch(() => option, filterJobs)
-  }
-}
-// watch(() => filters, filterJobs, { deep: true });
 
-// watch(() => filters.value, filterJobs, { deep: true });
-onMounted(filterJobs)
+    const response = await axios.get('/api/jobs', { params })
+
+    jobs.value = response.data.data
+    totalPages.value = Math.ceil(jobs.value.length / pageSize)
+    console.log(totalPages.value)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const handleInputSearch = (event) => {
+  searchQuery.value = event.target.value.trim().toLowerCase()
+  currentPage.value = 1
+  // console.log(currentPage.value)
+  // console.log(totalPages.value)
+}
+
+// const applySearchQuery = () => {
+
+// }
+const applySorting = () => {
+  // Apply sorting to jobs array
+  // Logic to sort jobs based on selected sorting option
+}
+const paginateJobs = (jobs) => {
+  // Paginate jobs based on currentPage and pageSize
+  const startIndex = (currentPage.value - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  return jobs.slice(startIndex, endIndex)
+}
+
+const fetchData = async () => {
+  await fetchJobs()
+  // applySearchQuery()
+  //apply sorting
+}
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
-    router.push(`/jobs?page=${currentPage.value}`)
   }
 }
-
 const nextPage = () => {
-  console.log('next')
   if (currentPage.value < totalPages.value) {
     currentPage.value++
-    console.log(currentPage.value)
-    router.push(`/jobs?page=${currentPage.value}`)
   }
 }
 
-const visiblePages = computed(() => {
-  const startPage = Math.max(1, currentPage.value - pageRange)
-  const endPage = Math.min(totalPages.value, currentPage.value + pageRange)
-  const pages = []
-  for (let i = startPage; i <= endPage; i++) {
-    pages.push(i)
-  }
-  return pages
-})
-// watch(filters, (newFilters, oldFilters) => {
-//   // Filter jobs when the filters change
-//   filterJobs();
-// }, { deep: true });
-
-watch(
-  () => route.query.page,
-  (newValue, oldValue) => {
-    if (newValue !== oldValue) {
-      currentPage.value = parseInt(newValue) || 1 // Parse the new value to an integer or default to 1
-    }
-    filterJobs()
-  }
-)
-currentPage.value = parseInt(route.query.page) || 1
-onMounted(filterJobs)
-
-
-const handleInputSearch = (event)=>{
-  searchQuery.value = event.target.value.trim().toLowerCase()
-}
-
-const filteredApplications = computed(() => {
-  if (!searchQuery.value) {
-    return jobs.value
-  } else {
-    return jobs.value.filter(job =>
-    job.data.attributes.title.toLowerCase().includes(searchQuery.value) ||
-    job.data.attributes.category.toLowerCase().includes(searchQuery.value)
+const paginatedJobs = computed(() => {
+  let slicedJobs = jobs.value
+  if (searchQuery.value) {
+    const filteredJobs = jobs.value.filter(
+      (job) =>
+        job.data.attributes.title.toLowerCase().includes(searchQuery.value) ||
+        job.data.attributes.category.toLowerCase().includes(searchQuery.value)
     )
+    slicedJobs = filteredJobs
   }
+  const startIndex = (currentPage.value - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  totalPages.value = Math.ceil(slicedJobs.length/pageSize)
+  return slicedJobs.slice(startIndex, endIndex)
 })
 
+watch(currentPage, () => {
+  paginateJobs(jobs.value)
+})
+
+onMounted(fetchData)
 </script>

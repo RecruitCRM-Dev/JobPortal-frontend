@@ -7,21 +7,23 @@
           <h2 class="text-center text-3xl text-gray-900">Edit your profile</h2>
         </div>
         <EmployerNavigation />
-        <Form @submit="onSubmit" class="flex flex-col py-10 ml-1">
+        <Form @submit="onSubmit" class="flex flex-col py-10 ml-1 lg:px-0 px-5">
           <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5 items-center">
             <!-- Avtar -->
             <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
-              <div class="h-36 w-full -mr-24">
-                <img class="h-full rounded-full" :src="formData.avtar ? formData.avtar : 'https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg'" alt="Rounded avatar" />
+              <div class="h-36 w-full">
+                <img class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover" :src="userPic ? userPic : 'https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg'" alt="Rounded profile_pic" />
               </div>
               <div class="w-full mr-2">
                 <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input"
                   >Upload Company Logo</label
                 >
-                <input
+                <Field
                   class="m-0 block min-w-0 flex-auto border-solid w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-2.5"
                   aria-describedby="file_input_help"
                   id="file_input"
+                  name="profile_pic"
+                  @change="handleProfilePicChange"
                   type="file"
                 />
                 <p class="mt-1 text-sm text-gray-500" id="file_input_help">
@@ -76,120 +78,16 @@
 
                 <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
                   <Field
-                    name="about"
-                    v-model="formData.about"
+                    name="description"
+                    v-model="formData.description"
                     placeholder=""
                     as="textarea"
-                    class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
+                    class="h-24 py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                   />
                 </div>
                 <ErrorMessage name="about" class="text-red-500" />
               </div>
             </div>
-
-            <!-- Gender -->
-            <!-- <div class="w-full">
-              <div>
-                <label for="gender" class="block mb-2 text-sm font-medium text-gray-900"
-                  >Gender identity</label
-                >
-
-                <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
-                  <Field
-                    id="gender"
-                    v-model="formData.gender"
-                    name="gender"
-                    as="select"
-                    class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
-                  >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="others">Others</option>
-                  </Field>
-                </div>
-              </div>
-            </div> -->
-
-            <!-- Contact Number -->
-            <!-- <div class="w-full">
-              <div>
-                <label for="phone" class="block mb-2 text-sm font-medium text-gray-900"
-                  >Contact Number</label
-                >
-
-                <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
-                  <Field
-                    name="phone"
-                    v-model="formData.phone"
-                    placeholder=""
-                    class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
-                  />
-                </div>
-                <ErrorMessage name="name" class="text-red-500" />
-              </div>
-            </div> -->
-
-            <!-- Role -->
-            <!-- <div>
-              <label for="role" class="block mb-2 text-sm font-medium text-gray-900"
-                >Select Your primary role</label
-              >
-              <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
-                <Field
-                  id="role"
-                  name="role"
-                  as="select"
-                  v-model="formData.role"
-                  class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
-                >
-                  <option value="EC">Electronics</option>
-                  <option value="TV">TV/Monitors</option>
-                  <option value="PC">PC</option>
-                  <option value="GA">Gaming/Console</option>
-                  <option value="PH">Phones</option>
-                </Field>
-              </div>
-            </div> -->
-
-            <!-- Years of experience -->
-            <!-- <div>
-              <label for="experience" class="block mb-2 text-sm font-medium text-gray-900"
-                >Years of experience</label
-              >
-              <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
-                <Field
-                  id="experience"
-                  name="experience"
-                  v-model="formData.experience"
-                  as="select"
-                  class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
-                >
-                  <option value="EC" selected>Electronics</option>
-                  <option value="TV">TV/Monitors</option>
-                  <option value="PC">PC</option>
-                  <option value="GA">Gaming/Console</option>
-                  <option value="PH">Phones</option>
-                </Field>
-              </div>
-            </div> -->
-
-            <!--  Education -->
-            <!-- <div class="sm:col-span-2">
-              <div>
-                <label for="education" class="block mb-2 text-sm font-medium text-gray-900"
-                  >Education</label
-                >
-
-                <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
-                  <Field
-                    name="education"
-                    v-model="formData.education"
-                    placeholder=""
-                    class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
-                  />
-                </div>
-              </div>
-            </div> -->
 
             <!--  Address -->
             <div class="sm:col-span-2">
@@ -208,68 +106,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Skills -->
-            <!-- <div class="sm:col-span-2">
-              <div>
-                <label for="name" class="block mb-2 text-sm font-medium text-gray-900"
-                  >Skills</label
-                >
-
-                <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
-                  <Field
-                    name="skills"
-                    class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
-                  >
-                    <Multiselect
-                      mode="tags"
-                      v-model="formData.skills"
-                      placeholder="Choose your stack"
-                      :close-on-select="false"
-                      :min-chars="1"
-                      :delay="0"
-                      :options="skillOptions"
-                    />
-                  </Field>
-                </div>
-              </div>
-            </div> -->
-
-            <!-- Resume -->
-            <!-- <div class="w-full sm:col-span-2">
-              <label for="resume" class="block mb-2 text-sm font-medium text-gray-900"
-                >Resume</label
-              >
-              <div class="flex items-center justify-center w-full sm:col-span-2">
-                <label
-                  for="resume"
-                  class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
-                >
-                  <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg
-                      class="w-8 h-8 mb-4 text-gray-500"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg>
-                    <p class="mb-2 text-sm text-gray-500">
-                      <span class="font-semibold">Click to upload</span> or drag and drop
-                    </p>
-                    <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                  </div>
-                  <input id="resume" type="file" class="hidden" />
-                </label>
-              </div>
-            </div> -->
           </div>
 
           <!-- Submit Button -->
@@ -286,17 +122,23 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 
 //import Multiselect from '@vueform/multiselect'
 
 import AppHeader from '@/components/AppHeader.vue'
 import EmployerNavigation from '@/components/EmployerNavigation.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import axios from 'axios'
+const store = useStore()
+const router = useRouter()
+const userPic = ref(null)
+
 useForm({
   initialValues: {
     name: 'Divyanshu Upreti',
@@ -307,23 +149,68 @@ useForm({
 //const skillOptions = ref(['Vue Js', 'Laravel', 'More to Come', 'Html', 'CSS'])
 
 const formData = reactive({
-  avtar: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png',
-  name: 'RecruitCRM',
-  about: '',
+  profile_pic: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png',
+  name: '',
+  description: '',
   address: ''
 })
 
-const onSubmit = () => {
-  console.log(formData)
+const handleProfilePicChange = (event) => {
+  formData.profile_pic = event.target.files[0]
+  console.log(event.target.files[0])
 }
 
-const store = useStore()
-const router = useRouter()
+
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
+  try {
+    const res = await axios.get(`/api/employer/profile/${store.getters.User.id}`)
+    formData.profile_pic = res.data.data.attributes.profile_pic
+    userPic.value = res.data.data.attributes.profile_pic
+    formData.name = res.data.data.attributes.name
+    formData.description = res.data.data.attributes.description
+    formData.address = res.data.data.attributes.address
+  } catch (error) {
+    console.log(error)
+  }
 })
+
+const onSubmit = async (values) => {
+  try {
+    console.log(values)
+    await axios.post(`/api/employer/profile/update/${store.getters.User.id}`, values, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    toast('Profile Update Successfully!', {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+
+    setTimeout(() => {
+      router.push('/candidate')
+    }, 2000);
+  } catch (error) {
+    if (error.response?.status === 400) {
+      toast('Please check input fields', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    } else {
+      toast('Please try again!', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    }
+  }
+}
 </script>
 
 <style src="@vueform/multiselect/themes/default.css"></style>
