@@ -9,7 +9,10 @@
 <section class="container mx-auto p-6">
   <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
     <div class="w-full overflow-x-auto">
-      <table class="w-full">
+      <p v-if="applicants.length == 0" class="text-center my-10 text-gray-500">
+                No applicants yet!                
+        </p>
+      <table v-else class="w-full">
         <thead>
           <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
             <th class="px-4 py-3">Name</th>
@@ -18,7 +21,9 @@
             <th class="px-4 py-3">Date</th>
           </tr>
         </thead>
+        
         <tbody class="bg-white">
+          
           <tr 
           v-for="applicant in applicants"
             :key="applicant"
@@ -58,13 +63,15 @@
     import AppHeader from '@/components/AppHeader.vue'
     import { onMounted, ref } from 'vue'
     import axios from 'axios'
-
     import { useStore } from 'vuex'
+    import { useRoute } from 'vue-router'
+
     import { useRouter } from 'vue-router'
     const store = useStore()
     const router = useRouter()
-    const applicants = ref()
+    const applicants = ref([])
     const apiProgress = ref(true)
+    const route = useRoute()
 
     const formatDate = (dateString) => {
       const date = new Date(dateString);
@@ -73,7 +80,7 @@
     const updateStatus = async (applicant) => {
       try {
       
-        await axios.put('/api/employer/1/job/72/', { userId:applicant.user.id,status: applicant.status })
+        await axios.put(`/api/employer/${store.getters.User.id}/job`, { userId:applicant.user.id,status: applicant.status })
         console.log('Updated status')
       } catch (error) {
         console.error('Error updating status:', error)
@@ -84,7 +91,7 @@
         router.push('/login')
       }
       try {
-        const res = await axios.get('/api/employer/1/job/72')
+        const res = await axios.get(`/api/employer/${store.getters.User.id}/job/${route.params.job_id}`)
         // console.log(res)
         applicants.value = res.data.users
         // console.log(applicants.value)

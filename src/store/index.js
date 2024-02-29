@@ -30,6 +30,7 @@ const store = createStore({
       return state.jobFilters
     }
   },
+
   mutations: {
     setUser(state, user) {
       state.user = user
@@ -51,13 +52,15 @@ const store = createStore({
               Authorization: 'Bearer ' + localStorage.getItem('access-token')
             }
           })
-          console.log(res.data.data.user)
+
+          // console.log(res.data.data.user)
           context.commit('setUser', res.data.data.user)
         }
       } catch (err) {
         console.log(err)
       }
     },
+
     async login(context, payload) {
       const email = payload.email
       const password = payload.password
@@ -80,7 +83,7 @@ const store = createStore({
             email: email,
             password: password
           })
-          console.log(res)
+          // console.log(res)
           context.commit('setRole', 'employer')
         }
         context.commit('setUser', res.data.data.user)
@@ -156,10 +159,12 @@ const store = createStore({
       const location = payload.location
       const type = payload.type
 
+      const userId = context.getters.User.id
+
       axios.defaults.withCredentials = true
       axios.defaults.withXSRFToken = true
       try {
-        const res = await axios.post(`/api/employer/${store.getters.User.id}/job`, {
+        const res = await axios.post(`/api/employer/${userId}/job`, {
           title : title,
           description : description,
           responsibilities : responsibilities,

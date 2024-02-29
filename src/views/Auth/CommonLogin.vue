@@ -105,6 +105,10 @@
           Login
         </button>
         <!-- <span class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password ?</span> -->
+        <p class="text-sm text-gray-400">
+          Don't have an account?
+          <span class="text-indigo-500 text-sm"><a href="/candidate/register">Register</a></span>
+        </p>
       </Form>
     </div>
   </div>

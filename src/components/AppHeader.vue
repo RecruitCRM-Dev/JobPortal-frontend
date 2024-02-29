@@ -120,7 +120,7 @@
                       </router-link>
                     </li>
                     <li class="px-3 py-3 text-sm font-medium hover:bg-slate-400">
-                      <router-link :to="store.getters.isRole==='employer' ? '/employer/jobs': '/candidate/applications'" class="flex space-x-2 items-center">
+                      <router-link :to="store.getters.isRole==='employer' ? `/employer/${store.getters.User.id}/jobs` : '/candidate/applications'" class="flex space-x-2 items-center">
                         <span>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
