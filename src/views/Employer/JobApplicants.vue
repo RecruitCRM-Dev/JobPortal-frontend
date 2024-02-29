@@ -82,6 +82,11 @@
       try {
       
         await axios.put(`/api/employer/${store.getters.User.id}/job`, { userId:applicant.user.id,status: applicant.status })
+        toast('Status updated successfully!', {
+          type: 'success',
+          autoClose: 1000,
+          dangerouslyHTMLString: true
+        })
         console.log('Updated status')
       } catch (error) {
         console.error('Error updating status:', error)
@@ -94,11 +99,7 @@
       try {
         const res = await axios.get(`/api/employer/${store.getters.User.id}/job/${route.params.job_id}`)
         // console.log(res)
-        toast('Status updated successfully!', {
-          type: 'success',
-          autoClose: 1000,
-          dangerouslyHTMLString: true
-        })
+        
         applicants.value = res.data.users
         // console.log(applicants.value)
         apiProgress.value = false
