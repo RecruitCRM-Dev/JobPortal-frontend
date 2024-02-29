@@ -144,9 +144,9 @@
             </div>
             <div>
               <router-link
-                to="/job/7/applicants"
+                :to="`/employer/${store.getters.User.id}/job/${job.data.job_id}/applicants`"
                 class="bg-purple-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
-                >View</router-link
+                >View Applicants</router-link
               >
             </div>
           </div>
@@ -185,7 +185,7 @@ onMounted(async () => {
     router.push('/login')
   }
   try {
-    const res = await axios.get('/api/employer/1/job')
+    const res = await axios.get(`/api/employer/${store.getters.User.id}/job`)
     // console.log()
     jobs.value = res.data.data
     apiProgress.value = false

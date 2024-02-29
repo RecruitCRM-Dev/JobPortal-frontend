@@ -73,7 +73,7 @@
     const updateStatus = async (applicant) => {
       try {
       
-        await axios.put('/api/employer/1/job/72/', { userId:applicant.user.id,status: applicant.status })
+        await axios.put(`/api/employer/${store.getters.User.id}/job/`, { userId:applicant.user.id,status: applicant.status })
         console.log('Updated status')
       } catch (error) {
         console.error('Error updating status:', error)
@@ -84,10 +84,10 @@
         router.push('/login')
       }
       try {
-        const res = await axios.get('/api/employer/1/job/72')
+        const res = await axios.get(`/api/employer/${store.getters.User.id}/job/75`)
         // console.log(res)
         applicants.value = res.data.users
-        // console.log(applicants.value)
+        console.log(applicants.value)
         apiProgress.value = false
         // console.log(user.role)
       } catch (error) {

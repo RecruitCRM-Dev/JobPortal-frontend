@@ -79,17 +79,17 @@ const router = createRouter({
       component: EmployerProfile
     },
     {
-      path: '/employer/jobs',
+      path: '/employer/:id/jobs',
       name: 'employee-jobs',
       component: EmployerJobPosts
     },
     {
-      path: '/employer/job/post',
+      path: '/employer/:id/job/post',
       name: 'job-post',
       component: JobPostVue
     },
     {
-      path:'/job/:id/applicants',
+      path:'/employer/:employer_id/job/:job_id/applicants',
       name:'job-applicants',
       component: JobApplicantsVue
     }
