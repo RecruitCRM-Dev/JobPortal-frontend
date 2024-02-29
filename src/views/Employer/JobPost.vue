@@ -8,7 +8,7 @@
             <h2 class="text-center text-3xl text-gray-900">Edit your profile</h2>
           </div>
           <EmployerNavigation />
-          <Form @submit="onSubmit" :validation-schema="schema" class="flex flex-col py-10 ml-1" enctype="multipart/form-data" name="jobPost">
+          <Form @submit="onSubmit" :validation-schema="schema" class="flex flex-col py-10 ml-1 lg:px-0 px-5" enctype="multipart/form-data" name="jobPost">
             <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5 items-center">
                 <!-- <h3 class="text-gray-900 inline-block float-right font-bold text-xl mb-3"><span class="text-indigo-500 inline-block float-left font-bold text-xl">1.&nbsp;</span>Your Company</h3> -->
 
@@ -35,7 +35,7 @@
                   <p class="mt-1 text-sm text-gray-500" id="file_input_help">
                     SVG, PNG, JPG or GIF (MAX. 800x400px).
                   </p>
-                  <!-- <button
+                  <button
                     type="button"
                     class="text-red-400 inline-flex items-center hover:text-white border border-red-400 hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
                   >
@@ -311,14 +311,6 @@
       // console.log(values)
       await store.dispatch('postJob', values)
 
-      formData.title = '';
-      formData.description = '';
-      formData.responsibilities = '';
-      formData.category = '';
-      formData.salary = '';
-      formData.location = '';
-      formData.type = '';
-
       resetForm();
   
       toast('Job Posted Successfully!', {
@@ -326,6 +318,10 @@
         autoClose: 1000,
         dangerouslyHTMLString: true
       })
+
+      setTimeout(() => {
+        router.push('/employer/jobs')
+      }, 2000);
     } catch (error) {
       if (error.response?.status === 400) {
         toast('Please check input fields', {

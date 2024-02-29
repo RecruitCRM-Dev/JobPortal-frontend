@@ -159,7 +159,7 @@ const store = createStore({
       axios.defaults.withCredentials = true
       axios.defaults.withXSRFToken = true
       try {
-        const res = await axios.post(`/api/employer/1/job`, {
+        const res = await axios.post(`/api/employer/${store.getters.User.id}/job`, {
           title : title,
           description : description,
           responsibilities : responsibilities,

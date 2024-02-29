@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppHeader />
-    <section>
+    <section v-if="!apiProgress">
       <div>
         <div class="container mx-auto py-8">
           <div class="bg-white mt-3">
@@ -16,9 +16,9 @@
                     src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"
                     class="w-32 h-32 rounded-full mb-4 shrink-0"
                   />
-                  <h1 class="text-xl font-bold">RecruitCRM</h1>
-                  <p class="text-gray-700 text-sm">SASS</p>
-                  <div class="flex space-x-1 justify-center items-center">
+                  <h1 class="text-xl font-bold">{{employer.name}}</h1>
+                  <!-- <p class="text-gray-700 text-sm">SASS</p> -->
+                  <div class="flex space-x-1 justify-center items-center" v-if="employer.address">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       class="h-4 w-4"
@@ -39,7 +39,7 @@
                       />
                     </svg>
 
-                    <p class="text-gray-700 text-sm">India</p>
+                    <p class="text-gray-700 text-sm">{{employer.address}}</p>
                   </div>
 
                   <!-- Social Icons bar -->
@@ -139,11 +139,7 @@
               <div class="bg-white shadow-xl rounded-lg p-6">
                 <h2 class="text-xl font-bold mb-4">About Company</h2>
                 <p class="text-gray-700">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae
-                  tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit
-                  egestas suscipit. Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis
-                  in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat.
-                  Nulla vulputate pharetra tellus, in luctus risus rhoncus id.
+                  {{employer.description}}
                 </p>
 
                 <!-- <hr class="my-6 border-t border-gray-300" />
@@ -181,17 +177,33 @@
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
 import EmployerNavigation from '@/components/EmployerNavigation.vue'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import axios from 'axios'
 
 //const skills = ['VueJs', 'Laravel', 'HTML', 'CSS ', 'JS', 'C++']
 
 const store = useStore()
 const router = useRouter()
+const employer = ref()
+const apiProgress = ref(true)
+
+
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
+  }
+  try {
+    const res = await axios.get(`/api/employer/profile/${store.getters.User.id}`)
+    // console.log()
+    console.log(res)
+    employer.value = res.data.data.attributes
+    // console.log(res)
+    // console.log(user.role)
+    apiProgress.value = false
+  } catch (error) {
+    console.log(error)
   }
 })
 </script>
