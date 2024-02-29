@@ -58,13 +58,15 @@
     import AppHeader from '@/components/AppHeader.vue'
     import { onMounted, ref } from 'vue'
     import axios from 'axios'
-
     import { useStore } from 'vuex'
+    import { useRoute } from 'vue-router'
+
     import { useRouter } from 'vue-router'
     const store = useStore()
     const router = useRouter()
     const applicants = ref()
     const apiProgress = ref(true)
+    const route = useRoute()
 
     const formatDate = (dateString) => {
       const date = new Date(dateString);
@@ -84,7 +86,7 @@
         router.push('/login')
       }
       try {
-        const res = await axios.get(`/api/employer/${store.getters.User.id}/job/75`)
+        const res = await axios.get(`/api/employer/${store.getters.User.id}/job/${route.params.job_id}`)
         // console.log(res)
         applicants.value = res.data.users
         console.log(applicants.value)

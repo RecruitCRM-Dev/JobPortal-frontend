@@ -13,15 +13,15 @@
       >Profile Update</router-link
     >
     <router-link
-      to="/employer/job/post"
+      to="/employer/:id/job/post"
       class="text-black"
-      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer/job/post' }"
+      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer/:id/job/post' }"
       >Post a Job</router-link
     >
     <router-link
-      to="/employer/jobs"
+      to="/employer/:id/jobs"
       class="text-black"
-      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer/jobs' }"
+      :class="{ 'border-b-4 border-indigo-300': $route.path === '/employer/:id/jobs' }"
       >Jobs Posted</router-link
     >
   </div>
