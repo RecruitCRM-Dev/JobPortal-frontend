@@ -53,7 +53,7 @@ const store = createStore({
             }
           })
 
-          console.log(res.data.data.user)
+          // console.log(res.data.data.user)
           context.commit('setUser', res.data.data.user)
         }
       } catch (err) {
@@ -83,7 +83,7 @@ const store = createStore({
             email: email,
             password: password
           })
-          console.log(res)
+          // console.log(res)
           context.commit('setRole', 'employer')
         }
         context.commit('setUser', res.data.data.user)
