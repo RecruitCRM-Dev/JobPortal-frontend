@@ -45,7 +45,7 @@
                     </div>
 
                     <!-- Filters -->
-                    <form class="mt-4 border-t border-gray-200">
+                    <form class="mt-4 border-t border-gray-200" @submit.prevent>
                       <h3 class="sr-only">Categories</h3>
                       <!-- <ul role="list" class="px-2 py-3 font-medium text-gray-900">
                       <li v-for="category in subCategories" :key="category.name">
@@ -84,6 +84,7 @@
                                 :value="option.value"
                                 type="checkbox"
                                 :checked="option.checked"
+                                @change="handleChange(section.id, optionIdx)"
                                 class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                               />
                               <label
@@ -95,6 +96,12 @@
                           </div>
                         </DisclosurePanel>
                       </Disclosure>
+                      <button
+                        @click="handleFiltersClear"
+                        class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
+                      >
+                        Clear
+                      </button>
                     </form>
                   </DialogPanel>
                 </TransitionChild>
@@ -104,7 +111,9 @@
 
           <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
             <div class="flex-1">
-              <div class="sticky top-0 z-10 bg-white border-b border-gray-200 pb-6 pt-16">
+              <div
+                class="sticky top-0 z-10 bg-white border-b border-gray-200 pb-6 pt-16 lg::max-w-md"
+              >
                 <div class="lg:flex items-baseline justify-between">
                   <h1 class="text-4xl font-bold tracking-tight text-gray-900">Jobs</h1>
 
@@ -131,6 +140,8 @@
                         id="simple-search"
                         class="bg-gray-50 rounded h-10 border-r-1 focus:ring-0 border-gray-200 text-gray-900 text-sm block w-full pl-10 py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white shadow"
                         placeholder="Search here..."
+                        v-model="searchQuery"
+                        @input="handleInputSearch"
                         required
                       />
                     </div>
@@ -164,28 +175,21 @@
                               :key="option.name"
                               v-slot="{ active }"
                             >
-                              <a
-                                :href="option.href"
+                              <button
+                                @click="sortBy(option.name)"
                                 :class="[
                                   option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                   active ? 'bg-gray-100' : '',
                                   'block px-4 py-2 text-sm'
                                 ]"
-                                >{{ option.name }}</a
                               >
+                                {{ option.name }}
+                              </button>
                             </MenuItem>
                           </div>
                         </MenuItems>
                       </transition>
                     </Menu>
-
-                    <button
-                      type="button"
-                      class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
-                    >
-                      <span class="sr-only">View grid</span>
-                      <Squares2X2Icon class="h-5 w-5" aria-hidden="true" />
-                    </button>
                     <button
                       type="button"
                       class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
@@ -198,12 +202,16 @@
                 </div>
               </div>
 
-              <section aria-labelledby="products-heading" class="pb-24 pt-6 flex">
+              <section
+                v-if="paginateJobs"
+                aria-labelledby="products-heading"
+                class="pb-24 pt-6 flex"
+              >
                 <h2 id="products-heading" class="sr-only">Products</h2>
 
                 <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                   <!-- Filters -->
-                  <form class="hidden lg:block">
+                  <form class="hidden lg:block" @submit.prevent>
                     <h3 class="sr-only">Categories</h3>
                     <!-- <ul
                   role="list"
@@ -245,6 +253,7 @@
                               :value="option.value"
                               type="checkbox"
                               :checked="option.checked"
+                              @change="handleChange(section.id, optionIdx)"
                               class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                             />
                             <label
@@ -256,20 +265,86 @@
                         </div>
                       </DisclosurePanel>
                     </Disclosure>
+                    <button
+                      @click="handleFiltersClear"
+                      class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
+                    >
+                      Clear
+                    </button>
+                    <!-- <button type="submit">Filte apply</button> -->
                   </form>
 
                   <!-- Product grid -->
-                  <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2">
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
-                    <JobCard />
+                  <div v-if="paginatedJobs.length == 0" class="text-center w-100">
+                    <p>No jobs found. <span class="text-indigo-500">Clear Search</span></p>
+                  </div>
+                  <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2" v-if="jobs">
+                    <JobCard
+                      v-for="job in paginatedJobs"
+                      :key="job.data.job_id"
+                      :job="job.data"
+                      class="max-h-80 max-w-xl"
+                    />
+                    <!-- <p>sd</p> -->
                   </div>
                 </div>
               </section>
+              <p v-else class="text-center my-10 text-gray-500">
+                No jobs found.
+                <router-link to="/jobs" class="text-indigo-500 cursor-pointer"
+                  >Go to Jobs</router-link
+                >
+              </p>
+              <!-- Pagination Start -->
+              <div class="flex items-center justify-center mx-auto gap-4">
+                <button
+                  @click="prevPage"
+                  :disabled="currentPage === 1"
+                  class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-indigo-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                  type="button"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                    ></path>
+                  </svg>
+                  Previous
+                </button>
+                <button
+                  @click="nextPage"
+                  :disabled="currentPage === totalPages"
+                  class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-indigo-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                  type="button"
+                >
+                  Next
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+              <!-- Pagination End -->
             </div>
           </main>
         </div>
@@ -279,7 +354,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import Container from '@/components/Container.vue'
 import JobCard from '@/components/JobCard.vue'
@@ -305,38 +380,30 @@ import {
   PlusIcon,
   Squares2X2Icon
 } from '@heroicons/vue/20/solid'
+import axios from 'axios'
+import { useRoute, useRouter } from 'vue-router'
 
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
+  { name: 'Latest', href: '#', current: false },
+  { name: 'Salary: High to Low', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false }
-]
-const subCategories = [
-  { name: 'Totes', href: '#' },
-  { name: 'Backpacks', href: '#' },
-  { name: 'Travel Bags', href: '#' },
-  { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' }
 ]
 const filters = [
   {
-    id: 'job-type',
+    id: 'type',
     name: 'Job Type',
     options: [
-      { value: 'full-time', label: 'Full-time', checked: false },
-      { value: 'part-time', label: 'Part-time', checked: false },
-      { value: 'internship', label: 'Internship', checked: true },
-      { value: 'contract', label: 'Contract / Freelance', checked: false },
-      { value: 'co-founder', label: 'Co-founder', checked: false }
+      { value: 'Full Time', label: 'Full Time', checked: false },
+      { value: 'Part Time', label: 'Part Time', checked: false },
+      { value: 'Internship', label: 'Internship', checked: false },
+      { value: 'Freelancing', label: 'Freelance', checked: false }
     ]
   },
   {
-    id: 'job-role',
-    name: 'Job Roles',
+    id: 'category',
+    name: 'Job Category',
     options: [
-      { value: 'IT', label: 'IT', checked: true},
+      { value: 'IT', label: 'IT', checked: false },
       { value: 'Finance', label: 'Finance', checked: false },
       { value: 'Sales', label: 'Sales', checked: false },
       { value: 'Marketing', label: 'Marketing', checked: false },
@@ -344,28 +411,135 @@ const filters = [
     ]
   },
   {
-    id: 'size',
-    name: 'Salary Range',
+    id: 'salary',
+    name: 'Annual Salary',
     options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true }
+      { value: '2lpa', label: '2Lpa', checked: false },
+      { value: '6lpa', label: '6Lpa', checked: false },
+      { value: '12lpa', label: '12Lpa', checked: false },
+      { value: '18lpa', label: '18Lpa', checked: false },
+      { value: '20lpa', label: '20Lpa', checked: false },
+      { value: '40lpa', label: '40Lpa', checked: false }
     ]
   },
   {
     id: 'experience',
     name: 'Experience',
     options: [
-      { value: 'all', label: 'All', checked: false },
       { value: 'entry', label: 'Entry', checked: false },
       { value: 'intermediate', label: 'Intermediate', checked: false },
       { value: 'senior', label: 'Senior', checked: false }
     ]
   }
 ]
-
 const mobileFiltersOpen = ref(false)
+
+const jobs = ref([])
+const totalPages = ref(0)
+const currentPage = ref(1)
+const searchQuery = ref('')
+// const sortOption = ref() sort option
+const pageSize = 12
+
+const handleChange = (sectionId, optionIdx) => {
+  // Toggle the checked property of the selected option
+  filters.find((filter) => filter.id === sectionId).options[optionIdx].checked = !filters.find(
+    (filter) => filter.id === sectionId
+  ).options[optionIdx].checked
+
+  // Call your filter function or perform any other necessary action here
+  fetchData() // Assuming you have a filter function defined
+  // currentPage.value = 1
+}
+
+const sortBy = (option) => {
+  sortOptions.forEach((sortOption) => {
+    sortOption.current = sortOption.name === option
+  })
+}
+
+const fetchJobs = async () => {
+  try {
+    const selectedFilters = {}
+    filters.forEach((filter) => {
+      selectedFilters[filter.id] = filter.options
+        .filter((option) => option.checked)
+        .map((option) => option.value)
+    })
+
+    const params = {
+      type: selectedFilters.type,
+      category: selectedFilters.category,
+      salary: selectedFilters.salary,
+      experience: selectedFilters.experience
+    }
+
+    const response = await axios.get('/api/jobs', { params })
+
+    jobs.value = response.data.data
+    totalPages.value = Math.ceil(jobs.value.length / pageSize)
+    console.log(totalPages.value)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const handleInputSearch = (event) => {
+  searchQuery.value = event.target.value.trim().toLowerCase()
+  currentPage.value = 1
+  // console.log(currentPage.value)
+  // console.log(totalPages.value)
+}
+
+// const applySearchQuery = () => {
+
+// }
+const applySorting = () => {
+  // Apply sorting to jobs array
+  // Logic to sort jobs based on selected sorting option
+}
+const paginateJobs = (jobs) => {
+  // Paginate jobs based on currentPage and pageSize
+  const startIndex = (currentPage.value - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  return jobs.slice(startIndex, endIndex)
+}
+
+const fetchData = async () => {
+  await fetchJobs()
+  // applySearchQuery()
+  //apply sorting
+}
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const paginatedJobs = computed(() => {
+  let slicedJobs = jobs.value
+  if (searchQuery.value) {
+    const filteredJobs = jobs.value.filter(
+      (job) =>
+        job.data.attributes.title.toLowerCase().includes(searchQuery.value) ||
+        job.data.attributes.category.toLowerCase().includes(searchQuery.value)
+    )
+    slicedJobs = filteredJobs
+  }
+  const startIndex = (currentPage.value - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  totalPages.value = Math.ceil(slicedJobs.length/pageSize)
+  return slicedJobs.slice(startIndex, endIndex)
+})
+
+watch(currentPage, () => {
+  paginateJobs(jobs.value)
+})
+
+onMounted(fetchData)
 </script>

@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="pt-20">
+    <div class="pt-20" v-if="!apiProgress">
       <Container>
         <div class="lg:flex lg:justify-between">
           <!-- side menu -->
@@ -15,7 +15,9 @@
                     height="72"
                     alt=""
                   />
-                  <h2 class="font-bold text-xl">Medium inc.</h2>
+                  <h2 class="font-bold text-xl">
+                    {{ job.attributes.posted_by.data.attributes.name }}
+                  </h2>
                 </div>
                 <div class="lg:justify-start flex mb-5 justify-center">
                   <ul class="flex-col inline-flex">
@@ -35,7 +37,7 @@
                         />
                       </svg>
 
-                      <span class="abc">24 August, 2024</span>
+                      <span class="abc">{{ jobPostedDate }}</span>
                     </li>
                     <li class="items-center flex text-opacity-100 text-gray-400">
                       <svg
@@ -57,7 +59,7 @@
                           d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
                         />
                       </svg>
-                      <span class="abc">Remote</span>
+                      <span class="abc">{{ job.attributes.location }}</span>
                     </li>
                     <li class="items-center flex text-opacity-100 text-gray-400">
                       <svg
@@ -74,15 +76,16 @@
                           d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                         />
                       </svg>
-                      <span class="abc">7lpa - 12lpa</span>
+                      <span class="abc">{{ job.attributes.salary.toLocaleString('en-IN') }}</span>
                     </li>
                   </ul>
                 </div>
                 <div>
-                  <button
-                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  <button :disabled="isApplied"
+                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:bg-gray-500"
                   >
-                    Apply Now
+                    <span v-if="!isApplied">Apply Now</span>
+                    <span v-else>Already Applied</span>
                   </button>
                 </div>
                 <div class="text-center"></div>
@@ -94,14 +97,12 @@
             <!-- Job Description -->
             <div class="mb-8">
               <div class="mb-4">
-                <a href="/" class="text-indigo-600 items-center text-opacity-100 font-medium">
+                <router-link to="/jobs" class="text-indigo-600 items-center text-opacity-100 font-medium">
                   <span>← </span>
                   All Jobs
-                </a>
+                </router-link>
               </div>
-              <h1 class="font-extrabold text-4xl mb-10">
-                Engineering Manager Developer Experience
-              </h1>
+              <h1 class="font-extrabold text-4xl mb-10">{{ job.attributes.title }}</h1>
               <div class="mb-8">
                 <div class="mb-10">
                   <h3 class="font-bold text-xl mb-5 text-gray-900 text-opacity-100">The Role</h3>
@@ -234,10 +235,99 @@
                 </ul>
               </div>
               <button
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 font-bold"
+                type="button" :disabled="isApplied"
+                @click="open = !open"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 font-bold disabled:bg-gray-400"
               >
-                Apply Now →
+                <span v-if="!isApplied">Apply Now →</span>
+                <span v-else>Already applied</span>
               </button>
+              <TransitionRoot as="template" :show="open">
+                <Dialog as="div" class="relative z-10" @close="open = false">
+                  <TransitionChild
+                    as="template"
+                    enter="ease-out duration-300"
+                    enter-from="opacity-0"
+                    enter-to="opacity-100"
+                    leave="ease-in duration-200"
+                    leave-from="opacity-100"
+                    leave-to="opacity-0"
+                  >
+                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                  </TransitionChild>
+
+                  <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                    <div
+                      class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+                    >
+                      <TransitionChild
+                        as="template"
+                        enter="ease-out duration-300"
+                        enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                        enter-to="opacity-100 translate-y-0 sm:scale-100"
+                        leave="ease-in duration-200"
+                        leave-from="opacity-100 translate-y-0 sm:scale-100"
+                        leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                      >
+                        <DialogPanel
+                          class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                        >
+                          <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
+                              <div
+                                class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10"
+                              >
+                                <CheckCircleIcon
+                                  class="h-6 w-6 text-green-600"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <DialogTitle
+                                  as="h3"
+                                  class="text-base font-semibold leading-6 text-gray-900"
+                                  >Are you sure?</DialogTitle
+                                >
+                                <div class="mt-2">
+                                  <p class="text-sm text-gray-500">
+                                    The details in your profile is submitted to the employer.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                            <button
+                              type="button"
+                              class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto"
+                              @click="handleJobApply"
+                            >
+                              Apply
+                            </button>
+                            <router-link to="/candidate/update">
+                              <button
+                                type="button"
+                                class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto"
+                                @click="open = false"
+                              >
+                                Update Profile
+                              </button>
+                            </router-link>
+                            <button
+                              type="button"
+                              class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                              @click="open = false"
+                              ref="cancelButtonRef"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </DialogPanel>
+                      </TransitionChild>
+                    </div>
+                  </div>
+                </Dialog>
+              </TransitionRoot>
             </div>
           </div>
         </div>
@@ -249,6 +339,80 @@
 <script setup>
 import AppLayout from '../layouts/AppLayout.vue'
 import Container from '../components/Container.vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
+import { useRoute } from 'vue-router'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { CheckCircleIcon } from '@heroicons/vue/24/outline'
+import { useStore } from 'vuex'
+
+const open = ref(false)
+const store = useStore()
+const job = ref(null)
+const jobPostedDate = ref(null)
+const route = useRoute()
+const apiProgress = ref(true)
+const isApplied = ref(false)
+
+onMounted(async () => {
+  try {
+    const res = await axios.get(`/api/jobs/${route.params.id}`)
+    job.value = res.data.data
+    jobPostedDate.value = convertToLocalDate(res.data.data.attributes.created_at)
+    apiProgress.value = false
+
+    await axios.get(`/api/user/${store.getters.User.id}/applied/${route.params.id}`)
+  } catch (error) {
+    if (error.response && error.response.status === 409) {
+        // Handle the conflict case without logging
+        isApplied.value = true; 
+    } else {
+        // Log other unexpected errors
+        console.error(error); 
+    }
+  }
+})
+
+const convertToLocalDate = (jobDate) => {
+  const dateString = jobDate
+  const date = new Date(dateString)
+
+  const options = { day: '2-digit', month: 'long', year: 'numeric' }
+  return date.toLocaleDateString('en-GB', options)
+}
+
+const handleJobApply = async () => {
+  try {
+    open.value = false
+    await axios.post('/api/job/application', {
+      job_id: job.value.job_id,
+      user_id: store.getters.User.id,
+      status: 'Just_Applied'
+    })
+    isApplied.value = true
+    toast('Applied Successfully!', {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+  } catch (error) {
+    if (error.response?.status === 422) {
+      toast('Invalid input data, please try again', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    } else {
+      toast('Internal Server Error', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    }
+  }
+}
 </script>
 <style>
 .abc {
