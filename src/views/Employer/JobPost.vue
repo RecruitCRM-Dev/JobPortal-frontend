@@ -310,6 +310,14 @@
     try {
       // console.log(values)
       await store.dispatch('postJob', values)
+      router.push(`/employer/${store.getters.User.id}/jobs`)
+      formData.title = '';
+      formData.description = '';
+      formData.responsibilities = '';
+      formData.category = '';
+      formData.salary = '';
+      formData.location = '';
+      formData.type = '';
 
       resetForm();
   

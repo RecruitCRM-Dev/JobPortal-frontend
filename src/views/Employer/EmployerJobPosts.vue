@@ -135,13 +135,11 @@
               </div>
             </div>
             <div>
-              <router-link to="/job/7/applicants">
-                <button
-                  class="bg-purple-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
-                >
-                  View
-                </button>
-              </router-link>
+              <router-link
+                :to="`/employer/${store.getters.User.id}/job/${job.data.job_id}/applicants`"
+                class="bg-purple-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
+                >View Applicants</router-link
+              >
             </div>
           </div>
         </div>
