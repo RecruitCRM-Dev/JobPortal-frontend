@@ -35,7 +35,15 @@
                   <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
                 </div>
                 <div>
+
+                <router-link
+                to="/candidate"
+                class="text-black"
+                :class="{ 'border-b-4 border-indigo-300': $route.path === '/candidate' }">
                   <p class="font-semibold text-black">{{applicant.user.name}}</p>
+                </router-link>
+
+                  <!-- <p class="font-semibold text-black">{{applicant.user.name}}</p> -->
                   <p class="text-xs text-gray-600">{{applicant.user.role}}</p>
                 </div>
               </div>
@@ -81,7 +89,7 @@
     const updateStatus = async (applicant) => {
       try {
       
-        await axios.put(`/api/employer/${store.getters.User.id}/job`, { userId:applicant.user.id,status: applicant.status })
+        await axios.put(`/api/employer/${store.getters.User.id}/job/${applicant.job_id}`, { userId:applicant.user.id,status: applicant.status })
         toast('Status updated successfully!', {
           type: 'success',
           autoClose: 1000,
@@ -99,9 +107,8 @@
       try {
         const res = await axios.get(`/api/employer/${store.getters.User.id}/job/${route.params.job_id}`)
         // console.log(res)
-        
         applicants.value = res.data.users
-        // console.log(applicants.value)
+        console.log(applicants.value)
         apiProgress.value = false
         // console.log(user.role)
       } catch (error) {

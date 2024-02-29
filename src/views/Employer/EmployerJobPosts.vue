@@ -102,7 +102,16 @@
           >
             <div>
               <!-- <span class="text-purple-800 text-sm">Engineering</span> -->
-              <h3 class="font-bold mt-px">{{ job.data.attributes.title }}</h3>
+              <!-- <h3 class="font-bold mt-px">{{ job.data.attributes.title }}</h3> -->
+              <router-link
+                :to="`/job/${job.data.job_id}/apply`"
+                class="text-black"
+                :class="{ 'border-b-4 border-indigo-300': $route.path === `/job/${job.data.job_id}/apply` }">   
+
+                  <h3 class="font-bold mt-px">{{ job.data.attributes.title }}</h3>
+
+                </router-link>
+              
               <div class="flex items-center gap-3 mt-2">
                 <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
                   >Full-time</span
