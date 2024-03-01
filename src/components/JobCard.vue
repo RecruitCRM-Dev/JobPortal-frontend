@@ -1,4 +1,5 @@
 <template>
+  <router-link :to="`/job/${job.job_id}/apply`"> 
   <div
     class="cursor-pointer transition-[0.2s] px-4 py-5 rounded-lg hover:scale-[1.02] border border-gray-200 max-w-md"
   >
@@ -46,16 +47,26 @@
       <router-link :to="`/job/${job.job_id}/apply`">
         <button
           type="button"
-          class="w-full text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-blue-800"
+          :disabled="isEmployer()"
+          :class="isEmployer() ? 'w-full text-white bg-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-blue-800' : 'w-full text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-blue-800'"
         >
           Apply Now
         </button>
       </router-link>
     </div>
   </div>
+  </router-link>
 </template>
 
 <script setup>
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+const isEmployer = () => {
+  console.log(store.getters.isRole==='employer')
+  return store.getters.isRole==='employer'
+}
 defineProps({
   job: {
     type: Object,

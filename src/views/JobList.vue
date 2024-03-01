@@ -478,7 +478,7 @@ const fetchJobs = async () => {
 
     jobs.value = response.data.data
     totalPages.value = Math.ceil(jobs.value.length / pageSize)
-    console.log(totalPages.value)
+    // console.log(totalPages.value)
   } catch (error) {
     console.log(error)
   }

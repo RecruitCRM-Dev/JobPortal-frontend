@@ -174,7 +174,7 @@ const store = createStore({
           type : type
         })
         // context.commit('setUser', res.data.data.user)
-        // context.commit('setRole', 'employer')
+        context.commit('setRole', 'employer')
         // localStorage.setItem('access-token', res.data.data.access_token)
         // console.log('Job Posted')
         return 'Job Posted'
