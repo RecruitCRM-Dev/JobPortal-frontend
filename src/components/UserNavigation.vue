@@ -18,5 +18,11 @@
       :class="{ 'border-b-4 border-indigo-300': $route.path === '/candidate/applications' }"
       >Applied Jobs</router-link
     >
+    <router-link
+      to="/candidate/insights"
+      class="text-black"
+      :class="{ 'border-b-4 border-indigo-300': $route.path === '/candidate/insights' }"
+      >Insights</router-link
+    >
   </div>
 </template>

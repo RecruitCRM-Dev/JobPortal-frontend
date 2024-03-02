@@ -91,6 +91,8 @@
                 </div>
               </div>
               <UserTable />
+              <BarChart />
+              <PieChart :labels="labels" :series="series" />
             </div>
           </main>
         </div>
@@ -103,6 +105,8 @@
 import AppHeader from '@/components/AppHeader.vue'
 // import EmployerNavigation from '@/components/EmployerNavigation.vue'
 import UserTable from '@/components/UserTable.vue'
+import BarChart from '@/components/chart/BarChart.vue'
+import PieChart from '@/components/chart/PieChart.vue'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 
@@ -110,6 +114,9 @@ import axios from 'axios'
 // import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+
+const labels = ref(['Just Applied', 'Resume Viewed', 'Under Consideration', 'Selected', 'Rejected'])
+const series = ref([35, 41, 36, 26, 45])
 
 // const sortOptions = [
 //   { name: 'Newest', href: '?sort=newest', current: false },

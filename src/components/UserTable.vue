@@ -108,7 +108,7 @@ const getStatusColorClass = (status) => {
     case 'ResumeViewed':
       return 'text-yellow-800 bg-yellow-200'
     case 'Just_Applied':
-      return 'text-indigo-800 bg-indigo-200'
+      return 'text-pink-800 bg-pink-200'
     case 'Underconsideration':
       return 'text-indigo-800 bg-indigo-200'
     default:
