@@ -116,6 +116,9 @@
                 <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
                   >Full-time</span
                 >
+                <span class="rounded-full px-3 py-1 text-sm bg-purple-100 text-purple-700">{{
+                  job.data.attributes.category
+                }}</span>
                 <span class="text-slate-600 text-sm flex gap-1 items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -138,9 +141,7 @@
                   </svg>
                   {{ job.data.attributes.location }}</span
                 >
-                <span class="rounded-full px-3 py-1 text-sm bg-purple-100 text-purple-700">{{
-                  job.data.attributes.category
-                }}</span>
+                
               </div>
             </div>
             <div>
@@ -151,6 +152,7 @@
               >
             </div>
           </div>
+          <div v-if="filteredJobPosts?.length == 0" class="text-center mt-5">No Jobs found</div>
         </div>
       </div>
     </section>
@@ -161,8 +163,7 @@
 import AppHeader from '@/components/AppHeader.vue'
 import EmployerNavigation from '@/components/EmployerNavigation.vue'
 import { computed, onMounted, ref } from 'vue'
-import axios from 'axios'
-
+import axios from '@/api'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
 import { useStore } from 'vuex'
@@ -201,7 +202,7 @@ onMounted(async () => {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/employer/${store.getters.User.id}/job`)
+    const res = await axios.get(`/api/employer/${store.getters.User.id}/jobs`)
     // console.log()
     jobPosts.value = res.data.data
     console.log(jobPosts.value)

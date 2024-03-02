@@ -13,10 +13,10 @@
               <div class="bg-white shadow-xl rounded-lg p-6">
                 <div class="flex flex-col items-center">
                   <img
-                    src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"
+                  :src="userPic ? userPic : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMy48opkiA5UkBbnwDGXkqV9uDcORBTDo1uiqfHxIo-w&s'"
                     class="w-32 h-32 rounded-full mb-4 shrink-0"
                   />
-                  <h1 class="text-xl font-bold">{{employer.name}}</h1>
+                  <h1 class="text-xl font-bold">{{ employer.name }}</h1>
                   <!-- <p class="text-gray-700 text-sm">SASS</p> -->
                   <div class="flex space-x-1 justify-center items-center" v-if="employer.address">
                     <svg
@@ -39,7 +39,7 @@
                       />
                     </svg>
 
-                    <p class="text-gray-700 text-sm">{{employer.address}}</p>
+                    <p class="text-gray-700 text-sm">{{ employer.address }}</p>
                   </div>
 
                   <!-- Social Icons bar -->
@@ -139,7 +139,7 @@
               <div class="bg-white shadow-xl rounded-lg p-6">
                 <h2 class="text-xl font-bold mb-4">About Company</h2>
                 <p class="text-gray-700">
-                  {{employer.description}}
+                  {{ employer.description }}
                 </p>
 
                 <!-- <hr class="my-6 border-t border-gray-300" />
@@ -180,7 +180,7 @@ import EmployerNavigation from '@/components/EmployerNavigation.vue'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import axios from 'axios'
+import axios from '@/api'
 
 //const skills = ['VueJs', 'Laravel', 'HTML', 'CSS ', 'JS', 'C++']
 
@@ -188,7 +188,7 @@ const store = useStore()
 const router = useRouter()
 const employer = ref()
 const apiProgress = ref(true)
-
+const userPic = ref(null)
 
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
@@ -199,6 +199,7 @@ onMounted(async () => {
     // console.log()
     console.log(res)
     employer.value = res.data.data.attributes
+    userPic.value = res.data.data.attributes.profile_pic
     // console.log(res)
     // console.log(user.role)
     apiProgress.value = false
