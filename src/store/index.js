@@ -148,6 +148,9 @@ const store = createStore({
         if(userRole === 'employer'){
           await axios.post('/api/employer/logout')
         }
+        else if(userRole === 'candidate'){
+          await axios.post('/api/employer/logout')
+        }
         localStorage.clear()
         context.commit('setUser', null)
         context.commit('setRole', null)

@@ -192,74 +192,29 @@
               <h1 class="font-extrabold text-4xl mb-10">{{ job.attributes.title }}</h1>
               <div class="mb-8">
                 <div class="mb-10">
-                  <h3 class="font-bold text-xl mb-5 text-gray-900 text-opacity-100">The Role</h3>
+                  <h3 class="font-bold text-xl mb-5 text-gray-900 text-opacity-100">About the role</h3>
                   <div class="text-gray-700 text-opacity-100">
                     <p class="mb-4">
-                      In the world of AI, behavioural predictions are leading the charge to better
-                      machine learning.
-                    </p>
-                    <p class="mb-4">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum quia
-                      asperiores vitae harum rerum nemo placeat. Reprehenderit facilis ex
-                      voluptates!
-                    </p>
-                    <p class="mb-4">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolores autem
-                      beatae blanditiis mollitia, deserunt doloremque molestiae repellat suscipit
-                      maiores, alias quasi deleniti illo nobis exercitationem inventore praesentium
-                      corrupti numquam!
+                      {{job.attributes.description}}
                     </p>
                   </div>
                 </div>
                 <div class="mb-10">
-                  <h3 class="text-gray-800 opacity-100 font-bold text-xl mb-5">About You</h3>
+                  <h3 class="text-gray-800 opacity-100 font-bold text-xl mb-5">About company</h3>
                   <div class="text-gray-700 opacity-100">
                     <p class="mb-4">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus nemo veniam
-                      voluptas odit qui incidunt dolor sint illo, tempore delectus iure recusandae
-                      aliquid, accusantium similique corrupti fugit inventore adipisci laborum error
-                      eos voluptates pariatur nihil ut quis. Autem, praesentium quia.
-                    </p>
-                    <p class="mb-4">
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Saepe ut quae
-                      recusandae? Ut inventore velit soluta ea odio aliquid sit nobis laborum sed
-                      nam? Rerum temporibus est vero repellendus mollitia.
-                    </p>
-                    <p class="mb-4">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, iste.
-                      Veritatis praesentium delectus, maxime tenetur provident veniam eaque
-                      explicabo? Et.
+                      {{ job.attributes.posted_by.data.attributes.description }}
                     </p>
                   </div>
                 </div>
                 <div class="mb-10">
                   <h3 class="text-gray-800 opacity-100 font-bold text-xl mb-5">
-                    Things You Might Do
+                    Responsibilities
                   </h3>
                   <div class="text-dynamic-color">
                     <p class="mb-4">
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil, alias! Error
-                      voluptate eum at aperiam rerum consequuntur itaque expedita provident!
+                      {{job.attributes.responsibilities}}
                     </p>
-                    <ul class="dynamic-size flex flex-col list-disc ml-5">
-                      <li class="mb-2">
-                        Give back to the community via open source and blog posts
-                      </li>
-                      <li class="mb-2">
-                        Travel and meet great people- as part of our remote-first lifestyle, it's
-                        important that we come together as needed to work together, meet each other
-                        in person and have fun together. Please keep that in mind when you apply
-                      </li>
-                      <li class="mb-2">
-                        Teach and be taught: Modus creates active teams that work in internal and
-                        external projects together, giving opportunities to stay relevant with the
-                        latest technologies and learning from experts worldwide
-                      </li>
-                      <li class="mb-2">
-                        Interact directly with internal and external clients to represent Modus and
-                        its values
-                      </li>
-                    </ul>
                   </div>
                 </div>
               </div>
@@ -447,10 +402,11 @@ onMounted(async () => {
   try {
     const res = await axios.get(`/api/jobs/${route.params.id}`)
     job.value = res.data.data
+    console.log(res.data.data)
     jobPostedDate.value = convertToLocalDate(res.data.data.attributes.created_at)
     apiProgress.value = false
 
-    await axios.get(`/api/user/${store.getters.User.id}/applied/${route.params.id}`)
+    await axios.get(`/api/user/${store.getters.User.id}/jobs/${route.params.id}`)
   } catch (error) {
     if (error.response && error.response.status === 409) {
         // Handle the conflict case without logging
@@ -478,7 +434,7 @@ const convertToLocalDate = (jobDate) => {
 const handleJobApply = async () => {
   try {
     open.value = false
-    await axios.post('/api/job/application', {
+    await axios.post(`/api/user/${store.getters.User.id}/jobs`, {
       job_id: job.value.job_id,
       user_id: store.getters.User.id,
       status: 'Just_Applied'

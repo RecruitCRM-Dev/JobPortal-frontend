@@ -58,7 +58,7 @@
               >
                 <li>
                   <router-link to="/jobs" class="block md:px-4 transition hover:text-primary">
-                    <span>Jobs</span>
+                    <span>All Jobs</span>
                   </router-link>
                 </li>
               </ul>

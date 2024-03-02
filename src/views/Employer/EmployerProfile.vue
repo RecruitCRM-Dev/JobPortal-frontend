@@ -7,12 +7,20 @@
           <h2 class="text-center text-3xl text-gray-900">Edit your profile</h2>
         </div>
         <EmployerNavigation />
-        <Form @submit="onSubmit" class="flex flex-col py-10 ml-1 lg:px-0 px-5">
+        <Form v-if="!apiProgress" @submit="onSubmit" class="flex flex-col py-10 ml-1 lg:px-0 px-5">
           <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5 items-center">
             <!-- Avtar -->
             <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
               <div class="h-36 w-full">
-                <img class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover" :src="userPic ? userPic : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMy48opkiA5UkBbnwDGXkqV9uDcORBTDo1uiqfHxIo-w&s'" alt="Rounded profile_pic" />
+                <img
+                  class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover"
+                  :src="
+                    userPic
+                      ? userPic
+                      : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMy48opkiA5UkBbnwDGXkqV9uDcORBTDo1uiqfHxIo-w&s'
+                  "
+                  alt="Rounded profile_pic"
+                />
               </div>
               <div class="w-full mr-2">
                 <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input"
@@ -92,12 +100,16 @@
 
           <!-- Submit Button -->
           <button
-            type="submit"
+            type="submit" :disabled="formProgress"
             class="block bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
           >
+            <ButtonSpinner v-if="formProgress"/>
             Update
           </button>
         </Form>
+        <div v-else class="flex justify-center items-center mt-20">
+          <Spinner giant />
+        </div>
       </div>
     </section>
   </div>
@@ -110,18 +122,22 @@ import { onMounted, reactive, ref } from 'vue'
 
 import AppHeader from '@/components/AppHeader.vue'
 import EmployerNavigation from '@/components/EmployerNavigation.vue'
+import Spinner from '@/components/Spinner.vue'
+import ButtonSpinner from '@/components/ButtonSpinner.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { useForm } from 'vee-validate'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import axios from '@/api'
 
 const store = useStore()
 const router = useRouter()
 const userPic = ref(null)
-
+const route = useRoute()
+const apiProgress = ref(true)
+const formProgress = ref(false)
 
 //const skillOptions = ref(['Vue Js', 'Laravel', 'More to Come', 'Html', 'CSS'])
 
@@ -137,24 +153,25 @@ const handleProfilePicChange = (event) => {
   console.log(event.target.files[0])
 }
 
-
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/employer/profile/${store.getters.User.id}`)
+    const res = await axios.get(`/api/employer/profile/${route.params.id}`)
     formData.profile_pic = res.data.data.attributes.profile_pic
     userPic.value = res.data.data.attributes.profile_pic
     formData.name = res.data.data.attributes.name
     formData.description = res.data.data.attributes.description
     formData.address = res.data.data.attributes.address
+    apiProgress.value = false
   } catch (error) {
     console.log(error)
   }
 })
 
 const onSubmit = async (values) => {
+  formProgress.value = true
   try {
     console.log(values)
     await axios.post(`/api/employer/profile/${store.getters.User.id}`, values, {
@@ -171,7 +188,9 @@ const onSubmit = async (values) => {
 
     setTimeout(() => {
       router.push(`/employer/${store.getters.User.id}`)
-    }, 2000);
+    }, 2000)
+
+    formProgress.value = false
   } catch (error) {
     if (error.response?.status === 400) {
       toast('Please check input fields', {
@@ -186,6 +205,7 @@ const onSubmit = async (values) => {
         dangerouslyHTMLString: true
       })
     }
+    formProgress.value = false
   }
 }
 </script>

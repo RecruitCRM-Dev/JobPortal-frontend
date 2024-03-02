@@ -83,8 +83,9 @@ import UserNavigation from '@/components/UserNavigation.vue'
 import router from '@/router'
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-
+const route = useRoute()
 const store = useStore()
 const user = ref()
 const apiProgress = ref(true)
@@ -95,7 +96,7 @@ onMounted(async () => {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/user/profile/${store.getters.User.id}`)
+    const res = await axios.get(`/api/user/profile/${route.params.id}`)
     // console.log()
     user.value = res.data.user
     apiProgress.value = false
