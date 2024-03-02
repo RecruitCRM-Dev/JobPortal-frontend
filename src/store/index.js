@@ -12,7 +12,6 @@ const store = createStore({
     return {
       user: null,
       role: null,
-      jobFilters: null,
       token: null
     }
   },
@@ -27,9 +26,6 @@ const store = createStore({
     isRole(state){
       return state.role
     },
-    jobFilters(state){
-      return state.jobFilters
-    },
     Token(state){
       return state.token
     }
@@ -41,9 +37,6 @@ const store = createStore({
     },
     setRole(state, role){
       state.role = role
-    },
-    setJobFilters(state, filters){
-      state.jobFilters = filters
     },
     setToken(state, token){
       state.token = token
