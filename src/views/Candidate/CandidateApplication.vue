@@ -175,7 +175,6 @@ import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/s
 import axios from 'axios'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-const router = useRouter()
 
 const sortOptions = [
   { name: 'Best Rating', href: '#', current: false },
@@ -188,6 +187,8 @@ const mobileFiltersOpen = ref(false)
 const jobApplications = ref()
 const apiProgress = ref(true)
 const store = useStore()
+const router = useRouter()
+
 
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {

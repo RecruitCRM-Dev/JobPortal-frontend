@@ -1,138 +1,187 @@
 <template>
-  <!-- component -->
-  <AppHeader />
-  <div class="pt-20 pl-6 flex">
-    <h1 class="font-bold text-2xl">Applicants</h1>
-  </div>
-  <section class="container mx-auto p-6">
-    <div v-if="!apiProgress" class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-      <div class="w-full overflow-x-auto">
-        <p v-if="applicants.length == 0" class="text-center my-10 text-gray-500">
-          No applicants yet!
-        </p>
-        <table v-else class="w-full">
-          <thead>
-            <tr
-              class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600"
+  <div>
+    <AppHeader />
+    <section>
+      <div class="container mx-auto py-8 flex flex-col items-center">
+        <div class="max-w-xl bg-white mt-3 w-full flex">
+          <div class="mt-12 w-16 flex items-center">
+            <router-link
+              :to="`/employer/${$route.params.employer_id}/jobs`"
+              class="text-indigo-600 text-opacity-100 font-medium"
             >
-              <th class="px-4 py-3">Name</th>
-              <th class="px-4 py-3">Email</th>
-              <th class="px-4 py-3">Status</th>
-              <th class="px-4 py-3">Date</th>
-            </tr>
-          </thead>
+              <span>← </span>
+              Back
+            </router-link>
+          </div>
+          <div class="flex-grow">
+            <h2 class="text-center w-full mt-12 text-3xl text-gray-900">Job Applicants</h2>
+          </div>
+        </div>
 
-          <tbody class="bg-white">
-            <tr v-for="applicant in applicants" :key="applicant" class="text-gray-700">
-              <td class="px-4 py-3 border">
-                <div class="flex items-center text-sm">
-                  <div class="relative w-8 h-8 mr-3 rounded-full md:block">
-                    <img
-                      class="object-cover w-full h-full rounded-full"
-                      src="https://images.pexels.com/photos/5212324/pexels-photo-5212324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
-                      alt=""
-                      loading="lazy"
-                    />
-                    <div
-                      class="absolute inset-0 rounded-full shadow-inner"
-                      aria-hidden="true"
-                    ></div>
-                  </div>
-                  <div>
-                    <router-link
-                      :to="`/candidate/${store.getters.User.id}`"
-                      class="text-black"
-                      :class="{
-                        'border-b-4 border-indigo-300':
-                          $route.path === `/candidate/${store.getters.User.id}`
-                      }"
-                    >
-                      <p class="font-semibold text-black">{{ applicant.user.name }}</p>
-                    </router-link>
+        <div class="max-w-4xl w-full mx-auto p-3">
+          <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
+            <div class="flex-1">
+              <div class="sticky top-0 z-10 py-10 w-full m-3 bg-white border-b border-gray-200">
+                <div class="lg:flex items-baseline justify-between">
+                  <h1 class="text-4xl font-bold tracking-tight text-gray-900">Applicants</h1>
 
-                    <!-- <p class="font-semibold text-black">{{applicant.user.name}}</p> -->
-                    <p class="text-xs text-gray-600">{{ applicant.user.role }}</p>
+                  <div class="flex items-center mt-5 lg:mt-0">
+                    <div class="relative">
+                      <div
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                          class="w-5 h-5 text-blue-700"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        id="simple-search"
+                        class="bg-gray-50 rounded h-10 border-r-1 focus:ring-0 border-gray-200 text-gray-900 text-sm block w-full pl-10 py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white shadow"
+                        placeholder="Search here..."
+                        v-model="searchTerm"
+                        @input="handleSearch"
+                        required
+                      />
+                    </div>
+                    <!-- <Menu as="div" class="relative inline-block text-left ml-5">
+                      <div>
+                        <MenuButton
+                          class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
+                        >
+                          Sort
+                          <ChevronDownIcon
+                            class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                            aria-hidden="true"
+                          />
+                        </MenuButton>
+                      </div>
+
+                      <transition
+                        enter-active-class="transition ease-out duration-100"
+                        enter-from-class="transform opacity-0 scale-95"
+                        enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-75"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95"
+                      >
+                        <MenuItems
+                          class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        >
+                          <div class="py-1">
+                            <MenuItem
+                              v-for="option in sortOptions"
+                              :key="option.name"
+                              v-slot="{ active }"
+                            >
+                              <button
+                                @click="sortBy(option.name)"
+                                :class="[
+                                  option.current ? 'font-medium text-gray-900' : 'text-gray-500',
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm w-full'
+                                ]"
+                              >
+                                {{ option.name }}
+                              </button>
+                            </MenuItem>
+                          </div>
+                        </MenuItems>
+                      </transition>
+                    </Menu> -->
                   </div>
                 </div>
-              </td>
-              <td class="px-4 py-3 text-ms font-semibold border">{{ applicant.user.email }}</td>
-              <td class="px-4 py-3 text-xs border">
-                <select
-                  value="status"
-                  class="bg-transparent"
-                  v-model="applicant.status"
-                  @change="updateStatus(applicant)"
-                >
-                  <option value="Just_Applied">Applied</option>
-                  <option value="ResumeViewed">Resume Viewed</option>
-                  <option value="Underconsideration">Under Consideration</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Selected">Selected</option>
-                </select>
-              </td>
-              <td class="px-4 py-3 text-sm border">{{ formatDate(applicant.created_at) }}</td>
-            </tr>
-            <!--  -->
-          </tbody>
-        </table>
+              </div>
+              <UserTable />
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
-    <div v-else class="flex justify-center items-center mt-20">
-      <Spinner giant />
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
+
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
-import Spinner from '@/components/Spinner.vue'
+// import EmployerNavigation from '@/components/EmployerNavigation.vue'
+import UserTable from '@/components/UserTable.vue'
+import BarChart from '@/components/chart/BarChart.vue'
+import PieChart from '@/components/chart/PieChart.vue'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
-import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
-import { toast } from 'vue3-toastify'
 
+// import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+// import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
+import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+
+const labels = ref(['Just Applied', 'Resume Viewed', 'Under Consideration', 'Selected', 'Rejected'])
+const series = ref([35, 41, 36, 26, 45])
+
+// const sortOptions = [
+//   { name: 'Newest', href: '?sort=newest', current: false },
+//   { name: 'Oldest', href: '?sort=oldest', current: false }
+// ]
+
+// const mobileFiltersOpen = ref(false)
+
+// const sortBy = (option) => {
+//   sortOptions.forEach((sortOption) => {
+//     sortOption.current = sortOption.name === option
+//   })
+//   if (option === 'Newest') {
+//     jobPosts.value.sort(
+//       (a, b) => new Date(b.data.attributes.created_at) - new Date(a.data.attributes.created_at)
+//     )
+//   } else if (option === 'Oldest') {
+//     jobPosts.value.sort(
+//       (a, b) => new Date(a.data.attributes.created_at) - new Date(b.data.attributes.created_at)
+//     )
+//   }
+// }
+
 const store = useStore()
 const router = useRouter()
-const applicants = ref([])
+const jobPosts = ref()
 const apiProgress = ref(true)
-const route = useRoute()
+const searchTerm = ref('')
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString() // Adjust formatting as needed
-}
-const updateStatus = async (applicant) => {
-  try {
-    await axios.put(`/api/employer/${store.getters.User.id}/jobs/${applicant.job_id}`, {
-      userId: applicant.user.id,
-      status: applicant.status
-    })
-    toast('Status updated successfully!', {
-      type: 'success',
-      autoClose: 1000,
-      dangerouslyHTMLString: true
-    })
-    console.log('Updated status')
-  } catch (error) {
-    console.error('Error updating status:', error)
-  }
-}
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
   try {
-    const res = await axios.get(
-      `/api/employer/${store.getters.User.id}/jobs/${route.params.job_id}`
-    )
-    // console.log(res)
-    applicants.value = res.data.users
-    console.log(applicants.value)
+    const res = await axios.get(`/api/employer/${store.getters.User.id}/job`)
+    // console.log()
+    jobPosts.value = res.data.data
+    console.log(jobPosts.value)
     apiProgress.value = false
     // console.log(user.role)
   } catch (error) {
     console.log(error)
   }
 })
+
+const handleSearch = (event) => {
+  searchTerm.value = event.target.value.trim().toLowerCase()
+}
+
+// const filteredJobPosts = computed(() => {
+//   if (!searchTerm.value) {
+//     return jobPosts.value
+//   } else {
+//     return jobPosts.value.filter((jobPost) =>
+//       jobPost.data.attributes.title.toLowerCase().includes(searchTerm.value)
+//     )
+//   }
+// })
 </script>

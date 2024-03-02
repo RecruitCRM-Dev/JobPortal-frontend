@@ -171,7 +171,7 @@ import Spinner from '@/components/Spinner.vue'
 import { computed, onMounted, ref } from 'vue'
 import axios from '@/api'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
+import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -179,8 +179,6 @@ const sortOptions = [
   { name: 'Newest', href: '?sort=newest', current: false },
   { name: 'Oldest', href: '?sort=oldest', current: false }
 ]
-
-const mobileFiltersOpen = ref(false)
 
 const sortBy = (option) => {
   sortOptions.forEach((sortOption) => {
