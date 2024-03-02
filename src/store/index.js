@@ -12,7 +12,8 @@ const store = createStore({
     return {
       user: null,
       role: null,
-      jobFilters: null
+      jobFilters: null,
+      token: null
     }
   },
 
@@ -28,6 +29,9 @@ const store = createStore({
     },
     jobFilters(state){
       return state.jobFilters
+    },
+    Token(state){
+      return state.token
     }
   },
 
@@ -40,6 +44,9 @@ const store = createStore({
     },
     setJobFilters(state, filters){
       state.jobFilters = filters
+    },
+    setToken(state, token){
+      state.token = token
     }
   },
 
@@ -71,14 +78,14 @@ const store = createStore({
       axios.defaults.withXSRFToken = true
       try {
         if (userRole === 'candidate') {
-          res = await axios.post('/api/login/user', {
+          res = await axios.post('/api/user/login', {
             email: email,
             password: password
           })
 
           context.commit('setRole', 'candidate')
         } else if (userRole === 'employer') {
-          res = await axios.post('/api/login/employer', {
+          res = await axios.post('/api/employer/login', {
             //TODO
             email: email,
             password: password
@@ -87,6 +94,7 @@ const store = createStore({
           context.commit('setRole', 'employer')
         }
         context.commit('setUser', res.data.data.user)
+        context.commit('setToken', res.data.data.token)
         localStorage.setItem('access-token', res.data.data.token)
         return 'Logged In Successfully'
       } catch (error) {
@@ -101,7 +109,7 @@ const store = createStore({
       axios.defaults.withCredentials = true
       axios.defaults.withXSRFToken = true
       try {
-        const res = await axios.post('/api/register/user', {
+        const res = await axios.post('/api/user/register', {
           name: name,
           email: email,
           password: password,
@@ -109,6 +117,7 @@ const store = createStore({
         })
         context.commit('setUser', res.data.data.user)
         context.commit('setRole', 'candidate')
+        context.commit('setToken', res.data.data.token)
         localStorage.setItem('access-token', res.data.data.token)
         return 'Registered Successfully'
       } catch (error) {
@@ -124,7 +133,7 @@ const store = createStore({
       axios.defaults.withCredentials = true
       axios.defaults.withXSRFToken = true
       try {
-        const res = await axios.post('/api/register/employer', {
+        const res = await axios.post('/api/employer/register', {
           name: name,
           email: email,
           password: password,
@@ -132,7 +141,8 @@ const store = createStore({
         })
         context.commit('setUser', res.data.data.user)
         context.commit('setRole', 'employer')
-        localStorage.setItem('access-token', res.data.data.access_token)
+        context.commit('setToken', res.data.data.token)
+        localStorage.setItem('access-token', res.data.data.token)
         return 'Registered Successfully'
       } catch (error) {
         throw error
@@ -141,47 +151,19 @@ const store = createStore({
 
     async logout(context) {
       try {
-        await axios.post('/api/logout/user')
+        const userRole = context.state.role
+        if(userRole === 'employer'){
+          await axios.post('/api/employer/logout')
+        }
         localStorage.clear()
         context.commit('setUser', null)
         context.commit('setRole', null)
+        context.commit('setToken', null)
         return 'Logged Out Successfully'
       } catch (error) {
         throw error
       }
     },
-    async postJob(context, payload) {
-      const title = payload.title
-      const description = payload.description
-      const responsibilities = payload.responsibilities
-      const category = payload.category
-      const salary = payload.salary
-      const location = payload.location
-      const type = payload.type
-
-      const userId = context.getters.User.id
-
-      axios.defaults.withCredentials = true
-      axios.defaults.withXSRFToken = true
-      try {
-        const res = await axios.post(`/api/employer/${userId}/job`, {
-          title : title,
-          description : description,
-          responsibilities : responsibilities,
-          category : category,
-          salary : salary,
-          location : location,
-          type : type
-        })
-        // context.commit('setUser', res.data.data.user)
-        context.commit('setRole', 'employer')
-        // localStorage.setItem('access-token', res.data.data.access_token)
-        // console.log('Job Posted')
-        return 'Job Posted'
-      } catch (error) {
-        throw error
-      }
-    }
   },
   plugins: [vuexLocal.plugin]
 })

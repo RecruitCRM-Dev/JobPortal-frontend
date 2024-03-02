@@ -98,9 +98,9 @@
                       </Disclosure>
                       <button
                         @click="handleFiltersClear"
-                        class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
+                        class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-3 text-white font-semibold mb-1"
                       >
-                        Clear
+                        Clear all filters
                       </button>
                     </form>
                   </DialogPanel>
@@ -145,7 +145,7 @@
                         required
                       />
                     </div>
-                    <Menu as="div" class="relative inline-block text-left ml-5">
+                    <!-- <Menu as="div" class="relative inline-block text-left ml-5">
                       <div>
                         <MenuButton
                           class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
@@ -189,7 +189,7 @@
                           </div>
                         </MenuItems>
                       </transition>
-                    </Menu>
+                    </Menu> -->
                     <button
                       type="button"
                       class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
@@ -267,9 +267,9 @@
                     </Disclosure>
                     <button
                       @click="handleFiltersClear"
-                      class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
+                      class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-3 text-white font-semibold mb-1"
                     >
-                      Clear
+                    Clear all filters
                     </button>
                     <!-- <button type="submit">Filte apply</button> -->
                   </form>
@@ -383,11 +383,6 @@ import {
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 
-const sortOptions = [
-  { name: 'Latest', href: '#', current: false },
-  { name: 'Salary: High to Low', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false }
-]
 const filters = [
   {
     id: 'type',
@@ -452,11 +447,6 @@ const handleChange = (sectionId, optionIdx) => {
   // currentPage.value = 1
 }
 
-const sortBy = (option) => {
-  sortOptions.forEach((sortOption) => {
-    sortOption.current = sortOption.name === option
-  })
-}
 
 const fetchJobs = async () => {
   try {
@@ -491,13 +481,6 @@ const handleInputSearch = (event) => {
   // console.log(totalPages.value)
 }
 
-// const applySearchQuery = () => {
-
-// }
-const applySorting = () => {
-  // Apply sorting to jobs array
-  // Logic to sort jobs based on selected sorting option
-}
 const paginateJobs = (jobs) => {
   // Paginate jobs based on currentPage and pageSize
   const startIndex = (currentPage.value - 1) * pageSize
@@ -536,6 +519,15 @@ const paginatedJobs = computed(() => {
   totalPages.value = Math.ceil(slicedJobs.length/pageSize)
   return slicedJobs.slice(startIndex, endIndex)
 })
+
+const handleFiltersClear = () =>{
+  filters.forEach(filter => {
+    filter.options.forEach(option => {
+      option.checked = false
+    })
+  })
+  fetchJobs()
+}
 
 watch(currentPage, () => {
   paginateJobs(jobs.value)
