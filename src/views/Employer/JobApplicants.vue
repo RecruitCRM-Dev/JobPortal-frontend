@@ -2,12 +2,23 @@
   <div>
     <AppHeader />
     <section>
-      <div class="container mx-auto py-8">
-        <div class="bg-white mt-3">
-          <h2 class="text-center mt-12 text-3xl text-gray-900">Job Applicants</h2>
+      <div class="container mx-auto py-8 flex flex-col items-center">
+        <div class="max-w-xl bg-white mt-3 w-full flex">
+          <div class="mt-12 w-16 flex items-center">
+            <router-link
+              :to="`/employer/${$route.params.employer_id}/jobs`"
+              class="text-indigo-600 text-opacity-100 font-medium"
+            >
+              <span>← </span>
+              Back
+            </router-link>
+          </div>
+          <div class="flex-grow">
+            <h2 class="text-center w-full mt-12 text-3xl text-gray-900">Job Applicants</h2>
+          </div>
         </div>
 
-        <div class="max-w-4xl mx-auto p-3">
+        <div class="max-w-4xl w-full mx-auto p-3">
           <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
             <div class="flex-1">
               <div class="sticky top-0 z-10 py-10 w-full m-3 bg-white border-b border-gray-200">
@@ -91,8 +102,6 @@
                 </div>
               </div>
               <UserTable />
-              <BarChart />
-              <PieChart :labels="labels" :series="series" />
             </div>
           </main>
         </div>

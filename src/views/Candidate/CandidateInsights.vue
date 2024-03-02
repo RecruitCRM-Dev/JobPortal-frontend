@@ -7,6 +7,7 @@
           <h2 class="text-center mt-12 text-3xl text-gray-900">Your Applications</h2>
         </div>
         <UserNavigation />
+  
 
         <!-- all the jobs will be listed here -->
 
