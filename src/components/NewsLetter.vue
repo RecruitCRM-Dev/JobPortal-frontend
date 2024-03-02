@@ -13,9 +13,9 @@
     </div>
     <Container>
       <div class="relative">
-        <div class="container mx-auto flex flex-col items-center pb-6 mb-4 md:p-10 md:px-12">
+        <div class="container mx-auto flex flex-col items-center mb-4 md:px-12">
           <h1 class="text-4xl font-semibold leadi text-center">
-            What our customers are saying about us
+            Why us?
           </h1>
         </div>
         <div class="relative isolate overflow-hidden py-16 sm:py-24 lg:py-8">
@@ -24,45 +24,41 @@
               <dl class="grid grid-cols-4 gap-x-8 gap-y-10 lg:pt-2">
                 <div class="flex flex-col items-start">
                   <div class="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                    <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                    <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
                   </div>
 
-                  <dt class="mt-4 font-semibold">Job updates</dt>
+                  <dt class="mt-4 font-semibold">Streamlined Job Search</dt>
                   <dd class="mt-2 leading-7 text-gray-600 dark:text-gray-300">
-                    Non laboris consequat cupidatat laborum magna. Eiusmod non irure cupidatat duis
-                    commodo amet.
+                    Effortlessly find relevant job opportunities using our powerful search filters and advanced search functionality.
                   </dd>
                 </div>
                 <div class="flex flex-col items-start">
                   <div class="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                    <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                    <UserCircleIcon class="h-6 w-6" aria-hidden="true" />
                   </div>
 
-                  <dt class="mt-4 font-semibold">Job updates</dt>
+                  <dt class="mt-4 font-semibold">Manage Your Profile</dt>
                   <dd class="mt-2 leading-7 text-gray-600 dark:text-gray-300">
-                    Non laboris consequat cupidatat laborum magna. Eiusmod non irure cupidatat duis
-                    commodo amet.
+                    Easily create, update, and manage your professional profile, allowing employers to discover you and your qualifications effortlessly.
                   </dd>
                 </div>
                 <div class="flex flex-col items-start">
                   <div class="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                    <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                    <DocumentTextIcon class="h-6 w-6" aria-hidden="true" />
                   </div>
 
-                  <dt class="mt-4 font-semibold">Job updates</dt>
+                  <dt class="mt-4 font-semibold">Track Your Applications</dt>
                   <dd class="mt-2 leading-7 text-gray-600 dark:text-gray-300">
-                    Non laboris consequat cupidatat laborum magna. Eiusmod non irure cupidatat duis
-                    commodo amet.
+                    Stay organized with our application tracking system, enabling you to monitor the status of your job applications and manage your job search effectively
                   </dd>
                 </div>
                 <div class="flex flex-col items-start">
                   <div class="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                    <BellAlertIcon class="h-6 w-6" aria-hidden="true" />
+                    <PresentationChartLineIcon class="h-6 w-6" aria-hidden="true" />
                   </div>
-                  <dt class="mt-4 font-semibold">No spam</dt>
+                  <dt class="mt-4 font-semibold">Application Analytics</dt>
                   <dd class="mt-2 leading-7 text-gray-600 dark:text-gray-300">
-                    Officia excepteur ullamco ut sint duis proident non adipisicing. Voluptate
-                    incididunt anim.
+                    Gain insights into your job application activities, including the number of applications submitted to optimize your job search strategy.
                   </dd>
                 </div>
               </dl>
@@ -79,6 +75,6 @@
 </template>
 
 <script setup>
-import { BriefcaseIcon, BellAlertIcon } from '@heroicons/vue/24/outline'
+import { MagnifyingGlassIcon, UserCircleIcon, PresentationChartLineIcon, DocumentTextIcon } from '@heroicons/vue/24/outline'
 import Container from './Container.vue'
 </script>

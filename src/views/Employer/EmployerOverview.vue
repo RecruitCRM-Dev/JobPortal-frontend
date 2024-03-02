@@ -1,22 +1,26 @@
 <template>
   <div>
     <AppHeader />
-    <section v-if="!apiProgress">
+    <section>
       <div>
         <div class="container mx-auto py-8">
           <div class="bg-white mt-3">
             <h2 class="text-center mt-12 text-3xl text-gray-900">Overview</h2>
           </div>
           <EmployerNavigation />
-          <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+          <div v-if="!apiProgress" class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div class="col-span-4 sm:col-span-3">
               <div class="bg-white shadow-xl rounded-lg p-6">
                 <div class="flex flex-col items-center">
                   <img
-                    src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"
+                    :src="
+                      userPic
+                        ? userPic
+                        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMy48opkiA5UkBbnwDGXkqV9uDcORBTDo1uiqfHxIo-w&s'
+                    "
                     class="w-32 h-32 rounded-full mb-4 shrink-0"
                   />
-                  <h1 class="text-xl font-bold">{{employer.name}}</h1>
+                  <h1 class="text-xl font-bold">{{ employer.name }}</h1>
                   <!-- <p class="text-gray-700 text-sm">SASS</p> -->
                   <div class="flex space-x-1 justify-center items-center" v-if="employer.address">
                     <svg
@@ -39,7 +43,7 @@
                       />
                     </svg>
 
-                    <p class="text-gray-700 text-sm">{{employer.address}}</p>
+                    <p class="text-gray-700 text-sm">{{ employer.address }}</p>
                   </div>
 
                   <!-- Social Icons bar -->
@@ -139,7 +143,7 @@
               <div class="bg-white shadow-xl rounded-lg p-6">
                 <h2 class="text-xl font-bold mb-4">About Company</h2>
                 <p class="text-gray-700">
-                  {{employer.description}}
+                  {{ employer.description }}
                 </p>
 
                 <!-- <hr class="my-6 border-t border-gray-300" />
@@ -168,6 +172,9 @@
               </div>
             </div>
           </div>
+          <div v-else class="flex justify-center items-center mt-20">
+            <Spinner giant />
+          </div>
         </div>
       </div>
     </section>
@@ -177,10 +184,11 @@
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
 import EmployerNavigation from '@/components/EmployerNavigation.vue'
+import Spinner from '@/components/Spinner.vue'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import axios from 'axios'
+import axios from '@/api'
 
 //const skills = ['VueJs', 'Laravel', 'HTML', 'CSS ', 'JS', 'C++']
 
@@ -188,19 +196,17 @@ const store = useStore()
 const router = useRouter()
 const employer = ref()
 const apiProgress = ref(true)
-
+const userPic = ref(null)
+const route = useRoute()
 
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/employer/profile/${store.getters.User.id}`)
-    // console.log()
-    console.log(res)
+    const res = await axios.get(`/api/employer/profile/${route.params.id}`)
     employer.value = res.data.data.attributes
-    // console.log(res)
-    // console.log(user.role)
+    userPic.value = res.data.data.attributes.profile_pic
     apiProgress.value = false
   } catch (error) {
     console.log(error)

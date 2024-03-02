@@ -98,9 +98,9 @@
                       </Disclosure>
                       <button
                         @click="handleFiltersClear"
-                        class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
+                        class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-3 text-white font-semibold mb-1"
                       >
-                        Clear
+                        Clear all filters
                       </button>
                     </form>
                   </DialogPanel>
@@ -145,7 +145,7 @@
                         required
                       />
                     </div>
-                    <Menu as="div" class="relative inline-block text-left ml-5">
+                    <!-- <Menu as="div" class="relative inline-block text-left ml-5">
                       <div>
                         <MenuButton
                           class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
@@ -189,7 +189,7 @@
                           </div>
                         </MenuItems>
                       </transition>
-                    </Menu>
+                    </Menu> -->
                     <button
                       type="button"
                       class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
@@ -201,19 +201,19 @@
                   </div>
                 </div>
               </div>
+              <div v-if="!apiProgress">
+                <section
+                  v-if="paginateJobs"
+                  aria-labelledby="products-heading"
+                  class="pb-24 pt-6 flex"
+                >
+                  <h2 id="products-heading" class="sr-only">Products</h2>
 
-              <section
-                v-if="paginateJobs"
-                aria-labelledby="products-heading"
-                class="pb-24 pt-6 flex"
-              >
-                <h2 id="products-heading" class="sr-only">Products</h2>
-
-                <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-                  <!-- Filters -->
-                  <form class="hidden lg:block" @submit.prevent>
-                    <h3 class="sr-only">Categories</h3>
-                    <!-- <ul
+                  <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+                    <!-- Filters -->
+                    <form class="hidden lg:block" @submit.prevent>
+                      <h3 class="sr-only">Categories</h3>
+                      <!-- <ul
                   role="list"
                   class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
                 >
@@ -222,127 +222,131 @@
                   </li>
                 </ul> -->
 
-                    <Disclosure
-                      as="div"
-                      v-for="section in filters"
-                      :key="section.id"
-                      class="border-b border-gray-200 py-6"
-                      v-slot="{ open }"
-                    >
-                      <h3 class="-my-3 flow-root">
-                        <DisclosureButton
-                          class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
-                        >
-                          <span class="font-medium text-gray-900">{{ section.name }}</span>
-                          <span class="ml-6 flex items-center">
-                            <PlusIcon v-if="!open" class="h-5 w-5" aria-hidden="true" />
-                            <MinusIcon v-else class="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        </DisclosureButton>
-                      </h3>
-                      <DisclosurePanel class="pt-6">
-                        <div class="space-y-4">
-                          <div
-                            v-for="(option, optionIdx) in section.options"
-                            :key="option.value"
-                            class="flex items-center"
+                      <Disclosure
+                        as="div"
+                        v-for="section in filters"
+                        :key="section.id"
+                        class="border-b border-gray-200 py-6"
+                        v-slot="{ open }"
+                      >
+                        <h3 class="-my-3 flow-root">
+                          <DisclosureButton
+                            class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
                           >
-                            <input
-                              :id="`filter-${section.id}-${optionIdx}`"
-                              :name="`${section.id}[]`"
-                              :value="option.value"
-                              type="checkbox"
-                              :checked="option.checked"
-                              @change="handleChange(section.id, optionIdx)"
-                              class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <label
-                              :for="`filter-${section.id}-${optionIdx}`"
-                              class="ml-3 text-sm text-gray-600"
-                              >{{ option.label }}</label
+                            <span class="font-medium text-gray-900">{{ section.name }}</span>
+                            <span class="ml-6 flex items-center">
+                              <PlusIcon v-if="!open" class="h-5 w-5" aria-hidden="true" />
+                              <MinusIcon v-else class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          </DisclosureButton>
+                        </h3>
+                        <DisclosurePanel class="pt-6">
+                          <div class="space-y-4">
+                            <div
+                              v-for="(option, optionIdx) in section.options"
+                              :key="option.value"
+                              class="flex items-center"
                             >
+                              <input
+                                :id="`filter-${section.id}-${optionIdx}`"
+                                :name="`${section.id}[]`"
+                                :value="option.value"
+                                type="checkbox"
+                                :checked="option.checked"
+                                @change="handleChange(section.id, optionIdx)"
+                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              />
+                              <label
+                                :for="`filter-${section.id}-${optionIdx}`"
+                                class="ml-3 text-sm text-gray-600"
+                                >{{ option.label }}</label
+                              >
+                            </div>
                           </div>
-                        </div>
-                      </DisclosurePanel>
-                    </Disclosure>
-                    <button
-                      @click="handleFiltersClear"
-                      class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-10 text-white font-semibold mb-1"
-                    >
-                      Clear
-                    </button>
-                    <!-- <button type="submit">Filte apply</button> -->
-                  </form>
+                        </DisclosurePanel>
+                      </Disclosure>
+                      <button
+                        @click="handleFiltersClear"
+                        class="block align-items-center bg-indigo-600 mt-5 ml-auto py-3 rounded-2xl px-3 text-white font-semibold mb-1"
+                      >
+                        Clear all filters
+                      </button>
+                      <!-- <button type="submit">Filte apply</button> -->
+                    </form>
 
-                  <!-- Product grid -->
-                  <div v-if="paginatedJobs.length == 0" class="text-center w-100">
-                    <p>No jobs found. <span class="text-indigo-500">Clear Search</span></p>
+                    <!-- Product grid -->
+                    <div v-if="paginatedJobs.length == 0" class="text-center w-100">
+                      <p>No jobs found. <span class="text-indigo-500">Clear Search</span></p>
+                    </div>
+                    <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2" v-if="jobs">
+                      <JobCard
+                        v-for="job in paginatedJobs"
+                        :key="job.data.job_id"
+                        :job="job.data"
+                        class="max-h-80 max-w-xl"
+                      />
+                      <!-- <p>sd</p> -->
+                    </div>
                   </div>
-                  <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2" v-if="jobs">
-                    <JobCard
-                      v-for="job in paginatedJobs"
-                      :key="job.data.job_id"
-                      :job="job.data"
-                      class="max-h-80 max-w-xl"
-                    />
-                    <!-- <p>sd</p> -->
-                  </div>
+                </section>
+                <p v-else class="text-center my-10 text-gray-500">
+                  No jobs found.
+                  <router-link to="/jobs" class="text-indigo-500 cursor-pointer"
+                    >Go to Jobs</router-link
+                  >
+                </p>
+                <!-- Pagination Start -->
+                <div class="flex items-center justify-center mx-auto gap-4">
+                  <button
+                    @click="prevPage"
+                    :disabled="currentPage === 1"
+                    class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-indigo-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                      class="w-4 h-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                      ></path>
+                    </svg>
+                    Previous
+                  </button>
+                  <button
+                    @click="nextPage"
+                    :disabled="currentPage === totalPages"
+                    class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-indigo-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button"
+                  >
+                    Next
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                      class="w-4 h-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                      ></path>
+                    </svg>
+                  </button>
                 </div>
-              </section>
-              <p v-else class="text-center my-10 text-gray-500">
-                No jobs found.
-                <router-link to="/jobs" class="text-indigo-500 cursor-pointer"
-                  >Go to Jobs</router-link
-                >
-              </p>
-              <!-- Pagination Start -->
-              <div class="flex items-center justify-center mx-auto gap-4">
-                <button
-                  @click="prevPage"
-                  :disabled="currentPage === 1"
-                  class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-indigo-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  type="button"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                    class="w-4 h-4"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                    ></path>
-                  </svg>
-                  Previous
-                </button>
-                <button
-                  @click="nextPage"
-                  :disabled="currentPage === totalPages"
-                  class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-indigo-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  type="button"
-                >
-                  Next
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                    class="w-4 h-4"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                    ></path>
-                  </svg>
-                </button>
+              </div>
+              <div v-else class="flex justify-center items-center mt-20">
+                <Spinner giant />
               </div>
               <!-- Pagination End -->
             </div>
@@ -359,6 +363,7 @@ import AppLayout from '@/layouts/AppLayout.vue'
 import Container from '@/components/Container.vue'
 import JobCard from '@/components/JobCard.vue'
 import JobSearch from '@/components/JobSearch.vue'
+import Spinner from '@/components/Spinner.vue'
 import {
   Dialog,
   DialogPanel,
@@ -383,11 +388,6 @@ import {
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 
-const sortOptions = [
-  { name: 'Latest', href: '#', current: false },
-  { name: 'Salary: High to Low', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false }
-]
 const filters = [
   {
     id: 'type',
@@ -438,6 +438,7 @@ const jobs = ref([])
 const totalPages = ref(0)
 const currentPage = ref(1)
 const searchQuery = ref('')
+const apiProgress = ref(true)
 // const sortOption = ref() sort option
 const pageSize = 12
 
@@ -450,12 +451,6 @@ const handleChange = (sectionId, optionIdx) => {
   // Call your filter function or perform any other necessary action here
   fetchData() // Assuming you have a filter function defined
   // currentPage.value = 1
-}
-
-const sortBy = (option) => {
-  sortOptions.forEach((sortOption) => {
-    sortOption.current = sortOption.name === option
-  })
 }
 
 const fetchJobs = async () => {
@@ -478,7 +473,8 @@ const fetchJobs = async () => {
 
     jobs.value = response.data.data
     totalPages.value = Math.ceil(jobs.value.length / pageSize)
-    console.log(totalPages.value)
+    apiProgress.value = false
+    // console.log(totalPages.value)
   } catch (error) {
     console.log(error)
   }
@@ -491,13 +487,6 @@ const handleInputSearch = (event) => {
   // console.log(totalPages.value)
 }
 
-// const applySearchQuery = () => {
-
-// }
-const applySorting = () => {
-  // Apply sorting to jobs array
-  // Logic to sort jobs based on selected sorting option
-}
 const paginateJobs = (jobs) => {
   // Paginate jobs based on currentPage and pageSize
   const startIndex = (currentPage.value - 1) * pageSize
@@ -533,9 +522,18 @@ const paginatedJobs = computed(() => {
   }
   const startIndex = (currentPage.value - 1) * pageSize
   const endIndex = startIndex + pageSize
-  totalPages.value = Math.ceil(slicedJobs.length/pageSize)
+  totalPages.value = Math.ceil(slicedJobs.length / pageSize)
   return slicedJobs.slice(startIndex, endIndex)
 })
+
+const handleFiltersClear = () => {
+  filters.forEach((filter) => {
+    filter.options.forEach((option) => {
+      option.checked = false
+    })
+  })
+  fetchJobs()
+}
 
 watch(currentPage, () => {
   paginateJobs(jobs.value)

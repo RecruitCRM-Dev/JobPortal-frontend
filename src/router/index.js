@@ -55,17 +55,17 @@ const router = createRouter({
       component: EmployerRegisterVue
     },
     {
-      path: '/candidate',
+      path: '/candidate/:id',
       name: 'profile-overview',
       component: CandidateOverviewVue
     },
     {
-      path: '/candidate/update',
+      path: '/candidate/:id/update',
       name: 'candidate-update',
       component: CandidateProfileVue
     },
     {
-      path: '/candidate/applications',
+      path: '/candidate/:id/applications',
       name: 'candidate-applications',
       component: CandidateApplicationVue
     },
@@ -76,11 +76,12 @@ const router = createRouter({
     },
     {
       path: '/employer',
+      path: '/employer/:id',
       name: 'Employee-profile-overview',
       component: EmployerOverview
     },
     {
-      path: '/employer/update',
+      path: '/employer/:id/update',
       name: 'employee-update',
       component: EmployerProfile
     },

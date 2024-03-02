@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!apiProgress">
     <AppHeader />
     <section>
       <div class="max-w-2xl mx-auto py-16">
@@ -13,9 +13,13 @@
             <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
               <div class="h-36 w-full -mr-24">
                 <img
-                    :src="userPic ? userPic :  'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'"
-                    class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover"
-                  />
+                  :src="
+                    userPic
+                      ? userPic
+                      : 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'
+                  "
+                  class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover"
+                />
               </div>
               <div class="w-full mr-2">
                 <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input"
@@ -225,7 +229,8 @@
 
                 <div class="flex items-center border-2 py-2 px-3 w-full rounded-lg">
                   <Field
-                    name="skills" v-model="formData.skills"
+                    name="skills"
+                    v-model="formData.skills"
                     class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
                   >
                     <Multiselect
@@ -247,7 +252,12 @@
               <label for="resume" class="block mb-2 text-sm font-medium text-gray-900"
                 >Resume</label
               >
-              <Field type="file" name="resume" v-model="formData.resume" @change="handleFileChange" />
+              <Field
+                type="file"
+                name="resume"
+                v-model="formData.resume"
+                @change="handleFileChange"
+              />
             </div>
           </div>
 
@@ -277,12 +287,13 @@ import 'vue3-toastify/dist/index.css'
 import { useForm } from 'vee-validate'
 import { useStore } from 'vuex'
 import axios from 'axios'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const store = useStore()
 const userPic = ref(null)
 const apiProgress = ref(true)
 const router = useRouter()
+const route = useRoute()
 
 useForm({
   initialValues: {
@@ -330,7 +341,7 @@ const formData = reactive({
 const onSubmit = async (values) => {
   try {
     console.log(values)
-    await axios.post(`/api/user/profile/update/${store.getters.User.id}`, values, {
+    await axios.post(`/api/user/profile/${route.params.id}`, values, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -343,8 +354,8 @@ const onSubmit = async (values) => {
     })
 
     setTimeout(() => {
-      router.push('/candidate')
-    }, 2000);
+      router.push(`/candidate/${route.params.id}`)
+    }, 2000)
   } catch (error) {
     if (error.response?.status === 400) {
       toast('Please check input fields', {
@@ -352,8 +363,17 @@ const onSubmit = async (values) => {
         autoClose: 1000,
         dangerouslyHTMLString: true
       })
+    } else if (error.response?.status === 401) {
+      toast(error.response.data.error, {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+      setTimeout(() => {
+        router.back()
+      }, 2000)
     } else {
-      toast('Please try again!', {
+      toast('Please try again after some time', {
         type: 'error',
         autoClose: 1000,
         dangerouslyHTMLString: true
@@ -367,7 +387,7 @@ onMounted(async () => {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/user/profile/${store.getters.User.id}`)
+    const res = await axios.get(`/api/user/profile/${route.params.id}`)
     formData.profile_pic = res.data.user.profile_pic
     userPic.value = res.data.user.profile_pic
     formData.name = res.data.user.name
@@ -378,12 +398,13 @@ onMounted(async () => {
     formData.education = res.data.user.education
     formData.phone = res.data.user.phone
     formData.address = res.data.user.address
-    if(res.data.user?.skills){
+    if (res.data.user?.skills) {
       formData.skills = res.data.user.skills.split(',')
     }
     formData.resume = res.data.user.resume
+    apiProgress.value = false
   } catch (error) {
-    console.log(error)
+    apiProgress.value = false
   }
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppHeader />
-    <section>
+    <section v-if="!apiProgress">
       <div class="container mx-auto py-8">
         <div class="bg-white mt-3">
           <h2 class="text-center mt-12 text-3xl text-gray-900">Your Applications</h2>
@@ -92,13 +92,6 @@
 
                     <button
                       type="button"
-                      class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
-                    >
-                      <span class="sr-only">View grid</span>
-                      <Squares2X2Icon class="h-5 w-5" aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
                       class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
                       @click="mobileFiltersOpen = true"
                     >
@@ -120,8 +113,15 @@
           >
             <div>
               <span class="text-purple-800 text-sm">{{ jobApplication.job.category }}</span>
-              <h3 class="font-bold mt-px">{{ jobApplication.job.title }}</h3>
-              <div class="flex items-center gap-3 mt-2">
+              
+              <router-link
+                :to="`/job/${jobApplication.job.id}/apply`"
+                class="text-black"
+                :class="{ 'border-b-4 border-indigo-300': $route.path === `/candidate/${store.getters.User.id} ` }">
+                <h3 class="font-bold mt-px">{{ jobApplication.job.title }}</h3>
+              </router-link>
+
+                <div class="flex items-center gap-3 mt-2">
                 <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
                   >Exp. {{ jobApplication.job.experience }} year</span
                 >
@@ -157,6 +157,7 @@
               </button>
             </div>
           </div>
+          <div v-if="filteredApplications?.length == 0" class="text-center mt-5">No Jobs found</div>
         </div>
       </div>
     </section>
@@ -167,7 +168,8 @@
 import AppHeader from '@/components/AppHeader.vue'
 import UserNavigation from '@/components/UserNavigation.vue'
 import { computed, onMounted, ref } from 'vue'
-
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
 import axios from 'axios'
@@ -193,13 +195,13 @@ onMounted(async () => {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/myJobs?user_id=${store.getters.User.id}`)
+    const res = await axios.get(`/api/user/${store.getters.User.id}/jobs`)
     // console.log()
     jobApplications.value = res.data.job_applications
     console.log(res.data.job_applications)
     apiProgress.value = false
   } catch (error) {
-    console.log(error)
+    apiProgress.value = false
   }
 })
 

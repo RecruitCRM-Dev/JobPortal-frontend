@@ -129,6 +129,7 @@
               </svg>
               <Field
                 name="password_confirmation"
+                type="password"
                 placeholder="Confirm password"
                 class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
@@ -223,7 +224,7 @@ const onSubmit = async (values) => {
     })
 
     setTimeout(() => {
-      router.push('/candidate/update')
+      router.push(`/candidate/${store.getters.User.id}/update`)
     }, 2000)
   } catch (error) {
     if (error.response?.status === 400) {
