@@ -167,7 +167,7 @@ import axios from '@/api'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const sortOptions = [
   { name: 'Newest', href: '?sort=newest', current: false },
@@ -196,13 +196,14 @@ const router = useRouter()
 const jobPosts = ref()
 const apiProgress = ref(true)
 const searchTerm = ref('')
+const route = useRoute()
 
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/employer/${store.getters.User.id}/jobs`)
+    const res = await axios.get(`/api/employer/${route.params.id}/jobs`)
     // console.log()
     jobPosts.value = res.data.data
     console.log(jobPosts.value)

@@ -129,6 +129,7 @@
               </svg>
               <Field
                 name="password_confirmation"
+                type="password"
                 placeholder="Confirm password"
                 class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />

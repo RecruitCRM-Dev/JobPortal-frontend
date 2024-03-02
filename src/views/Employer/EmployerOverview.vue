@@ -178,7 +178,7 @@
 import AppHeader from '@/components/AppHeader.vue'
 import EmployerNavigation from '@/components/EmployerNavigation.vue'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import axios from '@/api'
 
@@ -189,13 +189,14 @@ const router = useRouter()
 const employer = ref()
 const apiProgress = ref(true)
 const userPic = ref(null)
+const route = useRoute()
 
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/employer/profile/${store.getters.User.id}`)
+    const res = await axios.get(`/api/employer/profile/${route.params.id}`)
     // console.log()
     console.log(res)
     employer.value = res.data.data.attributes

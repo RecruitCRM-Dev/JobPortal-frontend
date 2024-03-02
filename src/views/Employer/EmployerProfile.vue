@@ -114,13 +114,14 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { useForm } from 'vee-validate'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import axios from '@/api'
 
 const store = useStore()
 const router = useRouter()
 const userPic = ref(null)
+const route = useRoute()
 
 
 //const skillOptions = ref(['Vue Js', 'Laravel', 'More to Come', 'Html', 'CSS'])
@@ -143,7 +144,7 @@ onMounted(async () => {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/employer/profile/${store.getters.User.id}`)
+    const res = await axios.get(`/api/employer/profile/${route.params.id}`)
     formData.profile_pic = res.data.data.attributes.profile_pic
     userPic.value = res.data.data.attributes.profile_pic
     formData.name = res.data.data.attributes.name

@@ -89,7 +89,7 @@
     const updateStatus = async (applicant) => {
       try {
       
-        await axios.put(`/api/employer/${store.getters.User.id}/job/${applicant.job_id}`, { userId:applicant.user.id,status: applicant.status })
+        await axios.put(`/api/employer/${store.getters.User.id}/jobs/${applicant.job_id}`, { userId:applicant.user.id,status: applicant.status })
         toast('Status updated successfully!', {
           type: 'success',
           autoClose: 1000,
@@ -105,7 +105,7 @@
         router.push('/login')
       }
       try {
-        const res = await axios.get(`/api/employer/${store.getters.User.id}/job/${route.params.job_id}`)
+        const res = await axios.get(`/api/employer/${store.getters.User.id}/jobs/${route.params.job_id}`)
         // console.log(res)
         applicants.value = res.data.users
         console.log(applicants.value)
