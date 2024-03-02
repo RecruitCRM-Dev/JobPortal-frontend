@@ -224,9 +224,10 @@
           </div>
           <!-- Submit Button -->
           <button
-            type="submit"
+            type="submit" :disabled="apiProgress"
             class="block bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
           >
+          <ButtonSpinner v-if="apiProgress"/>
             Post
           </button>
         </Form>
@@ -242,6 +243,7 @@ import Multiselect from '@vueform/multiselect'
 
 import AppHeader from '@/components/AppHeader.vue'
 import EmployerNavigation from '@/components/EmployerNavigation.vue'
+import ButtonSpinner from '@/components/ButtonSpinner.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -252,7 +254,7 @@ import router from '@/router'
 import * as yup from 'yup'
 
 const store = useStore()
-const apiProgress = ref(true)
+const apiProgress = ref(false)
 
 const { resetForm } = useForm()
 
@@ -307,19 +309,11 @@ const formData = reactive({
 })
 
 const onSubmit = async (values) => {
+  apiProgress.value = true
   try {
-    console.log(values)
-    const res = await axios.post(`/api/employer/${store.getters.User.id}/jobs`, values)
-    // router.push(`/employer/${store.getters.User.id}/jobs`)
-    // formData.title = ''
-    // formData.description = ''
-    // formData.responsibilities = ''
-    // formData.category = ''
-    // formData.salary = ''
-    // formData.location = ''
-    // formData.type = ''
+    await axios.post(`/api/employer/${store.getters.User.id}/jobs`, values)
 
-    // resetForm();
+    apiProgress.value = false
 
     toast('Job Posted Successfully!', {
       type: 'success',
