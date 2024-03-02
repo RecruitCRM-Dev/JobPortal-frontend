@@ -109,6 +109,10 @@
           Don't have an account?
           <span class="text-indigo-500 text-sm"><a href="/candidate/register">Register</a></span>
         </p>
+        <p class="text-sm text-gray-400">
+          Forgot Password?
+          <span class="text-indigo-500 text-sm"><a href="/forgotpassword">Reset Password</a></span>
+        </p>
       </Form>
     </div>
   </div>

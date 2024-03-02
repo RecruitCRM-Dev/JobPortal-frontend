@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import JobList from '../views/JobList.vue'
 import CommonLogin from '@/views/Auth/CommonLogin.vue'
+import ForgotPasswod from '../views/Auth/ForgotPasswod.vue'
 import CandidateRegisterVue from '@/views/Auth/CandidateRegister.vue'
 import EmployerLoginVue from '@/views/Auth/CommonLogin.vue'
 import EmployerRegisterVue from '@/views/Auth/EmployerRegister.vue'
@@ -37,6 +38,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: CommonLogin
+    },
+    {
+      path: '/forgotpassword',
+      name: 'forgotpassword',
+      component: ForgotPasswod
     },
     {
       path: '/candidate/register',
