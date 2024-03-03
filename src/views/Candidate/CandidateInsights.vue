@@ -7,7 +7,6 @@
           <h2 class="text-center mt-12 text-3xl text-gray-900">Your Applications</h2>
         </div>
         <UserNavigation />
-  
 
         <!-- all the jobs will be listed here -->
 
@@ -19,16 +18,35 @@
                   <h1 class="text-4xl font-bold tracking-tight text-gray-900">Insights</h1>
                 </div>
               </div>
-              <div class="bg-white flex flex-col items-center rounded-md shadow-lg p-10 m-3">
-                <PieChart :labels="labels" :series="series" class="w-full m-3" />
+              <div
+                v-if="!apiProgress"
+                class="bg-white flex flex-col items-center rounded-md shadow-lg p-10 m-3"
+              >
+                <PieChart :labels="statusLabels" :series="statusSeries" class="w-full m-3" />
                 <div>On the basis of status</div>
               </div>
-              <div class="bg-white flex flex-col items-center rounded-md shadow-lg p-10 m-3">
-                <BarChart :labels="labels" :series="_series" colors="#00E396" class="w-full m-3" />
+              <div
+                v-if="!apiProgress"
+                class="bg-white flex flex-col items-center rounded-md shadow-lg p-10 m-3"
+              >
+                <BarChart
+                  :labels="categoryLabels"
+                  :series="categorySeries"
+                  colors="#00E396"
+                  class="w-full m-3"
+                />
                 <div>On the basis of job type</div>
               </div>
-              <div class="bg-white flex flex-col items-center rounded-md shadow-lg p-10">
-                <BarChart :labels="labels" :series="_series" colors="#775DD0" class="w-full m-3" />
+              <div
+                v-if="!apiProgress"
+                class="bg-white flex flex-col items-center rounded-md shadow-lg p-10"
+              >
+                <BarChart
+                  :labels="typeLabels"
+                  :series="typeSeries"
+                  colors="#775DD0"
+                  class="w-full m-3"
+                />
                 <div>On the basis of categories</div>
               </div>
             </div>
@@ -41,33 +59,46 @@
 
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
+import axios from '@/api'
 import UserNavigation from '@/components/UserNavigation.vue'
 import { onMounted, ref } from 'vue'
+import { useStore } from 'vuex'
 import BarChart from '@/components/chart/BarChart.vue'
 import PieChart from '@/components/chart/PieChart.vue'
-
-const labels = ref(['Just Applied', 'Resume Viewed', 'Under Consideration', 'Selected', 'Rejected'])
-const series = ref([35, 41, 36, 26, 45])
-
-const _series = ref([
-  {
-    name: 'Divyanshu',
-    data: [35, 41, 36, 26, 45]
-  }
-])
+// import { useRoute, useRouter } from 'vue-router'
+const apiProgress = ref(true)
+const store = useStore()
+let statusLabels, statusSeries, categoryLabels, categorySeries, typeLabels, typeSeries
 
 onMounted(async () => {
-  //   if (!store.getters.isLoggedIn) {
-  //     router.push('/login')
-  //   }
-  //   try {
-  //     const res = await axios.get(`/api/myJobs?user_id=${store.getters.User.id}`)
-  //     // console.log()
-  //     jobApplications.value = res.data.job_applications
-  //     console.log(res.data.job_applications)
-  //     apiProgress.value = false
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
+  try {
+    const res = await axios.get(`/api/user/profile/${store.getters.User.id}/insights`)
+
+    const data = res.data
+
+    statusLabels = Object.keys(data.status)
+    statusSeries = Object.values(data.status)
+
+    categoryLabels = Object.keys(data.category)
+
+    typeLabels = Object.keys(data.type)
+
+    categorySeries = [
+      {
+        name: 'Divyanshu',
+        data: Object.values(data.category)
+      }
+    ]
+
+    typeSeries = [
+      {
+        name: 'Divyanshu',
+        data: Object.values(data.type)
+      }
+    ]
+    apiProgress.value = false
+  } catch (error) {
+    console.log(error)
+  }
 })
 </script>
