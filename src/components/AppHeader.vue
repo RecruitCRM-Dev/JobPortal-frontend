@@ -258,9 +258,7 @@ const handleLogout = async () => {
 }
 
 onMounted(async () => {
-  if (!store.getters.isLoggedIn) {
-    route.push('/login')
-  }
+  
   try {
     const res = await axios.get(`/api/user/${store.getters.User.id}/notifications`)
     console.log(res)
