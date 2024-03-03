@@ -20,6 +20,7 @@
     "@vueform/multiselect": "^2.6.6",
     "@vueform/vueform": "^1.8.0",
     "axios": "^1.6.7",
+    "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "primevue": "^3.48.1",
     "vee-validate": "^4.12.5",
