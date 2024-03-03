@@ -1,0 +1,108 @@
+<template>
+  <div class="h-screen md:flex">
+    <div class="flex md:w-1/2 justify-center py-10 items-center">
+      <Form @submit="onSubmit" :validation-schema="schema" class="flex flex-col py-10 ml-1">
+        <!-- <router-link to="/"> -->
+        <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" class="mb-5">
+          <path fill="#6366f1" d="M13.853 18.14 1 10.643 31 1l-.019.058z"></path>
+          <path fill="#a5b4fc" d="M13.853 18.14 30.981 1.058 21.357 31l-7.5-12.857z"></path>
+        </svg>
+        <!-- </router-link> -->
+        <h1 class="font-bold text-3xl w-80 mb-5 text-center">Update Password</h1>
+        <div class="flex flex-col px-5 lg:px-0">
+          <!-- Email -->
+          <div class="mb-3">
+            <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                />
+              </svg>
+
+              <Field
+                name="email"
+                placeholder="Email"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
+              />
+            </div>
+            <ErrorMessage name="email" class="text-red-500" />
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <Field
+                name="password"
+                type="password"
+                placeholder="Password"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
+              />
+            </div>
+            <ErrorMessage name="password" class="text-red-500" />
+          </div>
+
+          <!-- Confirm Password -->
+          <div>
+            <div class="flex items-center border-2 py-2 px-3 w-full rounded-2xl">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <Field
+                name="password_confirmation"
+                type="password"
+                placeholder="Confirm password"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
+              />
+            </div>
+            <ErrorMessage name="password_confirmation" class="text-red-500" />
+          </div>
+        </div>
+
+        <!-- Update Password -->
+        <button
+          type="submit"
+          class="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
+        >
+          Update Password
+        </button>
+      </Form>
+    </div>
+    <div class="overflow-hidden md:flex w-1/2 justify-around items-center hidden">
+      <img src="../../assets/register-img.jpg" alt="" class="object-cover w-full h-full" />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { Form, Field, ErrorMessage } from 'vee-validate'
+</script>

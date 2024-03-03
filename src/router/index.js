@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import JobList from '../views/JobList.vue'
 import CommonLogin from '@/views/Auth/CommonLogin.vue'
 import ForgotPasswod from '../views/Auth/ForgotPasswod.vue'
+import NotFound from '@/components/NotFound.vue'
 import CandidateRegisterVue from '@/views/Auth/CandidateRegister.vue'
 import EmployerLoginVue from '@/views/Auth/CommonLogin.vue'
 import EmployerRegisterVue from '@/views/Auth/EmployerRegister.vue'
@@ -16,6 +17,7 @@ import EmployerOverview from '@/views/Employer/EmployerOverview.vue'
 import EmployerProfile from '@/views/Employer/EmployerProfile.vue'
 import EmployerJobPosts from '@/views/Employer/EmployerJobPosts.vue'
 import CandidateInsightsVue from '@/views/Candidate/CandidateInsights.vue'
+import UpdatePassword from '@/views/Auth/UpdatePassword.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +46,11 @@ const router = createRouter({
       path: '/forgotpassword',
       name: 'forgotpassword',
       component: ForgotPasswod
+    },
+    {
+      path: '/updatepassword',
+      name: 'update-password',
+      component: UpdatePassword
     },
     {
       path: '/candidate/register',
@@ -76,12 +83,11 @@ const router = createRouter({
       component: CandidateApplicationVue
     },
     {
-      path: '/candidate/insights',
+      path: '/candidate/:id/insights',
       name: 'candidate-insights',
       component: CandidateInsightsVue
     },
     {
-      path: '/employer',
       path: '/employer/:id',
       name: 'Employee-profile-overview',
       component: EmployerOverview
@@ -105,6 +111,11 @@ const router = createRouter({
       path: '/employer/:employer_id/job/:job_id/applicants',
       name: 'job-applicants',
       component: JobApplicantsVue
+    },
+    {
+      path: '/:pathName(.*)*',
+      name: 'notfound',
+      component: NotFound
     }
   ]
 })
