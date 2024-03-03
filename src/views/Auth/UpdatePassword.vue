@@ -104,5 +104,63 @@
 </template>
 
 <script setup>
+import axios from '@/api';
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import * as yup from 'yup'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+const route = useRoute()
+const router = useRouter()
+const apiProgress = ref(false)
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Please enter a valid email address')
+    .required((data) => `${data.path} is required`)
+    .label('Email'),
+  password: yup
+    .string()
+    .min(5, (data) => `Password must be at least ${data.min} characters`)
+    .required((data) => `${data.label} is required`)
+    .label('Password'),
+  password_confirmation: yup
+    .string()
+    .required(() => `Field is required`)
+    .label('Confirm password')
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
+})
+
+const onSubmit = async (values) =>{
+  apiProgress.value = true
+  try {
+    const res = await axios.post(`/api/reset-password/${route.query.resetToken}`, values)
+    //Showing message to user
+    console.log(res.data.message)
+    toast(res.data.message, {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000);
+  } catch (error) {
+    if (error.response?.status === 422) {
+      toast(error.response.data.message, {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    } else {
+      toast('Internal Server Error', {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    }
+  }
+}
 </script>
