@@ -76,7 +76,7 @@ const router = createRouter({
       component: CandidateApplicationVue
     },
     {
-      path: '/candidate/insights',
+      path: '/candidate/:id/insights',
       name: 'candidate-insights',
       component: CandidateInsightsVue
     },
