@@ -53,55 +53,11 @@
                         required
                       />
                     </div>
-                    <!-- <Menu as="div" class="relative inline-block text-left ml-5">
-                      <div>
-                        <MenuButton
-                          class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                        >
-                          Sort
-                          <ChevronDownIcon
-                            class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                            aria-hidden="true"
-                          />
-                        </MenuButton>
-                      </div>
-
-                      <transition
-                        enter-active-class="transition ease-out duration-100"
-                        enter-from-class="transform opacity-0 scale-95"
-                        enter-to-class="transform opacity-100 scale-100"
-                        leave-active-class="transition ease-in duration-75"
-                        leave-from-class="transform opacity-100 scale-100"
-                        leave-to-class="transform opacity-0 scale-95"
-                      >
-                        <MenuItems
-                          class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
-                        >
-                          <div class="py-1">
-                            <MenuItem
-                              v-for="option in sortOptions"
-                              :key="option.name"
-                              v-slot="{ active }"
-                            >
-                              <button
-                                @click="sortBy(option.name)"
-                                :class="[
-                                  option.current ? 'font-medium text-gray-900' : 'text-gray-500',
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm w-full'
-                                ]"
-                              >
-                                {{ option.name }}
-                              </button>
-                            </MenuItem>
-                          </div>
-                        </MenuItems>
-                      </transition>
-                    </Menu> -->
+              
                   </div>
                 </div>
               </div>
-              <UserTable />
+              <UserTable :applicants="jobPosts"/>
             </div>
           </main>
         </div>
@@ -112,60 +68,31 @@
 
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
-// import EmployerNavigation from '@/components/EmployerNavigation.vue'
-import UserTable from '@/components/UserTable.vue'
-import BarChart from '@/components/chart/BarChart.vue'
-import PieChart from '@/components/chart/PieChart.vue'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
-
-// import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-// import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-
-const labels = ref(['Just Applied', 'Resume Viewed', 'Under Consideration', 'Selected', 'Rejected'])
-const series = ref([35, 41, 36, 26, 45])
-
-// const sortOptions = [
-//   { name: 'Newest', href: '?sort=newest', current: false },
-//   { name: 'Oldest', href: '?sort=oldest', current: false }
-// ]
-
-// const mobileFiltersOpen = ref(false)
-
-// const sortBy = (option) => {
-//   sortOptions.forEach((sortOption) => {
-//     sortOption.current = sortOption.name === option
-//   })
-//   if (option === 'Newest') {
-//     jobPosts.value.sort(
-//       (a, b) => new Date(b.data.attributes.created_at) - new Date(a.data.attributes.created_at)
-//     )
-//   } else if (option === 'Oldest') {
-//     jobPosts.value.sort(
-//       (a, b) => new Date(a.data.attributes.created_at) - new Date(b.data.attributes.created_at)
-//     )
-//   }
-// }
+import { useRoute, useRouter } from 'vue-router'
+import UserTable from '@/components/UserTable.vue'
 
 const store = useStore()
 const router = useRouter()
 const jobPosts = ref()
 const apiProgress = ref(true)
 const searchTerm = ref('')
+const route = useRoute()
 
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/employer/${store.getters.User.id}/job`)
-    // console.log()
-    jobPosts.value = res.data.data
+    const res = await axios.get(
+      `/api/employer/${store.getters.User.id}/jobs/${route.params.job_id}`
+    )
+    console.log(res.data.users)
+    jobPosts.value = res.data.users
     console.log(jobPosts.value)
     apiProgress.value = false
-    // console.log(user.role)
   } catch (error) {
     console.log(error)
   }

@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-100">
-        <tr v-for="(applicant, index) in applicants" :key="index" class="text-gray-700">
+        <tr v-for="(applicant, index) in props.applicants" :key="index" class="text-gray-700">
           <td class="flex gap-3 whitespace-nowrap p-5 text-sm text-gray-700">
             <div class="relative h-10 w-10">
               <img
@@ -22,8 +22,8 @@
               ></span>
             </div>
             <div class="text-sm">
-              <div class="font-medium text-gray-700">{{ applicant.name }}</div>
-              <div class="text-gray-400">{{ applicant.email }}</div>
+              <div class="font-medium text-gray-700">{{ applicant.user.name }}</div>
+              <div class="text-gray-400">{{ applicant.user.email }}</div>
             </div>
           </td>
           <td class="whitespace-nowrap p-5 text-sm text-gray-700">
@@ -81,7 +81,7 @@
                 class="focus:outline-none text-white bg-purple-500 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
                 @click="updateStatus(applicant), toggleSelect(index)"
               >
-                submit
+                Submit
               </button>
             </div>
           </td>
@@ -94,8 +94,17 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { toast } from 'vue3-toastify'
+import { useStore } from 'vuex'
+import axios from '@/api'
+import { useRoute, useRouter } from 'vue-router'
+
+const store = useStore()
+const router = useRouter()
+const route = useRoute()
 
 const selectedItem = ref(null)
+
+const props = defineProps(['applicants'])
 
 //TODO: use computed for the label of the status
 
@@ -135,39 +144,21 @@ const getStatusLabel = computed(() => {
   }
 })
 
-const applicants = ref([
-  {
-    id: 1,
-    name: 'John Doe',
-    role: 'Developer',
-    email: 'john.doe@example.com',
-    status: 'Just_Applied',
-    created_at: '2024-03-01T12:30:00Z'
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    role: 'Designer',
-    email: 'jane.smith@example.com',
-    status: 'Rejected',
-    created_at: '2024-02-28T15:45:00Z'
-  },
-  {
-    id: 3,
-    name: 'Bob Johnson',
-    role: 'Manager',
-    email: 'bob.johnson@example.com',
-    status: 'Selected',
-    created_at: '2024-02-27T09:15:00Z'
-  }
-])
-
 const toggleSelect = (index) => {
   selectedItem.value = selectedItem.value === index ? null : index
 }
 
 const updateStatus = async (applicant) => {
   try {
+    console.log(applicant)
+    const res = await axios.put(
+      `/api/employer/${store.getters.User.id}/jobs/${route.params.job_id}`,
+      {
+        userId: applicant.user_id,
+        status: applicant.status
+      }
+    )
+    console.log(res);
     toast('Status updated successfully!', {
       type: 'success',
       autoClose: 1000,
