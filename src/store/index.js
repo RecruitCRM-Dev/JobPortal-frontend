@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import axios from 'axios'
+import axios from '../api.js'
 
 import VuexPersistence from 'vuex-persist'
 
@@ -102,16 +102,12 @@ const store = createStore({
       axios.defaults.withCredentials = true
       axios.defaults.withXSRFToken = true
       try {
-        const res = await axios.post('/api/user/register', {
+        await axios.post('/api/user/register', {
           name: name,
           email: email,
           password: password,
           password_confirmation: password
         })
-        context.commit('setUser', res.data.data.user)
-        context.commit('setRole', 'candidate')
-        context.commit('setToken', res.data.data.token)
-        localStorage.setItem('access-token', res.data.data.token)
         return 'Registered Successfully'
       } catch (error) {
         throw error
@@ -132,10 +128,6 @@ const store = createStore({
           password: password,
           password_confirmation: password
         })
-        context.commit('setUser', res.data.data.user)
-        context.commit('setRole', 'employer')
-        context.commit('setToken', res.data.data.token)
-        localStorage.setItem('access-token', res.data.data.token)
         return 'Registered Successfully'
       } catch (error) {
         throw error
@@ -149,7 +141,7 @@ const store = createStore({
           await axios.post('/api/employer/logout')
         }
         else if(userRole === 'candidate'){
-          await axios.post('/api/employer/logout')
+          await axios.post('/api/user/logout')
         }
         localStorage.clear()
         context.commit('setUser', null)

@@ -105,9 +105,10 @@
           Login
         </button>
         <!-- <span class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password ?</span> -->
-        <p class="text-sm text-gray-400">
-          Don't have an account?
-          <span class="text-indigo-500 text-sm"><a href="/candidate/register">Register</a></span>
+        <p class="text-sm text-gray-400 space-x-2">
+          Register
+          <span class="text-indigo-500 text-sm"><a href="/candidate/register">Candidate</a></span>
+          <span class="text-indigo-500 text-sm"><a href="/employer/register">Employer</a></span>
         </p>
         <p class="text-sm text-gray-400">
           Forgot Password?
@@ -128,9 +129,11 @@ import 'vue3-toastify/dist/index.css'
 import router from '@/router'
 import { onMounted } from 'vue'
 import axios from 'axios'
+import { useRoute } from 'vue-router'
 
 const userRole = ref(null)
 const store = useStore()
+const route = useRoute()
 
 onMounted(async () => {
   await axios.get('sanctum/csrf-cookie')
@@ -138,6 +141,14 @@ onMounted(async () => {
 
   if (store.getters.isLoggedIn) {
     router.push('/')
+  }
+
+  if (route.query.message) {
+    toast(route.query.message, {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
   }
 })
 
@@ -170,7 +181,7 @@ const onSubmit = async (values) => {
     }, 2000)
   } catch (error) {
     if (error.response?.status === 401) {
-      toast('Invalid credentials', {
+      toast(error.response.data.error, {
         type: 'error',
         autoClose: 1000,
         dangerouslyHTMLString: true

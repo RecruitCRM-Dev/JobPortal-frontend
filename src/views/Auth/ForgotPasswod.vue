@@ -102,6 +102,7 @@ import axios from 'axios'
 
 const userRole = ref(null)
 const store = useStore()
+const apiProgress = ref(false);
 
 onMounted(async () => {
   await axios.get('sanctum/csrf-cookie')
@@ -122,18 +123,17 @@ const schema = yup.object().shape({
 })
 
 const onSubmit = async (values) => {
+  apiProgress.value = true
   try {
-    await store.dispatch('login', values)
+    const res = await axios.post('/api/forgot-password', values)
     //Showing message to user
-    toast('Logged In Successfully!', {
+    console.log(res.data.message)
+    toast(res.data.message, {
       type: 'success',
       autoClose: 1000,
       dangerouslyHTMLString: true
     })
 
-    setTimeout(() => {
-      router.push('/')
-    }, 2000)
   } catch (error) {
     if (error.response?.status === 401) {
       toast('Invalid credentials', {
