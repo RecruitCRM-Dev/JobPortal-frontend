@@ -86,6 +86,9 @@ import Container from './Container.vue'
 import Spinner from './Spinner.vue'
 import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const jobs = ref(null)
 const apiProgress = ref(true)
@@ -95,4 +98,9 @@ onMounted(async () => {
   jobs.value = res.data.data
   apiProgress.value = false
 })
+
+const isEmployer = () => {
+  console.log(store.getters.isRole==='employer')
+  return store.getters.isRole==='employer'
+}
 </script>
