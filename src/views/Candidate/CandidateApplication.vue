@@ -153,17 +153,16 @@
               </div>
               <div>
                 <button
-                class="text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
-                :class="getStatusColorClass(jobApplication.status)"
-              >
-                {{ getStatusLabel(jobApplication.status) }}
-              </button>
+                  class="text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
+                  :class="getStatusColorClass(jobApplication.status)"
+                >
+                  {{ getStatusLabel(jobApplication.status) }}
+                </button>
               </div>
-            <div v-if="filteredApplications?.length == 0" class="text-center mt-5">
-              No Jobs found
+              <div v-if="filteredApplications?.length == 0" class="text-center mt-5">
+                No Jobs found
+              </div>
             </div>
-          <div v-else class="flex justify-center items-center mt-20">
-            <Spinner giant />
           </div>
         </div>
       </div>
