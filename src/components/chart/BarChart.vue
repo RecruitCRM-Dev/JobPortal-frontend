@@ -7,7 +7,6 @@
 <script setup>
 import { ref } from 'vue'
 const props = defineProps(['labels', 'series', 'colors'])
-console.log('bargraph', props)
 const series = props.series
 
 const chartOptions = ref({

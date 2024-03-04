@@ -153,18 +153,16 @@
               </div>
               <div>
                 <button
-                  class="bg-red-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
+                  class="text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
+                  :class="getStatusColorClass(jobApplication.status)"
                 >
-                  {{ jobApplication.status }}
+                  {{ getStatusLabel(jobApplication.status) }}
                 </button>
               </div>
+              <div v-if="filteredApplications?.length == 0" class="text-center mt-5">
+                No Jobs found
+              </div>
             </div>
-            <div v-if="filteredApplications?.length == 0" class="text-center mt-5">
-              No Jobs found
-            </div>
-          </div>
-          <div v-else class="flex justify-center items-center mt-20">
-            <Spinner giant />
           </div>
         </div>
       </div>
@@ -197,6 +195,43 @@ const jobApplications = ref()
 const apiProgress = ref(true)
 const store = useStore()
 const router = useRouter()
+
+const getStatusColorClass = (status) => {
+  switch (status) {
+    case 'Selected':
+      return 'text-green-800 bg-green-500'
+    case 'Rejected':
+      return 'text-red-800 bg-red-500'
+    case 'ResumeViewed':
+      return 'text-yellow-800 bg-yellow-500'
+    case 'Just_Applied':
+      return 'text-pink-800 bg-pink-500'
+    case 'Underconsideration':
+      return 'text-indigo-800 bg-indigo-500'
+    default:
+      return 'default-class'
+  }
+}
+
+const getStatusLabel = computed(() => {
+  return (status) => {
+    switch (status) {
+      case 'Selected':
+        return 'Selected'
+      case 'Rejected':
+        return 'Rejected'
+      case 'ResumeViewed':
+        return 'Resume Viewed'
+      case 'Just_Applied':
+        return 'Just Applied'
+      case 'Underconsideration':
+        return 'Under Consideration'
+      default:
+        return 'Unknown Status'
+    }
+  }
+})
+
 const route = useRoute()
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
