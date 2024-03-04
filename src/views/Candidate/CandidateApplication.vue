@@ -75,15 +75,16 @@
                               :key="option.name"
                               v-slot="{ active }"
                             >
-                              <a
-                                :href="option.href"
+                              <button
+                                @click="sortBy(option.name)"
                                 :class="[
                                   option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                   active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm'
+                                  'block px-4 py-2 text-sm w-full'
                                 ]"
-                                >{{ option.name }}</a
                               >
+                                {{ option.name }}
+                              </button>
                             </MenuItem>
                           </div>
                         </MenuItems>
@@ -164,10 +165,13 @@
                   {{ getStatusLabel(jobApplication.status) }}
                 </button>
               </div>
-              <div v-if="filteredApplications?.length == 0" class="text-center mt-5">
-                No Jobs found
-              </div>
             </div>
+            <div v-if="filteredApplications?.length == 0" class="text-center mt-5">
+              No Jobs found
+            </div>
+          </div>
+          <div v-else class="flex justify-center items-center mt-20">
+            <Spinner medium />
           </div>
         </div>
       </div>
@@ -189,11 +193,25 @@ import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 
 const sortOptions = [
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false }
+  { name: 'Newest', href: '?sort=newest', current: false },
+  { name: 'Oldest', href: '?sort=oldest', current: false }
 ]
+
+const sortBy = (option) => {
+  console.log(jobApplications.value)
+  sortOptions.forEach((sortOption) => {
+    sortOption.current = sortOption.name === option
+  })
+  if (option === 'Newest') {
+    jobApplications.value.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    )
+  } else if (option === 'Oldest') {
+    jobApplications.value.sort(
+      (a, b) => new Date(a.created_at) - new Date(b.created_at)
+    )
+  }
+}
 
 const mobileFiltersOpen = ref(false)
 const jobApplications = ref()

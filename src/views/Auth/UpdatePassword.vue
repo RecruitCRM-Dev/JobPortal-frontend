@@ -90,9 +90,10 @@
 
         <!-- Update Password -->
         <button
-          type="submit"
+          type="submit" :disabled="apiProgress"
           class="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
         >
+        <ButtonSpinner v-if="apiProgress"/>
           Update Password
         </button>
       </Form>
@@ -105,6 +106,7 @@
 
 <script setup>
 import axios from '@/api';
+import ButtonSpinner from '@/components/ButtonSpinner.vue';
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -137,7 +139,7 @@ const onSubmit = async (values) =>{
   try {
     const res = await axios.post(`/api/reset-password/${route.query.resetToken}`, values)
     //Showing message to user
-    console.log(res.data.message)
+    apiProgress.value = false
     toast(res.data.message, {
       type: 'success',
       autoClose: 1000,
@@ -161,6 +163,7 @@ const onSubmit = async (values) =>{
         dangerouslyHTMLString: true
       })
     }
+    apiProgress.value = false
   }
 }
 </script>

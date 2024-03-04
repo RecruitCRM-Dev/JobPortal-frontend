@@ -252,9 +252,11 @@ import { useStore } from 'vuex'
 import axios from '@/api'
 import router from '@/router'
 import * as yup from 'yup'
+import { useRoute } from 'vue-router'
 
 const store = useStore()
 const apiProgress = ref(false)
+const route = useRoute()
 
 const { resetForm } = useForm()
 
@@ -311,7 +313,7 @@ const formData = reactive({
 const onSubmit = async (values) => {
   apiProgress.value = true
   try {
-    await axios.post(`/api/employer/${store.getters.User.id}/jobs`, values)
+    await axios.post(`/api/employer/${route.params.id}/jobs`, values)
 
     apiProgress.value = false
 
@@ -338,6 +340,7 @@ const onSubmit = async (values) => {
         dangerouslyHTMLString: true
       })
     }
+    apiProgress.value = false
   }
 }
 

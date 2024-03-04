@@ -4,23 +4,7 @@
     class="cursor-pointer transition-[0.2s] px-4 py-5 rounded-lg hover:scale-[1.02] border border-gray-200 max-w-md"
   >
     <div>
-      <svg
-        class="shadow-none w-[46px] p-2.5 rounded-lg"
-        viewBox="0 -13 512 512"
-        xmlns="http://www.w3.org/2000/svg"
-        style="background-color: #2e2882"
-      >
-        <g fill="#feb0a5">
-          <path
-            d="M256 92.5l127.7 91.6L512 92 383.7 0 256 91.5 128.3 0 0 92l128.3 92zm0 0M256 275.9l-127.7-91.5L0 276.4l128.3 92L256 277l127.7 91.5 128.3-92-128.3-92zm0 0"
-          />
-          <path d="M127.7 394.1l128.4 92 128.3-92-128.3-92zm0 0" />
-        </g>
-        <path
-          d="M512 92L383.7 0 256 91.5v1l127.7 91.6zm0 0M512 276.4l-128.3-92L256 275.9v1l127.7 91.5zm0 0M256 486.1l128.4-92-128.3-92zm0 0"
-          fill="#feb0a5"
-        />
-      </svg>
+      <img class="w-[60px]" :src="companyLogo ? companyLogo : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMy48opkiA5UkBbnwDGXkqV9uDcORBTDo1uiqfHxIo-w&s'"/>
       <div
         class="bg-[color:var(--placeholder-color)] shadow-[-6px_0_0_0_var(--placeholder-color),6px_0_0_0_var(--placeholder-color)] w-1 h-1 ml-auto mr-2 p-0 rounded-[50%] border-0"
       ></div>
@@ -38,10 +22,6 @@
         class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10"
         >Min. {{ job.attributes.experience }} year</span
       >
-      <!-- <span
-        class="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10"
-        >Rs. {{ job.salary }}</span
-      > -->
     </div>
     <div class="mt-4">
       <router-link :to="`/job/${job.job_id}/apply`">
@@ -59,21 +39,25 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { useStore } from 'vuex'
 
 const store = useStore()
 
 const isEmployer = () => {
-  console.log(store.getters.isRole==='employer')
+  // console.log(store.getters.isRole==='employer')
   return store.getters.isRole==='employer'
 }
-defineProps({
+const { job } = defineProps({
   job: {
     type: Object,
     required: true
   }
-})
+});
 
+const companyLogo = computed(()=>{
+  return job.attributes.posted_by.data.attributes.profile_pic
+})
 const truncateDescription = (description, words) => {
   // Split the description into words
   const wordsArray = description.split(' ');

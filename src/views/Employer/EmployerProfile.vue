@@ -108,7 +108,7 @@
           </button>
         </Form>
         <div v-else class="flex justify-center items-center mt-20">
-          <Spinner giant />
+          <Spinner medium />
         </div>
       </div>
     </section>
@@ -166,7 +166,9 @@ onMounted(async () => {
     formData.address = res.data.data.attributes.address
     apiProgress.value = false
   } catch (error) {
+    router.back()
     console.log(error)
+    apiProgress.value = false
   }
 })
 
