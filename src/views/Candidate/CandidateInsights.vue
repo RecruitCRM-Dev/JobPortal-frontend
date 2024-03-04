@@ -75,10 +75,7 @@ onMounted(async () => {
     const res = await axios.get(`/api/user/profile/${store.getters.User.id}/insights`)
 
     const data = res.data
-    console.log('hi')
-    console.log(data)
-    console.log('hi')
-
+    
     statusLabels = Object.keys(data.status)
     statusSeries = Object.values(data.status)
 
