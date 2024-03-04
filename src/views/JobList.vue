@@ -211,7 +211,7 @@
 
                   <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                     <!-- Filters -->
-                    <form class="hidden lg:block" @submit.prevent>
+                    <form class="hidden lg:block min-w-[18vw]" @submit.prevent>
                       <h3 class="sr-only">Categories</h3>
                       <!-- <ul
                   role="list"
@@ -276,7 +276,7 @@
 
                     <!-- Product grid -->
                     <div v-if="paginatedJobs.length == 0" class="text-center w-100">
-                      <p>No jobs found. <span class="text-indigo-500">Clear Search</span></p>
+                      <p>No jobs found.</p>
                     </div>
                     <div class="lg:col-span-3 grid lg:grid-cols-3 gap-y-10 space-x-2" v-if="jobs">
                       <JobCard
@@ -511,6 +511,7 @@ const nextPage = () => {
 }
 
 const paginatedJobs = computed(() => {
+  console.log(jobs.value)
   let slicedJobs = jobs.value
   if (searchQuery.value) {
     const filteredJobs = jobs.value.filter(

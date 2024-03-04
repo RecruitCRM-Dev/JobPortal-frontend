@@ -21,7 +21,7 @@
         <div class="relative isolate overflow-hidden py-16 sm:py-24 lg:py-8">
           <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="mx-auto">
-              <dl class="grid grid-cols-4 gap-x-8 gap-y-10 lg:pt-2">
+              <dl class="grid lg:grid-cols-4 gap-x-8 gap-y-10 lg:pt-2">
                 <div class="flex flex-col items-start">
                   <div class="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
                     <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />

@@ -171,7 +171,7 @@
             <div v-if="filteredJobPosts?.length == 0" class="text-center mt-5">No Jobs found</div>
           </div>
           <div v-else class="flex justify-center items-center mt-20">
-            <Spinner giant />
+            <Spinner medium />
           </div>
         </div>
       </div>
@@ -247,7 +247,9 @@ onMounted(async () => {
     jobPosts.value = res.data.data
     apiProgress.value = false
   } catch (error) {
+    router.back()
     console.log(error)
+    apiProgress.value = false
   }
 })
 

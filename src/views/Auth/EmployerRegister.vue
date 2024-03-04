@@ -117,9 +117,10 @@
 
         <!-- Register -->
         <button
-          type="submit"
+          type="submit" :disabled="apiProgress"
           class="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
         >
+          <ButtonSpinner v-if="apiProgress" />
           Register
         </button>
         <p class="text-sm text-gray-400 mb-2">
@@ -142,13 +143,15 @@
 
 <script setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import ButtonSpinner from '@/components/ButtonSpinner.vue'
 import { useStore } from 'vuex'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import * as yup from 'yup'
 import { useRouter } from 'vue-router'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
+const apiProgress = ref(false)
 
 onMounted(async () => {
   // await axios.get('sanctum/csrf-cookie')
@@ -185,8 +188,10 @@ const store = useStore()
 const router = useRouter()
 
 const onSubmit = async (values) => {
+  apiProgress.value = true
   try {
     await store.dispatch('employerRegister', values)
+    apiProgress.value = false
     //Showing message to user
     toast('Registered Successfully!', {
       type: 'success',
@@ -211,6 +216,7 @@ const onSubmit = async (values) => {
         dangerouslyHTMLString: true
       })
     }
+    apiProgress.value = false
   }
 }
 </script>

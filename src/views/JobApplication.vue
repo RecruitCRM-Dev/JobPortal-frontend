@@ -1,8 +1,8 @@
 <template>
   <AppLayout>
-    <div class="pt-20" v-if="!apiProgress">
+    <div class="pt-20">
       <Container>
-        <div class="lg:flex lg:justify-between">
+        <div class="lg:flex lg:justify-between" v-if="!apiProgress">
           <!-- side menu -->
           <div class="lg:w-72 lg:ml-20 md:flex-shrink-0 order-1">
             <div class="top-8 sticky">
@@ -83,7 +83,7 @@
                 <div>
                   <button :disabled="isApplied || isEmployer()"
                     class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:bg-gray-500"
-                    @click="open = !open"
+                    @click="handleApplyNow"
                     >
                     <span v-if="!isApplied">Apply Now</span>
                     <span v-else>Already Applied</span>
@@ -278,7 +278,7 @@
               </div>
               <button
                 type="button" :disabled="isApplied || isEmployer()"
-                @click="open = !open"
+                @click="handleApplyNow"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 font-bold disabled:bg-gray-400"
               >
                 <span v-if="!isApplied">Apply Now →</span>
@@ -373,6 +373,9 @@
             </div>
           </div>
         </div>
+        <div class="text-center w-full flex justify-center" v-else>
+          <Spinner giant />
+        </div>
       </Container>
     </div>
   </AppLayout>
@@ -381,9 +384,10 @@
 <script setup>
 import AppLayout from '../layouts/AppLayout.vue'
 import Container from '../components/Container.vue'
+import Spinner from '@/components/Spinner.vue'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
@@ -397,15 +401,23 @@ const jobPostedDate = ref(null)
 const route = useRoute()
 const apiProgress = ref(true)
 const isApplied = ref(false)
+const router = useRouter()
 
+const handleApplyNow = () =>{
+  if(!store.getters.isLoggedIn){
+    router.push('/login')
+  }else{
+    open.value = !open.value
+  }
+}
 onMounted(async () => {
   try {
     const res = await axios.get(`/api/jobs/${route.params.id}`)
     job.value = res.data.data
     console.log(res.data.data)
     jobPostedDate.value = convertToLocalDate(res.data.data.attributes.created_at)
+    
     apiProgress.value = false
-
     await axios.get(`/api/user/${store.getters.User.id}/jobs/${route.params.id}`)
   } catch (error) {
     if (error.response && error.response.status === 409) {
@@ -415,6 +427,7 @@ onMounted(async () => {
         // Log other unexpected errors
         console.error(error); 
     }
+    apiProgress.value = false
   }
 })
 
