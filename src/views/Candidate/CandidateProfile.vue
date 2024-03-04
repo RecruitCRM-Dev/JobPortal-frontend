@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!apiProgress">
+  <div>
     <AppHeader />
     <section>
       <div class="max-w-2xl mx-auto py-16">
@@ -7,7 +7,12 @@
           <h2 class="text-center text-3xl text-gray-900">Edit your profile</h2>
         </div>
         <UserNavigation />
-        <Form @submit="onSubmit" class="flex flex-col py-10 ml-1" enctype="multipart/form-data">
+        <Form
+          v-if="!apiProgress"
+          @submit="onSubmit"
+          class="flex flex-col py-10 ml-1"
+          enctype="multipart/form-data"
+        >
           <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5 items-center">
             <!-- Avtar -->
             <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
@@ -263,12 +268,16 @@
 
           <!-- Submit Button -->
           <button
-            type="submit"
+            type="submit" :disabled="formProgress"
             class="block bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
           >
+          <ButtonSpinner v-if="formProgress"/>
             Update
           </button>
         </Form>
+        <div v-else class="flex justify-center items-center mt-20">
+          <Spinner giant />
+        </div>
       </div>
     </section>
   </div>
@@ -280,7 +289,9 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import Multiselect from '@vueform/multiselect'
 
 import AppHeader from '@/components/AppHeader.vue'
+import ButtonSpinner from '@/components/ButtonSpinner.vue'
 import UserNavigation from '@/components/UserNavigation.vue'
+import Spinner from '@/components/Spinner.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -292,6 +303,7 @@ import { useRoute, useRouter } from 'vue-router'
 const store = useStore()
 const userPic = ref(null)
 const apiProgress = ref(true)
+const formProgress = ref(false)
 const router = useRouter()
 const route = useRoute()
 
@@ -339,6 +351,7 @@ const formData = reactive({
 })
 
 const onSubmit = async (values) => {
+  formProgress.value = true
   try {
     console.log(values)
     await axios.post(`/api/user/profile/${route.params.id}`, values, {
@@ -346,6 +359,8 @@ const onSubmit = async (values) => {
         'Content-Type': 'multipart/form-data'
       }
     })
+
+    formProgress.value = false
 
     toast('Profile Update Successfully!', {
       type: 'success',
@@ -379,12 +394,16 @@ const onSubmit = async (values) => {
         dangerouslyHTMLString: true
       })
     }
+    formProgress.value = false
   }
 }
 
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
+  }
+  if(route.params.id != store.getters.User.id){
+    router.back()
   }
   try {
     const res = await axios.get(`/api/user/profile/${route.params.id}`)
@@ -404,6 +423,7 @@ onMounted(async () => {
     formData.resume = res.data.user.resume
     apiProgress.value = false
   } catch (error) {
+    console.log(error)
     apiProgress.value = false
   }
 })
