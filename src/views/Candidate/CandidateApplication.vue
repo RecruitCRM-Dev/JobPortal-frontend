@@ -149,6 +149,11 @@
                     </svg>
                     {{ jobApplication.job.location }}</span
                   >
+                  <span
+                    v-if="jobApplication.job.status == 'Expired'"
+                    class="bg-red-100 text-red-700 rounded-full px-3 py-1 text-sm"
+                    >Expired</span
+                  >
                 </div>
               </div>
               <div>
