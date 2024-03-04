@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppHeader />
-    <section v-if="!apiProgress">
+    <section>
       <div class="container mx-auto py-8">
         <div class="bg-white mt-3">
           <h2 class="text-center mt-12 text-3xl text-gray-900">Your Applications</h2>
@@ -103,61 +103,69 @@
               </div>
             </div>
           </main>
-          <div v-if="jobApplications?.length == 0" class="text-center">
-            You have not applied to any job till now
-          </div>
-          <div
-            v-for="jobApplication in filteredApplications"
-            :key="jobApplication.id"
-            class="bg-white shadow-xl shadow-gray-100 w-full flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md mb-2"
-          >
-            <div>
-              <span class="text-purple-800 text-sm">{{ jobApplication.job.category }}</span>
-              
-              <router-link
-                :to="`/job/${jobApplication.job.id}/apply`"
-                class="text-black"
-                :class="{ 'border-b-4 border-indigo-300': $route.path === `/candidate/${store.getters.User.id} ` }">
-                <h3 class="font-bold mt-px">{{ jobApplication.job.title }}</h3>
-              </router-link>
+          <div v-if="!apiProgress">
+            <div
+              v-for="jobApplication in filteredApplications"
+              :key="jobApplication.id"
+              class="bg-white shadow-xl shadow-gray-100 w-full flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md mb-2"
+            >
+              <div>
+                <span class="text-purple-800 text-sm">{{ jobApplication.job.category }}</span>
+
+                <router-link
+                  :to="`/job/${jobApplication.job.id}/apply`"
+                  class="text-black"
+                  :class="{
+                    'border-b-4 border-indigo-300':
+                      $route.path === `/candidate/${store.getters.User.id} `
+                  }"
+                >
+                  <h3 class="font-bold mt-px">{{ jobApplication.job.title }}</h3>
+                </router-link>
 
                 <div class="flex items-center gap-3 mt-2">
-                <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
-                  >Exp. {{ jobApplication.job.experience }} year</span
-                >
-                <span class="text-slate-600 text-sm flex gap-1 items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
+                  <span class="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm"
+                    >Exp. {{ jobApplication.job.experience }} year</span
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  {{ jobApplication.job.location }}</span
+                  <span class="text-slate-600 text-sm flex gap-1 items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    {{ jobApplication.job.location }}</span
+                  >
+                </div>
+              </div>
+              <div>
+                <button
+                  class="bg-red-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
                 >
+                  {{ jobApplication.status }}
+                </button>
               </div>
             </div>
-            <div>
-              <button
-                class="bg-red-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
-              >
-                {{ jobApplication.status }}
-              </button>
+            <div v-if="filteredApplications?.length == 0" class="text-center mt-5">
+              No Jobs found
             </div>
           </div>
-          <div v-if="filteredApplications?.length == 0" class="text-center mt-5">No Jobs found</div>
+          <div v-else class="flex justify-center items-center mt-20">
+            <Spinner giant />
+          </div>
         </div>
       </div>
     </section>
@@ -167,6 +175,7 @@
 <script setup>
 import AppHeader from '@/components/AppHeader.vue'
 import UserNavigation from '@/components/UserNavigation.vue'
+import Spinner from '@/components/Spinner.vue'
 import { computed, onMounted, ref } from 'vue'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -174,7 +183,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
 import axios from 'axios'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const sortOptions = [
   { name: 'Best Rating', href: '#', current: false },
@@ -188,19 +197,19 @@ const jobApplications = ref()
 const apiProgress = ref(true)
 const store = useStore()
 const router = useRouter()
-
-
+const route = useRoute()
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
   try {
-    const res = await axios.get(`/api/user/${store.getters.User.id}/jobs`)
+    const res = await axios.get(`/api/user/${route.params.id}/jobs`)
     // console.log()
     jobApplications.value = res.data.job_applications
     console.log(res.data.job_applications)
     apiProgress.value = false
   } catch (error) {
+    router.back()
     apiProgress.value = false
   }
 })
@@ -214,7 +223,7 @@ const filteredApplications = computed(() => {
   if (!searchTerm.value) {
     return jobApplications.value
   } else {
-    return jobApplications.value.filter(application =>
+    return jobApplications.value.filter((application) =>
       application.job.title.toLowerCase().includes(searchTerm.value)
     )
   }

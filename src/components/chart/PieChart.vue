@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 
 const props = defineProps(['labels', 'series'])
 

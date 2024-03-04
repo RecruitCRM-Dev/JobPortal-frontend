@@ -1,5 +1,5 @@
 <template>
-  <div class="flex space-x-5 justify-center items-center p-5 m-3">
+  <div v-if="store.getters.User.id == $route.params.id" class="flex space-x-5 justify-center items-center p-5 m-3">
     <router-link
       :to="`/candidate/${store.getters.User.id}`"
       class="text-black"
