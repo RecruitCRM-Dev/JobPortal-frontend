@@ -5,7 +5,7 @@
     <section>
       <div class="max-w-2xl mx-auto py-16">
         <div class="mt-3">
-          <h2 class="text-center text-3xl text-gray-900">Edit your profile</h2>
+          <h2 class="text-center text-3xl text-gray-900">Post a Job</h2>
         </div>
         <EmployerNavigation />
         <Form
@@ -16,54 +16,7 @@
           name="jobPost"
         >
           <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5 items-center">
-            <!-- <h3 class="text-gray-900 inline-block float-right font-bold text-xl mb-3"><span class="text-indigo-500 inline-block float-left font-bold text-xl">1.&nbsp;</span>Your Company</h3> -->
-
-            <!-- Avtar -->
-            <!-- <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
-                <div class="h-36 w-full -mr-24">
-                  <img
-                      src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"
-                      class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover"
-                    />
-                </div>
-                <div class="w-full mr-2">
-                  <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input"
-                    >Company Logo</label
-                  >
-                  <Field
-                    class="m-0 block min-w-0 flex-auto border-solid w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-2.5"
-                    aria-describedby="file_input_help"
-                    id="file_input"
-                    name="profile_pic"
-                    @change="handleProfilePicChange"
-                    type="file"
-                  />
-                  <p class="mt-1 text-sm text-gray-500" id="file_input_help">
-                    SVG, PNG, JPG or GIF (MAX. 800x400px).
-                  </p>
-                  <button
-                    type="button"
-                    class="text-red-400 inline-flex items-center hover:text-white border border-red-400 hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
-                  >
-                    <svg
-                      class="w-5 h-5 mr-1 -ml-1"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Delete
-                  </button> -->
-            <!-- </div> -->
-            <!-- </div> -->
-
             <!--  Name -->
-
             <h1 class="text-gray-900 inline-block float-right font-bold text-2xl mb-3">
               <!--<span class="text-indigo-500 inline-block float-left font-bold text-xl">2.&nbsp;</span>-->The
               Role
@@ -122,7 +75,7 @@
               </div>
               <ErrorMessage name="experience" class="text-red-500" />
             </div>
-            
+
             <div>
               <label for="type" class="block mb-2 text-sm font-medium text-gray-900"
                 >Job Type</label
@@ -224,10 +177,11 @@
           </div>
           <!-- Submit Button -->
           <button
-            type="submit" :disabled="apiProgress"
+            type="submit"
+            :disabled="apiProgress"
             class="block bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
           >
-          <ButtonSpinner v-if="apiProgress"/>
+            <ButtonSpinner v-if="apiProgress" />
             Post
           </button>
         </Form>

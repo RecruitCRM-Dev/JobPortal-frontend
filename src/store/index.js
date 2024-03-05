@@ -42,7 +42,7 @@ const store = createStore({
       state.token = token
     },
     setProfilePic(state, pic) {
-      state.User.profile_pic = pic
+      state.user.profile_pic = pic
     }
   },
 
