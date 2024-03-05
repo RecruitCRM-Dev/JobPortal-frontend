@@ -33,10 +33,11 @@
                   name="profile_pic"
                   @change="handleProfilePicChange"
                   type="file"
+                  accept=".gif, .jpeg, .jpg, .png"
                 />
-                <p class="mt-1 text-sm text-gray-500" id="file_input_help">
+                <!-- <p class="mt-1 text-sm text-gray-500" id="file_input_help">
                   SVG, PNG, JPG or GIF (MAX. 800x400px).
-                </p>
+                </p> -->
               </div>
             </div>
 
@@ -100,10 +101,11 @@
 
           <!-- Submit Button -->
           <button
-            type="submit" :disabled="formProgress"
+            type="submit"
+            :disabled="formProgress"
             class="block bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
           >
-            <ButtonSpinner v-if="formProgress"/>
+            <ButtonSpinner v-if="formProgress" />
             Update
           </button>
         </Form>
@@ -176,11 +178,13 @@ const onSubmit = async (values) => {
   formProgress.value = true
   try {
     console.log(values)
-    await axios.post(`/api/employer/profile/${store.getters.User.id}`, values, {
+    const res = await axios.post(`/api/employer/profile/${store.getters.User.id}`, values, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
+
+    await store.dispatch('setUserProfilePic', res.data.data.attributes.profile_pic)
 
     toast('Profile Update Successfully!', {
       type: 'success',

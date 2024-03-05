@@ -40,6 +40,9 @@ const store = createStore({
     },
     setToken(state, token){
       state.token = token
+    },
+    setProfilePic(state, pic) {
+      state.user.profile_pic = pic
     }
   },
 
@@ -152,6 +155,10 @@ const store = createStore({
         throw error
       }
     },
+
+    async setUserProfilePic(context, payload) {
+      context.commit('setProfilePic', payload);
+    }
   },
   plugins: [vuexLocal.plugin]
 })
