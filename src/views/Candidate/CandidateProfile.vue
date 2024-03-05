@@ -268,10 +268,11 @@
 
           <!-- Submit Button -->
           <button
-            type="submit" :disabled="formProgress"
+            type="submit"
+            :disabled="formProgress"
             class="block bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
           >
-          <ButtonSpinner v-if="formProgress"/>
+            <ButtonSpinner v-if="formProgress" />
             Update
           </button>
         </Form>
@@ -354,11 +355,13 @@ const onSubmit = async (values) => {
   formProgress.value = true
   try {
     console.log(values)
-    await axios.post(`/api/user/profile/${route.params.id}`, values, {
+    const res = await axios.post(`/api/user/profile/${route.params.id}`, values, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
+
+    console.log(res)
 
     formProgress.value = false
 
@@ -402,7 +405,7 @@ onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
-  if(route.params.id != store.getters.User.id){
+  if (route.params.id != store.getters.User.id) {
     router.back()
   }
   try {
