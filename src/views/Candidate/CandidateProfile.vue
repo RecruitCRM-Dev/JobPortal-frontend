@@ -37,28 +37,8 @@
                   name="profile_pic"
                   @change="handleProfilePicChange"
                   type="file"
+                  accept=".gif, .jpeg, .jpg, .png"
                 />
-                <p class="mt-1 text-sm text-gray-500" id="file_input_help">
-                  SVG, PNG, JPG or GIF (MAX. 800x400px).
-                </p>
-                <!-- <button
-                  type="button"
-                  class="text-red-400 inline-flex items-center hover:text-white border border-red-400 hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
-                >
-                  <svg
-                    class="w-5 h-5 mr-1 -ml-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  Delete
-                </button> -->
               </div>
             </div>
 
@@ -258,20 +238,23 @@
                 >Resume</label
               >
               <Field
+                class="m-0 block min-w-0 flex-auto border-solid w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-2.5"
                 type="file"
                 name="resume"
                 v-model="formData.resume"
                 @change="handleFileChange"
+                accept=".pdf"
               />
             </div>
           </div>
 
           <!-- Submit Button -->
           <button
-            type="submit" :disabled="formProgress"
+            type="submit"
+            :disabled="formProgress"
             class="block bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
           >
-          <ButtonSpinner v-if="formProgress"/>
+            <ButtonSpinner v-if="formProgress" />
             Update
           </button>
         </Form>
@@ -353,13 +336,13 @@ const formData = reactive({
 const onSubmit = async (values) => {
   formProgress.value = true
   try {
-    console.log(values)
-    await axios.post(`/api/user/profile/${route.params.id}`, values, {
+    const res = await axios.post(`/api/user/profile/${route.params.id}`, values, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
 
+    await store.dispatch('setUserProfilePic', res.data.user.profile_pic)
     formProgress.value = false
 
     toast('Profile Update Successfully!', {
@@ -402,7 +385,7 @@ onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
-  if(route.params.id != store.getters.User.id){
+  if (route.params.id != store.getters.User.id) {
     router.back()
   }
   try {
