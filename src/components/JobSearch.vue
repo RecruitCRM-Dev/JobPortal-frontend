@@ -1,6 +1,6 @@
 <template>
     <div class="pt-20 w-full">
-          <form class="grid lg:grid-cols-10 items-center mx-auto w-full">
+          <form class="grid lg:grid-cols-10 items-center mx-auto w-full" data-testid="job-search-form">
             <!-- First Field: Search -->
             <div class="flex lg:col-span-3">
               <label for="simple-search" class="sr-only">Search</label>

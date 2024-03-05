@@ -89,11 +89,12 @@
               </router-link>
             </div>
 
-            <div v-else class="flex mt-5 lg:mt-0 lg:items-center">
-              <div
-                v-if="store.getters.isRole === 'candidate'"
-                class="mt-12 lg:mt-0 lg:mr-10 lg:pt-1"
-              >
+            <div
+              v-else
+              :class="store.getters.isRole === 'candidate' ? 'min-320px:flex-row-reverse' : ''"
+              class="min-[320px]:justify-between lg:flex-row lg:w-30 flex mt-5 lg:mt-0 items-center"
+            >
+              <div v-if="store.getters.isRole === 'candidate'" class="lg:mt-0 lg:mr-10 lg:pt-1">
                 <button class="inline-block relative" @click="notifMenu()">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +117,7 @@
 
                 <div
                   v-if="openNotifMenu"
-                  class="drop-down w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute top-12 lg:mr-10 lg:right-12"
+                  class="min-[320px]:right-9 min-[320px]:top-20 min-[320px]:mt-10 min-[320px]:w-52 drop-down md:w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute md:mt-0 md:top-12 lg:mr-10 lg:right-12"
                 >
                   <!-- <div class="flex items-center justify-between my-4 px-8">
                   <p class="text-xs text-blue-500 cursor-pointer">Clear all</p>
@@ -142,20 +143,22 @@
                       <!-- </router-link> -->
                     </li>
                   </ul>
-                  <p
-                    v-if="!view"
-                    class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center"
-                    @click="viewAll()"
-                  >
-                    View all Notifications
-                  </p>
+                  <p v-if="!notificationsToShow.length>0"
+                  class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center">
+                    No Notifications yet!
+                </p>
+                <p v-else-if="notificationsToShow.length>0 && !view"
+                class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center"
+                @click="viewAll()">
+                  View all Notifications
+                </p>
                 </div>
               </div>
-              <div
-                @click="userMenu()"
-                class="h-10 w-10 hover:ring-4 user cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center"
-                :class="store.getters.User.profile_pic ? `bg-[url('${store.getters.User.profile_pic}')]` : 'bg-[url(https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png)]'"
-              >
+              <div @click="userMenu()">
+                <img
+                  :src="`${userPic}`"
+                  class="h-10 w-10 hover:ring-4 user cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center"
+                />
                 <div
                   v-if="openUserMenu"
                   class="drop-down w-48 overflow-hidden bg-white rounded-md shadow absolute top-12 lg:right-3"
@@ -262,6 +265,13 @@ import axios from 'axios'
 const store = useStore()
 const route = useRouter()
 
+const userPic = computed(() => {
+  console.log(' I was called', `'${store.getters.User.profile_pic}'`)
+  return store.getters.User.profile_pic
+    ? `${store.getters.User.profile_pic}`
+    : 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'
+})
+
 const openUserMenu = ref(false)
 const openNotifMenu = ref(false)
 const notifications = ref([])
@@ -280,7 +290,9 @@ onMounted(async () => {
     // console.log(notifications.value)
     apiProgress.value = false
     // console.log(user.role)
-  } catch (error) {}
+  } catch (error) {
+    throw error
+  }
 })
 
 const viewAll = function () {
