@@ -140,9 +140,10 @@
 
         <!-- Register -->
         <button
-          type="submit"
+          type="submit" :disabled="apiProgress"
           class="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
         >
+        <ButtonSpinner v-if="apiProgress"/>
           Register
         </button>
         <p class="text-sm text-gray-400 mb-2">
@@ -164,6 +165,7 @@
 </template>
 
 <script setup>
+import ButtonSpinner from '@/components/ButtonSpinner.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import axios from 'axios'
 import { toast } from 'vue3-toastify'
@@ -171,9 +173,10 @@ import 'vue3-toastify/dist/index.css'
 import { useStore } from 'vuex'
 import * as yup from 'yup'
 import router from '@/router'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const store = useStore()
+const apiProgress = ref(false)
 
 onMounted(async () => {
   // await axios.get('sanctum/csrf-cookie')
@@ -214,18 +217,17 @@ const schema = yup.object().shape({
 })
 
 const onSubmit = async (values) => {
+  apiProgress.value = true
   try {
     await store.dispatch('candidateRegister', values)
     //Showing message to user
-    toast('Registered Successfully!', {
+    apiProgress.value = false
+    toast('Registered Successfully and verified mail sent to your mail!', {
       type: 'success',
       autoClose: 1000,
       dangerouslyHTMLString: true
     })
 
-    setTimeout(() => {
-      router.push(`/candidate/${store.getters.User.id}/update`)
-    }, 2000)
   } catch (error) {
     if (error.response?.status === 400) {
       toast(error.response.data.data.email, {
@@ -247,6 +249,7 @@ const onSubmit = async (values) => {
         dangerouslyHTMLString: true
       })
     }
+    apiProgress.value = false
   }
 }
 </script>

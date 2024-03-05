@@ -88,54 +88,73 @@
                 <span class="relative text-sm font-semibold text-white">Login</span>
               </router-link>
             </div>
-            
+
             <div v-else class="flex mt-5 lg:mt-0 lg:items-center">
-              <div v-if="store.getters.isRole==='candidate'" class="mt-12 lg:mt-0 lg:mr-10 lg:pt-1">
-                
-                <button class="inline-block relative"
-                @click="notifMenu()">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              <div
+                v-if="store.getters.isRole === 'candidate'"
+                class="mt-12 lg:mt-0 lg:mr-10 lg:pt-1"
+              >
+                <button class="inline-block relative" @click="notifMenu()">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-7 w-7 text-gray-700"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
                   </svg>
-                  <span class="animate-ping absolute top-1 right-0.5 block h-1 w-1 rounded-full ring-2 ring-purple-400 bg-purple-600"></span>
-              </button>
-                
+                  <span
+                    class="animate-ping absolute top-1 right-0.5 block h-1 w-1 rounded-full ring-2 ring-purple-400 bg-purple-600"
+                  ></span>
+                </button>
+
                 <div
                   v-if="openNotifMenu"
                   class="drop-down w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute top-12 lg:mr-10 lg:right-12"
                 >
-                <!-- <div class="flex items-center justify-between my-4 px-8">
+                  <!-- <div class="flex items-center justify-between my-4 px-8">
                   <p class="text-xs text-blue-500 cursor-pointer">Clear all</p>
                 </div> -->
-                
-                <ul class="divide-y">
-                  <li v-for="(notification, index) in notificationsToShow" 
-                  :key="index"
-                  class="py-4 px-2 flex items-center hover:bg-gray-50 text-black text-sm cursor-pointer">
-                  <!-- <router-link :to="`/job/${notification.job_id}/apply`"> -->
-                    <!-- <img src="https://readymadeui.com/profile_2.webp" class="w-12 h-12 rounded-full shrink-0" /> -->
-                    <div class="ml-6">
-                      <h3 class="text-sm text-[#333] font-semibold">Your have a new message, for the job role {{ notification.data.job_title }} </h3>
-                      <p class="text-xs text-gray-700 mt-2">{{notification.data.message}}</p>
-                      <p class="text-xs text-blue-500 leading-3 mt-2">{{notification.data.created_at}}</p>
-                    </div>
-                  <!-- </router-link> -->
-                  </li>
-                </ul>
-                <p v-if="!notificationsToShow.length>0"
-                  class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center">
-                    No Notifications yet!
-                </p>
-                <p v-else-if="notificationsToShow.length>0 && !view"
-                class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center"
-                @click="viewAll()">
-                  View all Notifications
-                </p>
-              </div>
+                  <ul class="divide-y">
+                    <li
+                      v-for="(notification, index) in notificationsToShow"
+                      :key="index"
+                      class="py-4 px-2 flex items-center hover:bg-gray-50 text-black text-sm cursor-pointer"
+                    >
+                      <!-- <router-link :to="`/job/${notification.job_id}/apply`"> -->
+                      <!-- <img src="https://readymadeui.com/profile_2.webp" class="w-12 h-12 rounded-full shrink-0" /> -->
+                      <div class="ml-6">
+                        <h3 class="text-sm text-[#333] font-semibold">
+                          Your have a new message, for the job role
+                          {{ notification.data.job_title }}
+                        </h3>
+                        <p class="text-xs text-gray-700 mt-2">{{ notification.data.message }}</p>
+                        <p class="text-xs text-blue-500 leading-3 mt-2">
+                          {{ notification.data.created_at }}
+                        </p>
+                      </div>
+                      <!-- </router-link> -->
+                    </li>
+                  </ul>
+                  <p
+                    v-if="!view"
+                    class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center"
+                    @click="viewAll()"
+                  >
+                    View all Notifications
+                  </p>
+                </div>
               </div>
               <div
                 @click="userMenu()"
-                class="h-10 w-10 hover:ring-4 user cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')]"
+                class="h-10 w-10 hover:ring-4 user cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center"
+                :class="store.getters.User.profile_pic ? `bg-[url('${store.getters.User.profile_pic}')]` : 'bg-[url(https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png)]'"
               >
                 <div
                   v-if="openUserMenu"
@@ -143,7 +162,14 @@
                 >
                   <ul>
                     <li class="px-3 py-3 text-sm font-medium hover:bg-slate-400">
-                      <router-link :to="store.getters.isRole==='employer' ? `/employer/${store.getters.User.id}`: `/candidate/${store.getters.User.id}`" class="flex space-x-2 items-center">
+                      <router-link
+                        :to="
+                          store.getters.isRole === 'employer'
+                            ? `/employer/${store.getters.User.id}`
+                            : `/candidate/${store.getters.User.id}`
+                        "
+                        class="flex space-x-2 items-center"
+                      >
                         <span>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -160,11 +186,18 @@
                             />
                           </svg>
                         </span>
-                        <span> Dashboard </span>
+                        <span> User Dashboard </span>
                       </router-link>
                     </li>
                     <li class="px-3 py-3 text-sm font-medium hover:bg-slate-400">
-                      <router-link :to="store.getters.isRole==='employer' ? `/employer/${store.getters.User.id}/jobs` : `/candidate/${store.getters.User.id}/applications`" class="flex space-x-2 items-center">
+                      <router-link
+                        :to="
+                          store.getters.isRole === 'employer'
+                            ? `/employer/${store.getters.User.id}/jobs`
+                            : `/candidate/${store.getters.User.id}/applications`
+                        "
+                        class="flex space-x-2 items-center"
+                      >
                         <span>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +214,7 @@
                             />
                           </svg>
                         </span>
-                        <span v-if="store.getters.isRole==='employer'">Posted Jobs</span>
+                        <span v-if="store.getters.isRole === 'employer'">Posted Jobs</span>
                         <span v-else> Applied Jobs </span>
                       </router-link>
                     </li>
@@ -236,7 +269,6 @@ const apiProgress = ref(true)
 const view = ref(false)
 const newNotif = ref(false)
 onMounted(async () => {
-  
   try {
     const res = await axios.get(`/api/user/${store.getters.User.id}/notifications`)
     // console.log(res)
@@ -248,13 +280,10 @@ onMounted(async () => {
     // console.log(notifications.value)
     apiProgress.value = false
     // console.log(user.role)
-  } catch (error) {
-    console.log(error)
-  }
+  } catch (error) {}
 })
 
-
-const viewAll = function(){
+const viewAll = function () {
   view.value = !view.value
 }
 
@@ -266,19 +295,18 @@ const notificationsToShow = computed(() => {
   }
 })
 
-const notifMenu = function(){
+const notifMenu = function () {
   openNotifMenu.value = !openNotifMenu.value
-  if (!openNotifMenu.value){
+  if (!openNotifMenu.value) {
     view.value = false
-  }
-  else{
+  } else {
     openUserMenu.value = false
   }
 }
 
-const userMenu = function(){
+const userMenu = function () {
   openUserMenu.value = !openUserMenu.value
-  if (openUserMenu.value){
+  if (openUserMenu.value) {
     openNotifMenu.value = false
   }
 }
@@ -304,5 +332,4 @@ const handleLogout = async () => {
     })
   }
 }
-
 </script>

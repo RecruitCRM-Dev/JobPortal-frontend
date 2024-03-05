@@ -143,20 +143,35 @@
                     </svg>
                     {{ job.data.attributes.location }}</span
                   >
+                  <span
+                    v-if="job.data.attributes.status == 'Expired'"
+                    class="bg-red-100 text-red-700 rounded-full px-3 py-1 text-sm"
+                    >Expired</span
+                  >
                 </div>
               </div>
-              <div>
-                <router-link
-                  :to="`/employer/${store.getters.User.id}/job/${job.data.job_id}/applicants`"
-                  class="bg-purple-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
-                  >View Applicants</router-link
-                >
+              <div class="flex space-x-2">
+                <div v-if="job.data.attributes.status == 'Active'">
+                  <button
+                    @click="markAsExpired(job.data.job_id)"
+                    class="bg-red-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
+                  >
+                    Mark as expired
+                  </button>
+                </div>
+                <div>
+                  <router-link
+                    :to="`/employer/${store.getters.User.id}/job/${job.data.job_id}/applicants`"
+                    class="bg-purple-500 text-white font-medium px-4 py-2 rounded-md flex gap-1 items-center"
+                    >View Applicants</router-link
+                  >
+                </div>
               </div>
             </div>
             <div v-if="filteredJobPosts?.length == 0" class="text-center mt-5">No Jobs found</div>
           </div>
           <div v-else class="flex justify-center items-center mt-20">
-            <Spinner giant />
+            <Spinner medium />
           </div>
         </div>
       </div>
@@ -174,6 +189,8 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 const sortOptions = [
   { name: 'Newest', href: '?sort=newest', current: false },
@@ -202,19 +219,37 @@ const apiProgress = ref(true)
 const searchTerm = ref('')
 const route = useRoute()
 
+const markAsExpired = async (job_id) => {
+  try {
+    const res = await axios.put(`/api/employer/${route.params.id}/jobs/${job_id}/status`, {
+      status: 'Expired'
+    })
+    console.log(res)
+    toast('Job Status Updated', {
+      type: 'success',
+      autoClose: 1000,
+      dangerouslyHTMLString: true
+    })
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 onMounted(async () => {
   if (!store.getters.isLoggedIn) {
     router.push('/login')
   }
   try {
     const res = await axios.get(`/api/employer/${route.params.id}/jobs`)
-    // console.log()
     jobPosts.value = res.data.data
-    console.log(jobPosts.value)
     apiProgress.value = false
-    // console.log(user.role)
   } catch (error) {
+    router.back()
     console.log(error)
+    apiProgress.value = false
   }
 })
 

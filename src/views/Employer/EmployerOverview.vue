@@ -173,7 +173,7 @@
             </div>
           </div>
           <div v-else class="flex justify-center items-center mt-20">
-            <Spinner giant />
+            <Spinner medium />
           </div>
         </div>
       </div>
@@ -209,7 +209,10 @@ onMounted(async () => {
     userPic.value = res.data.data.attributes.profile_pic
     apiProgress.value = false
   } catch (error) {
+    router.back()
     console.log(error)
+    apiProgress.value = false
+
   }
 })
 </script>

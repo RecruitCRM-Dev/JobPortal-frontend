@@ -99,9 +99,10 @@
 
         <!-- Submit Button -->
         <button
-          type="submit"
+          type="submit" :disabled="apiProgress"
           class="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
         >
+        <ButtonSpinner v-if="apiProgress"/>
           Login
         </button>
         <!-- <span class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password ?</span> -->
@@ -120,6 +121,7 @@
 </template>
 
 <script setup>
+import ButtonSpinner from '@/components/ButtonSpinner.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
@@ -134,6 +136,7 @@ import { useRoute } from 'vue-router'
 const userRole = ref(null)
 const store = useStore()
 const route = useRoute()
+const apiProgress = ref(false)
 
 onMounted(async () => {
   await axios.get('sanctum/csrf-cookie')
@@ -167,9 +170,11 @@ const schema = yup.object().shape({
 })
 
 const onSubmit = async (values) => {
+  apiProgress.value = true
   try {
     await store.dispatch('login', values)
     //Showing message to user
+    apiProgress.value = false
     toast('Logged In Successfully!', {
       type: 'success',
       autoClose: 1000,
@@ -193,6 +198,7 @@ const onSubmit = async (values) => {
         dangerouslyHTMLString: true
       })
     }
+    apiProgress.value = false
   }
 }
 </script>

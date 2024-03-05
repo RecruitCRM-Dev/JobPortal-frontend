@@ -10,21 +10,20 @@
       </thead>
       <tbody class="divide-y divide-gray-100">
         <tr v-for="(applicant, index) in props.applicants" :key="index" class="text-gray-700">
-          <td class="flex gap-3 whitespace-nowrap p-5 text-sm text-gray-700">
-            <div class="relative h-10 w-10">
-              <img
-                class="h-full w-full rounded-full object-cover object-center"
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
-              <span
-                class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white font-semibold"
-              ></span>
-            </div>
-            <div class="text-sm">
-              <div class="font-medium text-gray-700">{{ applicant.user.name }}</div>
-              <div class="text-gray-400">{{ applicant.user.email }}</div>
-            </div>
+          <td>
+            <router-link class="flex gap-3 whitespace-nowrap p-5 text-sm text-gray-700" :to="`/candidate/${applicant.user.id}`">
+              <div class="relative h-10 w-10">
+                <img
+                  class="h-full w-full rounded-full object-cover object-center"
+                  :src="applicant.user.profile_pic ? applicant.user.profile_pic : 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'"
+                  alt="Applicant Profile Image"
+                />
+              </div>
+              <div class="text-sm">
+                <div class="font-medium text-gray-700">{{ applicant.user.name }}</div>
+                <div class="text-gray-400">{{ applicant.user.email }}</div>
+              </div>
+            </router-link>
           </td>
           <td class="whitespace-nowrap p-5 text-sm text-gray-700">
             <span
@@ -158,7 +157,7 @@ const updateStatus = async (applicant) => {
         status: applicant.status
       }
     )
-    console.log(res);
+    console.log(res)
     toast('Status updated successfully!', {
       type: 'success',
       autoClose: 1000,

@@ -276,7 +276,7 @@
           </button>
         </Form>
         <div v-else class="flex justify-center items-center mt-20">
-          <Spinner giant />
+          <Spinner medium />
         </div>
       </div>
     </section>
