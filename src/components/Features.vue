@@ -24,7 +24,7 @@
               <dl class="grid grid-cols-4 gap-x-8 gap-y-10 lg:pt-2">
                 <div class="flex flex-col items-start">
                   <div class="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                    <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
+                    <MagnifyingGlassIcon data-testid="magnifying-glass-icon" class="h-6 w-6" aria-hidden="true" />
                   </div>
 
                   <dt class="mt-4 font-semibold">Streamlined Job Search</dt>

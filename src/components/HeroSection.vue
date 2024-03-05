@@ -120,6 +120,7 @@
               alt="client logo"
               width=""
               height=""
+              data-testid="cleintLogo"
             />
           </div>
         </div>

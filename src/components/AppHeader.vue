@@ -107,9 +107,10 @@
                 <!-- <div class="flex items-center justify-between my-4 px-8">
                   <p class="text-xs text-blue-500 cursor-pointer">Clear all</p>
                 </div> -->
+                
                 <ul class="divide-y">
                   <li v-for="(notification, index) in notificationsToShow" 
-                  :key="index" 
+                  :key="index"
                   class="py-4 px-2 flex items-center hover:bg-gray-50 text-black text-sm cursor-pointer">
                   <!-- <router-link :to="`/job/${notification.job_id}/apply`"> -->
                     <!-- <img src="https://readymadeui.com/profile_2.webp" class="w-12 h-12 rounded-full shrink-0" /> -->
@@ -121,7 +122,11 @@
                   <!-- </router-link> -->
                   </li>
                 </ul>
-                <p v-if="!view"
+                <p v-if="!notificationsToShow.length>0"
+                  class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center">
+                    No Notifications yet!
+                </p>
+                <p v-else-if="notificationsToShow.length>0 && !view"
                 class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center"
                 @click="viewAll()">
                   View all Notifications
@@ -155,7 +160,7 @@
                             />
                           </svg>
                         </span>
-                        <span> User Dashboard </span>
+                        <span> Dashboard </span>
                       </router-link>
                     </li>
                     <li class="px-3 py-3 text-sm font-medium hover:bg-slate-400">
