@@ -152,15 +152,11 @@
                   </p>
                 </div>
               </div>
-              <div
-                @click="userMenu()"
-                class="h-10 w-10 hover:ring-4 user cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center"
-                :class="
-                  store.getters.User.profile_pic
-                    ? `bg-[url('${store.getters.User.profile_pic}')]`
-                    : 'bg-[url(https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png)]'
-                "
-              >
+              <div @click="userMenu()">
+                <img
+                  :src="`${userPic}`"
+                  class="h-10 w-10 hover:ring-4 user cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center"
+                />
                 <div
                   v-if="openUserMenu"
                   class="drop-down w-48 overflow-hidden bg-white rounded-md shadow absolute top-12 lg:right-3"
@@ -266,6 +262,13 @@ import axios from 'axios'
 
 const store = useStore()
 const route = useRouter()
+
+const userPic = computed(() => {
+  console.log(' I was called', `'${store.getters.User.profile_pic}'`)
+  return store.getters.User.profile_pic
+    ? `${store.getters.User.profile_pic}`
+    : 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'
+})
 
 const openUserMenu = ref(false)
 const openNotifMenu = ref(false)
