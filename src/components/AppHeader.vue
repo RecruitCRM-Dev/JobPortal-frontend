@@ -117,7 +117,7 @@
 
                 <div
                   v-if="openNotifMenu"
-                  class="min-[320px]:right-9 min-[320px]:top-20 min-[320px]:mt-10 min-[320px]:w-52 drop-down md:w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute md:mt-0 md:top-12 lg:mr-10 lg:right-12"
+                  class="min-[320px]:right-26 min-[320px]:top-20 min-[320px]:mt-10 min-[320px]:w-2/3 drop-down md:w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute md:mt-0 md:top-12 lg:mr-10 lg:right-12"
                 >
                   <!-- <div class="flex items-center justify-between my-4 px-8">
                   <p class="text-xs text-blue-500 cursor-pointer">Clear all</p>

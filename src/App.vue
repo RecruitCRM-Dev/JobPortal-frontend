@@ -5,8 +5,6 @@
 </template>
 
 <script setup>
-import axios from 'axios';
-import { onMounted } from 'vue'
 import { useStore } from 'vuex'
 const store = useStore()
 
