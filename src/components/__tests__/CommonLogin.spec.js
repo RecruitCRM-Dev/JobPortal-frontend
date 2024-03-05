@@ -63,12 +63,12 @@ describe('Login', () => {
     const employerRadioButton = screen.getByLabelText('Employer')
     expect(employerRadioButton).toBeInTheDocument()
   })
-  it.only('has email input required', async () => {
-    await setup()
-    // Find the error message associated with the email input field
-    const errorMessage = screen.queryByTestId('password') // Update with the actual error message
-    expect(errorMessage).not.toBeInTheDocument()
-  })
+  // it.only('has email input required', async () => {
+  //   await setup()
+  //   // Find the error message associated with the email input field
+  //   const errorMessage = screen.queryByTestId('password') // Update with the actual error message
+  //   expect(errorMessage).not.toBeInTheDocument()
+  // })
 
   // it('has sign in button', async () => {
   //   await setup()

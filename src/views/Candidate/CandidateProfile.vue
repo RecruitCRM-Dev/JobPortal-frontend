@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AppHeader />
+    <AppHeader/>
     <section>
       <div class="max-w-2xl mx-auto py-16">
         <div class="mt-3">
@@ -10,13 +10,13 @@
         <Form
           v-if="!apiProgress"
           @submit="onSubmit"
-          class="flex flex-col py-10 ml-1"
+          class="flex flex-col py-10 ml-1 lg:px-0 px-5"
           enctype="multipart/form-data"
         >
           <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5 items-center">
             <!-- Avtar -->
             <div class="flex flex-col md:flex-row sm:col-span-2 items-center justify-center">
-              <div class="h-36 w-full -mr-24">
+              <div class="h-36 lg:w-full lg:-mr-24">
                 <img
                   :src="
                     userPic
