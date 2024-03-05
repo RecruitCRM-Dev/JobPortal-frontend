@@ -19,4 +19,3 @@ import { useStore } from 'vuex'
 
 const store = useStore()
 </script>
-../components/Features.vue
