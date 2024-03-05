@@ -89,11 +89,12 @@
               </router-link>
             </div>
 
-            <div v-else class="flex mt-5 lg:mt-0 lg:items-center">
-              <div
-                v-if="store.getters.isRole === 'candidate'"
-                class="mt-12 lg:mt-0 lg:mr-10 lg:pt-1"
-              >
+            <div
+              v-else
+              :class="store.getters.isRole === 'candidate' ? 'min-320px:flex-row-reverse' : ''"
+              class="min-[320px]:justify-between lg:flex-row lg:w-30 flex mt-5 lg:mt-0 items-center"
+            >
+              <div v-if="store.getters.isRole === 'candidate'" class="lg:mt-0 lg:mr-10 lg:pt-1">
                 <button class="inline-block relative" @click="notifMenu()">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +117,7 @@
 
                 <div
                   v-if="openNotifMenu"
-                  class="drop-down w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute top-12 lg:mr-10 lg:right-12"
+                  class="min-[320px]:right-9 min-[320px]:top-20 min-[320px]:mt-10 min-[320px]:w-52 drop-down md:w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute md:mt-0 md:top-12 lg:mr-10 lg:right-12"
                 >
                   <!-- <div class="flex items-center justify-between my-4 px-8">
                   <p class="text-xs text-blue-500 cursor-pointer">Clear all</p>
@@ -154,7 +155,11 @@
               <div
                 @click="userMenu()"
                 class="h-10 w-10 hover:ring-4 user cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center"
-                :class="store.getters.User.profile_pic ? `bg-[url('${store.getters.User.profile_pic}')]` : 'bg-[url(https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png)]'"
+                :class="
+                  store.getters.User.profile_pic
+                    ? `bg-[url('${store.getters.User.profile_pic}')]`
+                    : 'bg-[url(https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png)]'
+                "
               >
                 <div
                   v-if="openUserMenu"
