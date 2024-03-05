@@ -142,13 +142,15 @@
                       <!-- </router-link> -->
                     </li>
                   </ul>
-                  <p
-                    v-if="!view"
-                    class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center"
-                    @click="viewAll()"
-                  >
-                    View all Notifications
-                  </p>
+                  <p v-if="!notificationsToShow.length>0"
+                  class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center">
+                    No Notifications yet!
+                </p>
+                <p v-else-if="notificationsToShow.length>0 && !view"
+                class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center"
+                @click="viewAll()">
+                  View all Notifications
+                </p>
                 </div>
               </div>
               <div
@@ -280,7 +282,9 @@ onMounted(async () => {
     // console.log(notifications.value)
     apiProgress.value = false
     // console.log(user.role)
-  } catch (error) {}
+  } catch (error) {
+    throw error
+  }
 })
 
 const viewAll = function () {
