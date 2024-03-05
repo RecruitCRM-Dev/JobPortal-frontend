@@ -193,15 +193,12 @@ const onSubmit = async (values) => {
     await store.dispatch('employerRegister', values)
     apiProgress.value = false
     //Showing message to user
-    toast('Registered Successfully!', {
+    toast('Registered Successfully and verified mail sent to your mail!', {
       type: 'success',
       autoClose: 1000,
       dangerouslyHTMLString: true
     })
 
-    setTimeout(() => {
-      router.push(`/employer/${store.getters.User.id}/update`)
-    }, 2000)
   } catch (error) {
     if (error.response?.status === 400) {
       toast(error.response.data.data.email, {

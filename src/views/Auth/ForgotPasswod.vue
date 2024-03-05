@@ -145,6 +145,12 @@ const onSubmit = async (values) => {
         autoClose: 1000,
         dangerouslyHTMLString: true
       })
+    } else if(error.response?.status === 400){
+      toast(error.response.data.error, {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
     } else {
       toast('Internal Server Error', {
         type: 'error',
