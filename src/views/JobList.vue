@@ -322,7 +322,7 @@
                   </button>
                   <button
                     @click="nextPage"
-                    :disabled="currentPage === totalPages"
+                    :disabled="currentPage === totalPages || currentPage>totalPages"
                     class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-indigo-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-indigo-900/10 active:bg-indigo-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                     type="button"
                   >

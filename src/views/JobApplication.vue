@@ -10,7 +10,7 @@
                 <div class="text-center mb-6">
                   <img
                     class="inline-flex mb-2"
-                    src="https://preview.cruip.com/job-board/images/company-icon-08.svg"
+                    :src="companyLogo ? companyLogo : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMy48opkiA5UkBbnwDGXkqV9uDcORBTDo1uiqfHxIo-w&s'"
                     width="72"
                     height="72"
                     alt=""
@@ -385,7 +385,7 @@
 import AppLayout from '../layouts/AppLayout.vue'
 import Container from '../components/Container.vue'
 import Spinner from '@/components/Spinner.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
@@ -410,6 +410,10 @@ const handleApplyNow = () =>{
     open.value = !open.value
   }
 }
+
+const companyLogo = computed(()=>{
+  return job.value.attributes.posted_by.data.attributes.profile_pic
+})
 onMounted(async () => {
   try {
     const res = await axios.get(`/api/jobs/${route.params.id}`)

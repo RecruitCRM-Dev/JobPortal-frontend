@@ -22,6 +22,7 @@
           <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
             <div class="flex-1">
               <div class="sticky top-0 z-10 py-10 w-full m-3 bg-white border-b border-gray-200">
+                <h3 class="font-bold text-gray-700">Total job applications: {{ totalApplications }}</h3>
                 <div class="lg:flex items-baseline justify-between mt-5">
                   <h1 class="text-4xl font-bold tracking-tight text-gray-900">Applicants</h1>
 
@@ -84,6 +85,7 @@ const store = useStore()
 const router = useRouter()
 const jobPosts = ref()
 const apiProgress = ref(true)
+const totalApplications = ref()
 const searchTerm = ref('')
 const route = useRoute()
 
@@ -95,9 +97,10 @@ onMounted(async () => {
     const res = await axios.get(
       `/api/employer/${store.getters.User.id}/jobs/${route.params.job_id}`
     )
-    console.log(res.data.users)
     jobPosts.value = res.data.users
-    console.log(jobPosts.value)
+    console.log(res.data)
+    totalApplications.value = res.data.job_application_count
+    // console.log(jobPosts.value)
     apiProgress.value = false
   } catch (error) {
     router.back()
