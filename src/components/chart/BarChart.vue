@@ -8,7 +8,7 @@
 import { ref } from 'vue'
 const props = defineProps(['labels', 'series', 'colors'])
 const series = props.series
-
+ 
 const chartOptions = ref({
   chart: {
     type: 'bar',

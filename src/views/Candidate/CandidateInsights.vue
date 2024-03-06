@@ -75,7 +75,6 @@ onMounted(async () => {
     const res = await axios.get(`/api/user/profile/${route.params.id}/insights`)
 
     const data = res.data
-    // console.log('hi', data)
 
     statusLabels = Object.keys(data.status)
     statusSeries = Object.values(data.status)
@@ -97,6 +96,7 @@ onMounted(async () => {
         data: Object.values(data.type)
       }
     ]
+
     apiProgress.value = false
   } catch (error) {
     router.back()
