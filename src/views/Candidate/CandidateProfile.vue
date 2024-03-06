@@ -8,6 +8,7 @@
         </div>
         <UserNavigation />
         <Form
+          data-testid="formtest"
           v-if="!apiProgress"
           @submit="onSubmit"
           class="flex flex-col py-10 ml-1 lg:px-0 px-5"
