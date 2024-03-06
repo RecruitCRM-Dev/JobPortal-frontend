@@ -31,7 +31,7 @@
               <Field
                 name="name"
                 placeholder="Name"
-                class="pl-2 outline-none border-none w-full py-0.5"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
             </div>
             <ErrorMessage name="name" class="text-red-500" />
@@ -58,7 +58,7 @@
               <Field
                 name="email"
                 placeholder="Email"
-                class="pl-2 outline-none border-none w-full py-0.5"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
             </div>
             <ErrorMessage name="email" class="text-red-500" />
@@ -83,7 +83,7 @@
                 name="password"
                 type="password"
                 placeholder="Password"
-                class="pl-2 outline-none border-none w-full py-0.5"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
             </div>
             <ErrorMessage name="password" class="text-red-500" />
@@ -108,7 +108,7 @@
                 name="confirm_password"
                 type="password"
                 placeholder="Confirm password"
-                class="pl-2 outline-none border-none w-full py-0.5"
+                class="pl-2 outline-none border-none w-full py-0.5 focus:ring-0"
               />
             </div>
             <ErrorMessage name="confirm_password" class="text-red-500" />
@@ -206,7 +206,14 @@ const onSubmit = async (values) => {
         autoClose: 1000,
         dangerouslyHTMLString: true
       })
-    } else {
+    } else if(error.response?.status === 401){
+      toast(error.response.data.error, {
+        type: 'error',
+        autoClose: 1000,
+        dangerouslyHTMLString: true
+      })
+    } 
+    else {
       toast('Internal Server Error', {
         type: 'error',
         autoClose: 1000,

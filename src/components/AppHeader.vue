@@ -236,7 +236,7 @@
                     </li>
                     <li
                       @click="handleLogout"
-                      class="px-3 py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400"
+                      class="px-3 py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400 cursor-pointer"
                     >
                       <span>
                         <svg

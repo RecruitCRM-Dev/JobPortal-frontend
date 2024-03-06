@@ -108,14 +108,16 @@
 import axios from '@/api';
 import ButtonSpinner from '@/components/ButtonSpinner.vue';
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as yup from 'yup'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import { useStore } from 'vuex';
 const route = useRoute()
 const router = useRouter()
 const apiProgress = ref(false)
+const store = useStore()
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -132,6 +134,12 @@ const schema = yup.object().shape({
     .required(() => `Field is required`)
     .label('Confirm password')
     .oneOf([yup.ref('password'), null], 'Passwords must match')
+})
+
+onMounted(()=>{
+  if(store.getters.isLoggedIn){
+    router.back()
+  }
 })
 
 const onSubmit = async (values) =>{

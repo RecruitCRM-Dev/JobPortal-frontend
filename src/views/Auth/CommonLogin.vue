@@ -62,7 +62,7 @@
                 />
               </svg>
 
-              <Field
+              <Field ref="emailInput"
                 name="email"
                 placeholder="Email"
                 class="py-0.5 pl-2 outline-none border-none w-full ring-0 border-transparent focus:border-transparent focus:ring-0"
@@ -144,9 +144,9 @@ onMounted(async () => {
   await axios.get('sanctum/csrf-cookie')
   await store.dispatch('tryLogIn')
 
-  // if (store.getters.isLoggedIn) {
-  //   router.push('/')
-  // }
+  if (store.getters.isLoggedIn) {
+    router.push('/')
+  }
 
   if (route.query.message) {
     toast(route.query.message, {

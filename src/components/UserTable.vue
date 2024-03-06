@@ -75,7 +75,13 @@
                 />
               </svg>
             </div>
-            <div v-else>
+            <div v-else class="space-x-2">
+              <button
+                class="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                @click="toggleSelect(index)"
+              >
+                Cancel
+              </button>
               <button
                 class="focus:outline-none text-white bg-purple-500 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
                 @click="updateStatus(applicant), toggleSelect(index)"
