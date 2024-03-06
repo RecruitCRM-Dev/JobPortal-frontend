@@ -377,12 +377,6 @@ const onSubmit = async (values) => {
 }
 
 onMounted(async () => {
-  if (!store.getters.isLoggedIn) {
-    router.push('/login')
-  }
-  if (route.params.id != store.getters.User.id) {
-    router.back()
-  }
   try {
     const res = await axios.get(`/api/user/profile/${route.params.id}`)
     formData.profile_pic = res.data.user.profile_pic
