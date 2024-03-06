@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import CandidateProfile from "@/components/__tests__/__mocks__/CandidateProfile.vue";
+import CandidateProfile from "@/views/mocked/CandidateProfile.vue";
 import { describe, it , expect, vi} from "vitest";
 import UserNavigation from '@/components/UserNavigation.vue';
 import { Form } from "vee-validate";

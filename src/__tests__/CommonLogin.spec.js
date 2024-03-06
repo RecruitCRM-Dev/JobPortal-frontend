@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/vue'
-import LoginForm from '@/views/Auth/CommonLogin.vue'
+import LoginForm from '@/views/mocked/CommonLogin.vue'
 import { describe, expect, it, vi } from 'vitest'
 import { useRoute, useRouter } from 'vue-router'
 import * as matchers from '@testing-library/jest-dom/matchers'

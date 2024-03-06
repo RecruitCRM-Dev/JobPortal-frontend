@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import EmployerProfile from '@/components/__tests__/__mocks__/EmployerProfile.vue'
+import EmployerProfile from '@/views/mocked/EmployerProfile.vue'
 import { describe, it, expect, vi } from 'vitest'
 import EmployerNavigation from '@/components/EmployerNavigation.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
