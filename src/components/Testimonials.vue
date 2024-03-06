@@ -10,7 +10,7 @@
         <div
           class="container mx-auto grid grid-cols-1 gap-8 lg:gap-20 md:px-10 md:pb-10 lg:grid-cols-2"
         >
-          <div class="flex flex-col items-center mx-12 lg:mx-0">
+          <div role="article" class="flex flex-col items-center mx-12 lg:mx-0">
             <div class="relative text-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +38,7 @@
             <span class="w-12 h-1 my-2 rounded-lg dark:bg-violet-400"></span>
             <p>Leroy Jenkins</p>
           </div>
-          <div class="flex flex-col items-center max-w-lg mx-12 lg:mx-0">
+          <div role="article" class="flex flex-col items-center max-w-lg mx-12 lg:mx-0">
             <div class="relative text-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,5 +1,6 @@
 <template>
   <svg
+    data-testid="spinner"
     aria-hidden="true"
     role="status"
     class="inline w-5 h-5 me-3 text-white animate-spin"

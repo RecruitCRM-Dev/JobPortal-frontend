@@ -87,6 +87,7 @@
                 />
               </svg>
               <Field
+                data-testid="password"
                 name="password"
                 type="password"
                 placeholder="Password"
@@ -99,10 +100,11 @@
 
         <!-- Submit Button -->
         <button
-          type="submit" :disabled="apiProgress"
+          type="submit"
+          :disabled="apiProgress"
           class="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
         >
-        <ButtonSpinner v-if="apiProgress"/>
+          <ButtonSpinner v-if="apiProgress" />
           Login
         </button>
         <!-- <span class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password ?</span> -->
@@ -142,9 +144,9 @@ onMounted(async () => {
   await axios.get('sanctum/csrf-cookie')
   await store.dispatch('tryLogIn')
 
-  if (store.getters.isLoggedIn) {
-    router.push('/')
-  }
+  // if (store.getters.isLoggedIn) {
+  //   router.push('/')
+  // }
 
   if (route.query.message) {
     toast(route.query.message, {
