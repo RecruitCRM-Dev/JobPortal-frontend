@@ -120,17 +120,12 @@
                   v-if="openNotifMenu"
                   class="min-[320px]:right-10 min-[320px]:top-20 min-[320px]:mt-10 min-[320px]:w-42 drop-down md:w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute lg:mt-0 lg:top-12 lg:mr-10 lg:right-12"
                 >
-                  <!-- <div class="flex items-center justify-between my-4 px-8">
-                  <p class="text-xs text-blue-500 cursor-pointer">Clear all</p>
-                </div> -->
                   <ul class="divide-y">
                     <li
                       v-for="(notification, index) in notificationsToShow"
                       :key="index"
                       class="min-[320px]:px-1 py-4 md:px-2 flex items-center hover:bg-gray-50 text-black text-sm"
                     >
-                      <!-- <router-link :to="`/job/${notification.job_id}/apply`"> -->
-                      <!-- <img src="https://readymadeui.com/profile_2.webp" class="w-12 h-12 rounded-full shrink-0" /> -->
                       <div class="ml-6">
                         <router-link
                           :to="`/job/${notification.data.job_id}/apply`"
@@ -284,7 +279,6 @@ const store = useStore()
 const route = useRouter()
 
 const userPic = computed(() => {
-  console.log(' I was called', `'${store.getters.User.profile_pic}'`)
   return store.getters.User.profile_pic
     ? `${store.getters.User.profile_pic}`
     : 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'
@@ -299,13 +293,11 @@ const newNotif = ref(false)
 onMounted(async () => {
   try {
     const res = await axios.get(`/api/user/${store.getters.User.id}/notifications`)
-    // console.log(res)
     notifications.value = res.data.notifications
     console.log(notifications.value)
     apiProgress.value = false
-    // console.log(user.role)
   } catch (error) {
-    throw error
+    console.log(error)
   }
 })
 
