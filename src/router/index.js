@@ -74,6 +74,7 @@ const router = createRouter({
     },
     {
       path: '/candidate/:id/update',
+      alias: '/candiate/update',
       name: 'candidate-update',
       component: CandidateProfileVue
     },
