@@ -6,25 +6,18 @@
         <div class="container mx-auto py-8">
           <div class="bg-white mt-3">
             <h2
-              v-if="store.getters.User.id == $route.params.id"
               class="text-center mt-12 text-3xl text-gray-900"
             >
-              What recruiters will see
-            </h2>
-            <h2 v-else class="text-center mt-12 text-3xl text-gray-900 mb-10">
               Candidate Overview
             </h2>
           </div>
           <UserNavigation />
-          <div v-if="!apiProgress" class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+          <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div class="col-span-4 sm:col-span-3">
               <div class="bg-white shadow-xl rounded-lg p-6">
                 <div class="flex flex-col items-center">
                   <img
-                    :src="
-                      user.profile_pic
-                        ? user.profile_pic
-                        : 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'
+                    :src="'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'
                     "
                     class="w-32 h-32 rounded-full mb-4 shrink-0 object-cover"
                   />
@@ -87,7 +80,7 @@
               </div>
             </div>
           </div>
-          <div v-else class="flex justify-center items-center mt-20">
+          <div  class="flex justify-center items-center mt-20">
             <Spinner medium />
           </div>
         </div>
@@ -107,7 +100,12 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 const route = useRoute()
 const store = useStore()
-const user = ref()
+const user = {
+  name: 'Candidate',
+  email: 'candidate@mail.com',
+  profile_pic: 'https://website.com/resume.pdf',
+  role: 'candidate'
+}
 const apiProgress = ref(true)
 
 onMounted(async () => {

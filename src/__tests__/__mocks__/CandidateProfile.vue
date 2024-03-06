@@ -249,7 +249,7 @@
             :disabled="formProgress"
             class="block bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
           >
-            <ButtonSpinner v-if="formProgress" />
+            <ButtonSpinner  />
             Update
           </button>
         </Form>
@@ -377,6 +377,12 @@ const onSubmit = async (values) => {
 }
 
 onMounted(async () => {
+  // if (!store.getters.isLoggedIn) {
+  //   router.push('/login')
+  // }
+  // if (route.params.id != store.getters.User.id) {
+  //   router.back()
+  // }
   try {
     const res = await axios.get(`/api/user/profile/${route.params.id}`)
     formData.profile_pic = res.data.user.profile_pic
