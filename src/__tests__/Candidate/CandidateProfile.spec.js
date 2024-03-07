@@ -18,10 +18,22 @@ describe('CandidateProfile',() => {
 // Assuming label is wrapped in a <label> tag
   
  
-    
+const mockUserData = {
+  profile_pic: 'https://example.com/profile-pic.jpg',
+  name: 'John Doe',
+  about: 'Lorem ipsum dolor sit amet.',
+  address: '123 Main St, City',
+  gender: 'Male',
+  role: 'Software Developer',
+  experience: '3',
+  education: 'Bachelor\'s Degree',
+  phone: '1234567890',
+  skills: ['HTML5', 'Javascript'],
+  resume: 'https://example.com/resume.pdf'
+};
     const form =  wrapper.findComponent(Form)
     expect(form.exists()).toBe(true)
-    // await wrapper.find('input[name="name"]').setValue('John Doe')
+    
     // // await wrapper.find('[name="about"]').setValue('Lorem ipsum dolor sit amet')
     // // await wrapper.find('[name="gender"]').setValue('Male')
     // // await wrapper.find('[name="phone"]').setValue('1234567890')
