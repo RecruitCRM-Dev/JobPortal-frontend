@@ -9,6 +9,8 @@
 // import { onMounted } from 'vue'
 // import { useStore } from 'vuex'
 // const store = useStore()
+import { useStore } from 'vuex'
+const store = useStore()
 
 // // onMounted(async () => {
 // //   // window.scrollTo(0, 0);

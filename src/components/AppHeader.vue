@@ -110,46 +110,61 @@
                       d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                     />
                   </svg>
-                  <span
+                  <span v-if="notificationsToShow.length>0"
                     class="animate-ping absolute top-1 right-0.5 block h-1 w-1 rounded-full ring-2 ring-purple-400 bg-purple-600"
                   ></span>
                 </button>
 
                 <div
                   v-if="openNotifMenu"
-                  class="min-[320px]:right-9 min-[320px]:top-20 min-[320px]:mt-10 min-[320px]:w-52 drop-down md:w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute md:mt-0 md:top-12 lg:mr-10 lg:right-12"
+                  class="min-[320px]:right-26 min-[320px]:top-20 min-[320px]:mt-10 min-[320px]:w-2/3 drop-down md:w-[380px] max-h-[400px] overflow-auto flex flex-col items-center bg-white rounded-md shadow absolute md:mt-0 md:top-12 lg:mr-10 lg:right-12"
                 >
                   <!-- <div class="flex items-center justify-between my-4 px-8">
                   <p class="text-xs text-blue-500 cursor-pointer">Clear all</p>
                 </div> -->
                   <ul class="divide-y">
+                    
                     <li
-                      v-for="(notification, index) in notificationsToShow"
-                      :key="index"
-                      class="py-4 px-2 flex items-center hover:bg-gray-50 text-black text-sm cursor-pointer"
+                    
+                    v-for="(notification, index) in notificationsToShow"
+                    :key="index"
+                    
+                    class="py-4 px-2 flex items-center hover:bg-gray-50 text-black text-sm "
                     >
-                      <!-- <router-link :to="`/job/${notification.job_id}/apply`"> -->
+                    <!-- <router-link :to="`/job/${notification.job_id}/apply`"> -->
                       <!-- <img src="https://readymadeui.com/profile_2.webp" class="w-12 h-12 rounded-full shrink-0" /> -->
                       <div class="ml-6">
+                        <router-link :to="`/job/${notification.data.job_id}/apply`" class="cursor-pointer">
                         <h3 class="text-sm text-[#333] font-semibold">
                           Your have a new message, for the job role
                           {{ notification.data.job_title }}
                         </h3>
+                      </router-link>
                         <p class="text-xs text-gray-700 mt-2">{{ notification.data.message }}</p>
-                        <p class="text-xs text-blue-500 leading-3 mt-2">
+                      <div class="flex flex-row justify-between">
+                        <p class="text-xs text-indigo-500 leading-3 mt-2">
                           {{ notification.data.created_at }}
                         </p>
+                        <button
+                          class='min-w-2 text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-2 py-1 me-2 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-blue-800'
+                          @click="markAsRead(notification.data.id)"
+                          > Mark As Read
+                        </button>
+                      </div>
                       </div>
                       <!-- </router-link> -->
+
                     </li>
                   </ul>
-                  <p
-                    v-if="!view"
-                    class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center"
-                    @click="viewAll()"
-                  >
-                    View all Notifications
-                  </p>
+                  <p v-if="!notificationsToShow.length>0"
+                  class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center">
+                    No Notifications yet!
+                </p>
+                <p v-else-if="notificationsToShow.length>4 && !view"
+                class="text-sm px-4 mt-6 mb-4 inline-block text-blue-500 cursor-pointer items-center"
+                @click="viewAll()">
+                  View all Notifications
+                </p>
                 </div>
               </div>
               <div @click="userMenu()">
@@ -281,14 +296,12 @@ onMounted(async () => {
     const res = await axios.get(`/api/user/${store.getters.User.id}/notifications`)
     // console.log(res)
     notifications.value = res.data.notifications
-    const oldNotificationLength = notifications.value.length
-    if (notifications.value.length > oldNotificationLength) {
-      newNotif.value = true
-    }
-    // console.log(notifications.value)
+      console.log(notifications.value)
     apiProgress.value = false
     // console.log(user.role)
-  } catch (error) {}
+  } catch (error) {
+    throw error
+  }
 })
 
 const viewAll = function () {
@@ -317,6 +330,18 @@ const userMenu = function () {
   if (openUserMenu.value) {
     openNotifMenu.value = false
   }
+}
+
+const markAsRead = async(notificationId)=>{
+    try {
+        const response = await axios.put(`/api/user/${store.getters.User.id}/notification/${notificationId}`);
+        console.log(response.data); // Log the response if needed
+        // Update the UI to reflect the read status
+        // For example, remove the notification from the list
+        notifications.value.splice(notificationId, 1)
+    } catch (error) {
+        console.error(error); // Handle errors if necessary
+    }
 }
 
 const handleLogout = async () => {

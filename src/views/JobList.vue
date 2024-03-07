@@ -205,7 +205,7 @@
                 <section
                   v-if="paginateJobs"
                   aria-labelledby="products-heading"
-                  class="pb-24 pt-6 flex"
+                  class="pb-24 pt-6 lg:flex"
                 >
                   <h2 id="products-heading" class="sr-only">Products</h2>
 

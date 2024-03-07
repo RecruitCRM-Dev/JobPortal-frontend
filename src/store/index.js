@@ -23,10 +23,10 @@ const store = createStore({
     User(state) {
       return state.user
     },
-    isRole(state){
+    isRole(state) {
       return state.role
     },
-    Token(state){
+    Token(state) {
       return state.token
     }
   },
@@ -35,10 +35,10 @@ const store = createStore({
     setUser(state, user) {
       state.user = user
     },
-    setRole(state, role){
+    setRole(state, role) {
       state.role = role
     },
-    setToken(state, token){
+    setToken(state, token) {
       state.token = token
     },
     setProfilePic(state, pic) {
@@ -140,10 +140,9 @@ const store = createStore({
     async logout(context) {
       try {
         const userRole = context.state.role
-        if(userRole === 'employer'){
+        if (userRole === 'employer') {
           await axios.post('/api/employer/logout')
-        }
-        else if(userRole === 'candidate'){
+        } else if (userRole === 'candidate') {
           await axios.post('/api/user/logout')
         }
         localStorage.clear()
@@ -157,7 +156,7 @@ const store = createStore({
     },
 
     async setUserProfilePic(context, payload) {
-      context.commit('setProfilePic', payload);
+      context.commit('setProfilePic', payload)
     }
   },
   plugins: [vuexLocal.plugin]
