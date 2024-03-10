@@ -291,12 +291,6 @@ const formProgress = ref(false)
 const router = useRouter()
 const route = useRoute()
 
-useForm({
-  initialValues: {
-    name: 'Divyanshu Upreti',
-    gender: 'male'
-  }
-})
 
 const skillOptions = ref([
   'HTML5',

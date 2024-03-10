@@ -21,9 +21,9 @@
                 <path d="M232,246.857V16H16V416H54.4ZM48,48H200V233.143L48,377.905Z"></path>
                 <path d="M280,416h38.4L496,246.857V16H280ZM312,48H464V233.143L312,377.905Z"></path>
               </svg>
-              <p class="px-6 py-1 text-lg italic">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatibus quibusdam,
-                eligendi exercitationem molestias possimus facere.
+              <p class="px-10 py-1 text-lg italic">
+                The job portal streamlined our hiring strategy, delivering top talent promptly. 
+                A game-changer in recruitment.
               </p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +36,7 @@
               </svg>
             </div>
             <span class="w-12 h-1 my-2 rounded-lg dark:bg-violet-400"></span>
-            <p>Leroy Jenkins</p>
+            <p>Recruit CRM</p>
           </div>
           <div role="article" class="flex flex-col items-center max-w-lg mx-12 lg:mx-0">
             <div class="relative text-center">
@@ -55,9 +55,7 @@
                 ></path>
               </svg>
               <p class="px-10 py-1 text-lg italic">
-                Accusantium illum cupiditate harum asperiores iusto quos quasi quis quae! Fugit
-                doloribus, voluptatum quidem magnam velit excepturi nobis, reprehenderit ducimus
-                incidunt quisquam quae veritatis, quos iure harum.
+                Our recruitment process became effortless with the job portal integration, simplifying hiring tasks. Highly recommend for its efficiency.
               </p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +73,7 @@
               </svg>
             </div>
             <span class="w-12 h-1 my-2 rounded-lg dark:bg-violet-400"></span>
-            <p>Leroy Jenkins</p>
+            <p>Google</p>
           </div>
         </div>
       </section>

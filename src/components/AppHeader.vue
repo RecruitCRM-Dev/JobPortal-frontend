@@ -305,7 +305,7 @@ onMounted(async () => {
     apiProgress.value = false
     // console.log(user.role)
   } catch (error) {
-    throw error
+    console.log(error)
   }
 })
 
