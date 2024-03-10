@@ -242,14 +242,7 @@ const schema = yup.object().shape({
 
 // Assuming Job is an object containing the categories and job types
 
-const handleProfilePicChange = (event) => {
-  formData.profile_pic = event.target.files[0]
-  console.log(event.target.files[0])
-}
 
-const handleFileChange = (event) => {
-  formData.resume = event.target.files[0]
-}
 
 const formData = reactive({
   // profile_pic: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png',

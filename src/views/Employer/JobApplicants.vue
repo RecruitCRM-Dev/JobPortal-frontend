@@ -4,7 +4,7 @@
     <section>
       <div class="container mx-auto py-8 flex flex-col items-center">
         <div class="max-w-3xl bg-white mt-3 w-full flex">
-          <div class="mt-12 w-16 flex items-center">
+          <div class="lg:ml-0 ml-10 mt-12 w-16 flex items-center">
             <router-link
               :to="`/employer/${$route.params.employer_id}/jobs`"
               class="text-indigo-600 text-opacity-100 font-medium"
@@ -22,7 +22,9 @@
           <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex">
             <div class="flex-1">
               <div class="sticky top-0 z-10 py-10 w-full m-3 bg-white border-b border-gray-200">
-                <h3 class="font-bold text-gray-700">Total job applications: {{ totalApplications }}</h3>
+                <h3 class="font-bold text-gray-700">
+                  Total job applications: {{ totalApplications }}
+                </h3>
                 <div class="lg:flex items-baseline justify-between mt-5">
                   <h1 class="text-4xl font-bold tracking-tight text-gray-900">Applicants</h1>
 
@@ -54,16 +56,16 @@
                         required
                       />
                     </div>
-              
                   </div>
                 </div>
               </div>
               <div v-if="!apiProgress">
-              <UserTable :applicants="filteredJobApplicants"/>
-            </div>
-            <div v-else class="flex justify-center items-center mt-20">
-            <Spinner medium />
-          </div>
+                <div v-if="jobPosts.length==0" class="mt-5 text-center">No applicants have applied to this job yet!</div>
+                <UserTable v-else :applicants="filteredJobApplicants" />
+              </div>
+              <div v-else class="flex justify-center items-center mt-20">
+                <Spinner medium />
+              </div>
             </div>
           </main>
         </div>
@@ -105,7 +107,7 @@ onMounted(async () => {
   } catch (error) {
     router.back()
     console.log(error)
-    apiProgress.value=false
+    apiProgress.value = false
   }
 })
 
@@ -117,8 +119,10 @@ const filteredJobApplicants = computed(() => {
   if (!searchTerm.value) {
     return jobPosts.value
   } else {
-    return jobPosts.value.filter((jobPost) =>
-      jobPost.user.name.toLowerCase().includes(searchTerm.value) || jobPost.user.email.toLowerCase().includes(searchTerm.value)
+    return jobPosts.value.filter(
+      (jobPost) =>
+        jobPost.user.name.toLowerCase().includes(searchTerm.value) ||
+        jobPost.user.email.toLowerCase().includes(searchTerm.value)
     )
   }
 })

@@ -118,6 +118,7 @@ const route = useRoute()
 const router = useRouter()
 const apiProgress = ref(false)
 const store = useStore()
+
 const schema = yup.object().shape({
   email: yup
     .string()

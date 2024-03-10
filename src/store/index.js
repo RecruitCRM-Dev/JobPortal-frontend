@@ -82,7 +82,6 @@ const store = createStore({
           context.commit('setRole', 'candidate')
         } else if (userRole === 'employer') {
           res = await axios.post('/api/employer/login', {
-            //TODO
             email: email,
             password: password
           })
